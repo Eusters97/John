@@ -269,7 +269,7 @@ export default function Index() {
       </section>
 
       {/* Investment Plans Section */}
-      <InvestmentPlansCarousel allowPayments={false} redirectToLogin={true} />
+      <SimpleInvestmentPlans allowPayments={false} redirectToLogin={true} />
 
       {/* Features Section */}
       <section className="py-20 bg-gray-50 relative overflow-hidden">

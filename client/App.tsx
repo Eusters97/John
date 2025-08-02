@@ -17,6 +17,7 @@ import UserDashboard from "./pages/UserDashboard";
 import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
 import AdminLogin from "./pages/AdminLogin";
+import AdminPanel from "./pages/AdminPanel";
 import Promo from "./pages/Promo";
 import Offers from "./pages/Offers";
 import Education from "./pages/Education";

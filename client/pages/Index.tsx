@@ -31,6 +31,8 @@ export default function Index() {
     avgROI: 12.5,
     activeUsers: 3421
   });
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Animate counters on load
   useEffect(() => {

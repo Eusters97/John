@@ -94,10 +94,15 @@ export default function EnhancedUserDashboard() {
   }, [location.state, navigate]);
 
   useEffect(() => {
+    console.log('User effect triggered, user:', user);
     if (user) {
+      console.log('User ID:', user.id);
+      console.log('User email:', user.email);
       initializeUserData().then(() => {
         loadUserStats();
         checkTelegramConnection();
+      }).catch(error => {
+        console.error('Error in user initialization chain:', error);
       });
     }
   }, [user]);

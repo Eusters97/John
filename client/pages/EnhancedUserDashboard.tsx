@@ -176,6 +176,15 @@ export default function EnhancedUserDashboard() {
   };
 
   const handleDeposit = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to make a deposit",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!depositAmount || parseFloat(depositAmount) < 60) {
       toast({
         title: "Invalid Amount",
@@ -196,10 +205,10 @@ export default function EnhancedUserDashboard() {
 
     try {
       setLoading(true);
-      
+
       // Create deposit payment
       const { payment, dbPayment } = await nowPaymentsService.createInvestmentPayment(
-        user?.id || '',
+        user.id,
         '', // No investment ID for deposits
         parseFloat(depositAmount),
         selectedCrypto,

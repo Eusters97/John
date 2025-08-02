@@ -53,10 +53,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Get visitor IP and user agent
   const getVisitorInfo = async () => {
     try {
-      const response = await fetch('/api/visitor-info')
-      const data = await response.json()
+      // Use a simple client-side approach instead of non-existent API
       return {
-        ipAddress: data.ip || 'unknown',
+        ipAddress: 'client-side', // We'll get this from a working service later
         userAgent: navigator.userAgent
       }
     } catch {

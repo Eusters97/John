@@ -60,6 +60,19 @@ export default function Index() {
     setShowPaymentModal(true);
   };
 
+  const nextSlide = () => {
+    const maxSlide = Math.max(0, investmentPlans.length - 3);
+    setCurrentSlide(prev => Math.min(prev + 1, maxSlide));
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide(prev => Math.max(prev - 1, 0));
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   const features = [
     {
       icon: <MessageCircle className="h-8 w-8 text-forex-600" />,

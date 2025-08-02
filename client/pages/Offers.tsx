@@ -23,7 +23,9 @@ import {
 } from "lucide-react";
 
 export default function Offers() {
-  const { setCurrentOffer, setShowPaymentModal } = useInvestment();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 45,

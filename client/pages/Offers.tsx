@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FrontPageLayout from "@/components/FrontPageLayout";
-import PaymentModal from "@/components/PaymentModal";
-import { useInvestment } from "@/contexts/InvestmentContext";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

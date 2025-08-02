@@ -150,7 +150,35 @@ export default function AdminLogin() {
               </form>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <>
+              {/* Demo Credentials Info */}
+              <div className="bg-blue-900/30 border border-blue-400/30 rounded-lg p-4 mb-4">
+                <div className="text-center mb-3">
+                  <h3 className="text-blue-300 font-semibold text-sm">Demo Admin Credentials</h3>
+                </div>
+                <div className="text-xs space-y-1">
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Email:</span>
+                    <code className="text-blue-300">admin@forextraderssignals.com</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Password:</span>
+                    <code className="text-blue-300">Demo@2024!</code>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => {
+                    setEmail("admin@forextraderssignals.com");
+                    setPassword("Demo@2024!");
+                  }}
+                  className="w-full mt-3 bg-blue-600/50 hover:bg-blue-600/70 text-white text-xs"
+                  type="button"
+                >
+                  Use Demo Credentials
+                </Button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-gray-200">Admin Email</Label>
                 <Input 
@@ -220,6 +248,7 @@ export default function AdminLogin() {
                 </div>
               </Button>
             </form>
+            </>
           )}
 
           <div className="text-center">

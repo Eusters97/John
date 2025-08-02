@@ -80,6 +80,7 @@ const countries = [
 
 interface RegistrationFormData {
   email: string;
+  username: string;
   password: string;
   confirmPassword: string;
   fullName: string;

@@ -52,15 +52,16 @@ export default function DashboardLayout({ children, isAdmin = false }: Dashboard
   ];
 
   const adminNavItems = [
-    { icon: LayoutDashboard, label: "Overview", path: "/admin", key: "overview" },
-    { icon: Users, label: "Users", path: "/admin", key: "users" },
-    { icon: BarChart3, label: "Investments", path: "/admin", key: "investments" },
-    { icon: DollarSign, label: "Payouts", path: "/admin", key: "payouts" },
-    { icon: FileText, label: "Blog Manager", path: "/admin", key: "blog" },
-    { icon: Star, label: "Testimonials", path: "/admin", key: "testimonials" },
-    { icon: MessageSquare, label: "Reviews", path: "/admin", key: "reviews" },
-    { icon: PieChart, label: "Analytics", path: "/admin", key: "analytics" },
-    { icon: Settings, label: "Settings", path: "/admin", key: "settings" }
+    { icon: LayoutDashboard, label: "Overview", path: "/admin-panel", key: "overview" },
+    { icon: Users, label: "Users", path: "/admin-panel", key: "users" },
+    { icon: BarChart3, label: "Investments", path: "/admin-panel", key: "investments" },
+    { icon: DollarSign, label: "Payouts", path: "/admin-panel", key: "payouts" },
+    { icon: FileText, label: "Blog Manager", path: "/admin-panel", key: "blog" },
+    { icon: BookOpen, label: "Ebooks", path: "/admin-panel", key: "ebooks" },
+    { icon: Star, label: "Testimonials", path: "/admin-panel", key: "testimonials" },
+    { icon: MessageSquare, label: "Reviews", path: "/admin-panel", key: "reviews" },
+    { icon: PieChart, label: "Analytics", path: "/admin-panel", key: "analytics" },
+    { icon: Settings, label: "Settings", path: "/admin-panel", key: "settings" }
   ];
 
   const navItems = isAdmin ? adminNavItems : userNavItems;

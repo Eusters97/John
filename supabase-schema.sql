@@ -568,6 +568,9 @@ CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.testimonials FOR EACH R
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.reviews FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.forex_signals FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.system_settings FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.withdrawal_requests FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.support_tickets FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.deposits FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 -- Create indexes for better performance
 CREATE INDEX idx_user_investments_user_id ON public.user_investments(user_id);

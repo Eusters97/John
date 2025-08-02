@@ -113,7 +113,10 @@ export default function EnhancedUserDashboard() {
         .select('*, payments(*)')
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error details:', error);
+        throw new Error(`Database error: ${error.message} (Code: ${error.code})`);
+      }
 
       // Calculate stats from investments
       const stats = investments?.reduce((acc, inv) => {

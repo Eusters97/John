@@ -332,7 +332,7 @@ export default function Offers() {
           </div>
         </section>
 
-        <PaymentModal />
+        {/* Payment processing is now handled in the dashboard */}
       </div>
     </FrontPageLayout>
   );

@@ -1,0 +1,168 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Menu, X, TrendingUp, MessageCircle, LogIn } from "lucide-react";
+
+export default function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  return (
+    <>
+      <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="bg-gradient-to-r from-forex-600 to-forex-500 p-2 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-forex-600 to-forex-500 bg-clip-text text-transparent">
+                FREE FOREX SIGNALS
+              </span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link to="/" className="text-gray-700 hover:text-forex-600 transition-colors">
+                Home
+              </Link>
+              <Link to="/blog" className="text-gray-700 hover:text-forex-600 transition-colors">
+                Blog
+              </Link>
+              <Link to="/news" className="text-gray-700 hover:text-forex-600 transition-colors">
+                News
+              </Link>
+              
+              {/* Telegram CTA */}
+              <a 
+                href="https://t.me/forex_traders_signalss" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>Join Telegram</span>
+              </a>
+
+              {/* Auth Button */}
+              <Button 
+                onClick={() => setIsAuthModalOpen(true)}
+                variant="outline"
+                className="flex items-center space-x-2"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Login</span>
+              </Button>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <div className="flex flex-col space-y-4">
+                <Link to="/" className="text-gray-700 hover:text-forex-600 transition-colors px-2 py-1">
+                  Home
+                </Link>
+                <Link to="/blog" className="text-gray-700 hover:text-forex-600 transition-colors px-2 py-1">
+                  Blog
+                </Link>
+                <Link to="/news" className="text-gray-700 hover:text-forex-600 transition-colors px-2 py-1">
+                  News
+                </Link>
+                
+                <a 
+                  href="https://t.me/forex_traders_signalss" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 w-fit"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span>Join Telegram</span>
+                </a>
+
+                <Button 
+                  onClick={() => setIsAuthModalOpen(true)}
+                  variant="outline"
+                  className="flex items-center space-x-2 w-fit"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Auth Modal */}
+      <Dialog open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">Welcome Back</DialogTitle>
+          </DialogHeader>
+          
+          <Tabs defaultValue="telegram" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="telegram">Telegram</TabsTrigger>
+              <TabsTrigger value="email">Email</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="telegram" className="space-y-4 mt-6">
+              <div className="text-center space-y-4">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg">
+                  <MessageCircle className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <h3 className="font-semibold text-lg mb-2">Login with Telegram</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Connect with @Blakehunterfxbot to access your account
+                  </p>
+                  <Button 
+                    className="w-full bg-blue-500 hover:bg-blue-600"
+                    onClick={() => window.open("https://t.me/Blakehunterfxbot", "_blank")}
+                  >
+                    Open Telegram Bot
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="email" className="space-y-4 mt-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="your@email.com" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input id="password" type="password" placeholder="••••••••" />
+                </div>
+                <Button className="w-full">Sign In</Button>
+                <div className="text-center text-sm">
+                  <span className="text-gray-600">Don't have an account? </span>
+                  <Button variant="link" className="p-0 h-auto text-forex-600">
+                    Sign up
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}

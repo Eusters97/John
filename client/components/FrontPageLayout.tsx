@@ -24,7 +24,8 @@ import {
   BarChart3,
   DollarSign,
   Wallet,
-  BookOpen
+  BookOpen,
+  Gift
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 

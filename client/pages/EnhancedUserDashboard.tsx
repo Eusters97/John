@@ -134,7 +134,18 @@ export default function EnhancedUserDashboard() {
 
       setUserStats(stats);
     } catch (error) {
-      console.error('Error loading user stats:', error);
+      console.error('Error loading user stats:', error instanceof Error ? error.message : 'Unknown error');
+      // Set default stats on error
+      setUserStats({
+        balance: 0,
+        totalInvested: 0,
+        totalProfit: 0,
+        totalROI: 0,
+        activeInvestments: 0,
+        completedInvestments: 0,
+        pendingPayouts: 0,
+        referralEarnings: 0
+      });
     }
   };
 

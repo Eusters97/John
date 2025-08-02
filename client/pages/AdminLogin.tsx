@@ -32,7 +32,7 @@ export default function AdminLogin() {
   // Redirect if already logged in as admin
   useEffect(() => {
     if (user && isAdmin) {
-      navigate('/eustersmain');
+      navigate('/admin-panel');
     }
   }, [user, isAdmin, navigate]);
 

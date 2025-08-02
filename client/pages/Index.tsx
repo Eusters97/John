@@ -131,38 +131,62 @@ export default function Index() {
     {
       id: "starter",
       name: "Starter Plan",
-      minAmount: 100,
+      minAmount: 200,
       maxAmount: 999,
       roi: "2,500%",
       duration: "24 hours",
       description: "Perfect for beginners",
       popular: false,
-      expectedReturn: 2500,
-      features: ["24/7 Support", "Telegram Signals", "Instant Payout"]
+      expectedReturn: 5000,
+      features: ["24/7 Support", "Telegram Signals", "Instant Payout", "Education Access"]
+    },
+    {
+      id: "growth",
+      name: "Growth Plan",
+      minAmount: 500,
+      maxAmount: 1999,
+      roi: "2,500%",
+      duration: "3 days",
+      description: "Accelerated growth",
+      popular: false,
+      expectedReturn: 12500,
+      features: ["Priority Support", "Premium Signals", "Fast Processing", "Risk Management", "Ebook Downloads"]
     },
     {
       id: "premium",
       name: "Premium Plan",
       minAmount: 1000,
       maxAmount: 4999,
-      roi: "400%",
-      duration: "3 days",
+      roi: "2,500%",
+      duration: "5 days",
       description: "Most popular choice",
       popular: true,
-      expectedReturn: 4000,
-      features: ["Priority Support", "VIP Signals", "Fast Processing", "Risk Management"]
+      expectedReturn: 25000,
+      features: ["VIP Support", "Exclusive Signals", "Personal Manager", "Advanced Analytics", "Full Library Access"]
     },
     {
       id: "vip",
       name: "VIP Plan",
-      minAmount: 5000,
-      maxAmount: 20000,
-      roi: "600%",
+      minAmount: 2000,
+      maxAmount: 10000,
+      roi: "2,500%",
       duration: "7 days",
       description: "Maximum returns",
       popular: false,
-      expectedReturn: 30000,
-      features: ["Personal Manager", "Exclusive Signals", "Priority Payout", "Advanced Analytics"]
+      expectedReturn: 50000,
+      features: ["Elite Support", "Private Signals", "Dedicated Manager", "Portfolio Analysis", "Lifetime Access"]
+    },
+    {
+      id: "elite",
+      name: "Elite Plan",
+      minAmount: 5000,
+      maxAmount: 50000,
+      roi: "2,500%",
+      duration: "10 days",
+      description: "Ultimate package",
+      popular: false,
+      expectedReturn: 125000,
+      features: ["White Glove Service", "Custom Strategies", "1-on-1 Coaching", "Market Insights", "All Premium Benefits"]
     }
   ];
 

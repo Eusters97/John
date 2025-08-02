@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { useInvestment } from "@/contexts/InvestmentContext";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -85,7 +85,7 @@ export default function WelcomeOfferModal() {
               </div>
               
               <Badge className="bg-gradient-to-r from-gold-500 to-yellow-500 text-white mb-4 px-4 py-1 text-sm">
-                🎉 EXCLUSIVE WELCOME OFFER
+                ���� EXCLUSIVE WELCOME OFFER
               </Badge>
               
               <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-forex-600 bg-clip-text text-transparent mb-3">

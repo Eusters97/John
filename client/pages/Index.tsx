@@ -51,30 +51,7 @@ export default function Index() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleInvestNow = (plan: any) => {
-    setCurrentOffer({
-      isActive: true,
-      plan: plan.name,
-      amount: plan.minAmount,
-      expectedReturn: plan.expectedReturn,
-      duration: plan.duration,
-      roi: plan.roi
-    });
-    setShowPaymentModal(true);
-  };
-
-  const nextSlide = () => {
-    const maxSlide = Math.max(0, investmentPlans.length - 3);
-    setCurrentSlide(prev => Math.min(prev + 1, maxSlide));
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide(prev => Math.max(prev - 1, 0));
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
+  // Removed investment handlers - now handled in InvestmentPlansCarousel
 
   const features = [
     {

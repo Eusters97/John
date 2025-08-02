@@ -426,7 +426,7 @@ export default function AdminPanel() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="overview" className="flex items-center space-x-2">
             <BarChart3 className="h-4 w-4" />
             <span>Overview</span>
@@ -438,6 +438,10 @@ export default function AdminPanel() {
           <TabsTrigger value="blog" className="flex items-center space-x-2">
             <FileText className="h-4 w-4" />
             <span>Blog</span>
+          </TabsTrigger>
+          <TabsTrigger value="promos" className="flex items-center space-x-2">
+            <Star className="h-4 w-4" />
+            <span>Promos</span>
           </TabsTrigger>
           <TabsTrigger value="testimonials" className="flex items-center space-x-2">
             <MessageSquare className="h-4 w-4" />

@@ -139,10 +139,21 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
   };
 
   const validateStep1 = () => {
-    if (!formData.email || !formData.password || !formData.confirmPassword || !formData.fullName) {
+    if (!formData.email || !formData.username || !formData.password || !formData.confirmPassword || !formData.fullName) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Username validation
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    if (!usernameRegex.test(formData.username)) {
+      toast({
+        title: "Invalid Username",
+        description: "Username must be 3-20 characters and contain only letters, numbers, and underscores.",
         variant: "destructive",
       });
       return false;

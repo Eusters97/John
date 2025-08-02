@@ -233,6 +233,15 @@ export default function EnhancedUserDashboard() {
   };
 
   const handleWithdraw = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to request a withdrawal",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!withdrawAmount || parseFloat(withdrawAmount) > userStats.balance) {
       toast({
         title: "Invalid Amount",
@@ -257,7 +266,7 @@ export default function EnhancedUserDashboard() {
       const { error } = await supabase
         .from('withdrawal_requests')
         .insert({
-          user_id: user?.id,
+          user_id: user.id,
           amount: parseFloat(withdrawAmount),
           crypto_currency: withdrawCrypto,
           wallet_address: withdrawAddress,

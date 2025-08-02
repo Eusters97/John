@@ -642,6 +642,7 @@ export default function UserDashboard() {
         </div>
       </DashboardLayout>
       <WelcomeOfferModal />
+      <PaymentModal />
     </>
   );
 }

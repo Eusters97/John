@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import FrontPageLayout from "@/components/FrontPageLayout";
 import CookieBanner from "@/components/CookieBanner";

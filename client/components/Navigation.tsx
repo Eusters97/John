@@ -12,6 +12,14 @@ import { Menu, X, TrendingUp, MessageCircle, LogIn, LogOut, User } from "lucide-
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { user, signIn, signUp, signOut } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   return (
     <>

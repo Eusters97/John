@@ -97,27 +97,45 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Create session data
   const createSessionData = async (rememberMe: boolean = false): Promise<SessionData> => {
-    const visitorInfo = await getVisitorInfo()
-    const sessionId = crypto.randomUUID()
-    const now = new Date().toISOString()
-    
-    const sessionData: SessionData = {
-      sessionId,
-      ipAddress: visitorInfo.ipAddress,
-      userAgent: visitorInfo.userAgent,
-      loginTime: now,
-      lastActivity: now,
-      rememberMe
-    }
+    try {
+      const visitorInfo = await getVisitorInfo()
+      const sessionId = crypto.randomUUID()
+      const now = new Date().toISOString()
 
-    // Store session data
-    if (rememberMe) {
-      localStorage.setItem('forex_session', JSON.stringify(sessionData))
-    } else {
-      sessionStorage.setItem('forex_session', JSON.stringify(sessionData))
-    }
+      const sessionData: SessionData = {
+        sessionId,
+        ipAddress: visitorInfo.ipAddress,
+        userAgent: visitorInfo.userAgent,
+        loginTime: now,
+        lastActivity: now,
+        rememberMe
+      }
 
-    return sessionData
+      // Store session data
+      try {
+        if (rememberMe) {
+          localStorage.setItem('forex_session', JSON.stringify(sessionData))
+        } else {
+          sessionStorage.setItem('forex_session', JSON.stringify(sessionData))
+        }
+      } catch (storageError) {
+        console.warn('Unable to store session data:', storageError instanceof Error ? storageError.message : 'Unknown storage error')
+      }
+
+      return sessionData
+    } catch (error) {
+      console.warn('Error creating session data:', error instanceof Error ? error.message : 'Unknown error')
+      // Return a minimal session data object
+      const fallbackSessionData: SessionData = {
+        sessionId: crypto.randomUUID(),
+        ipAddress: 'unknown',
+        userAgent: navigator.userAgent,
+        loginTime: new Date().toISOString(),
+        lastActivity: new Date().toISOString(),
+        rememberMe
+      }
+      return fallbackSessionData
+    }
   }
 
   // Load existing session data

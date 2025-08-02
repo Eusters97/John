@@ -66,7 +66,7 @@ export default function AdminLogin() {
             variant: "destructive"
           });
         } else {
-          navigate('/eustersmain');
+          navigate('/admin-panel');
         }
       }
     } catch (error) {

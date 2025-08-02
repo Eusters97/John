@@ -47,9 +47,10 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
 
   const navigationItems = [
     { icon: Home, label: "Home", path: "/", key: "home" },
+    { icon: Gift, label: "Special Offers", path: "/offers", key: "offers" },
     { icon: Calculator, label: "Investment Plans", path: "/#investment-plans", key: "plans" },
     { icon: Target, label: "Live Signals", path: "/#live-signals", key: "signals" },
-    { icon: BookOpen, label: "Education", path: "/#education", key: "education" },
+    { icon: BookOpen, label: "Education", path: "/education", key: "education" },
     { icon: FileText, label: "Blog", path: "/blog", key: "blog" },
     { icon: Star, label: "Testimonials", path: "/#testimonials", key: "testimonials" },
     { icon: Newspaper, label: "News", path: "/news", key: "news" },

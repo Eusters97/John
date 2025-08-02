@@ -237,8 +237,8 @@ export default function EnhancedUserDashboard() {
         balance: userBalance,
         ...investmentStats,
         totalROI: investmentStats.totalInvested > 0 ? (investmentStats.totalProfit / investmentStats.totalInvested) * 100 : 0,
-        pendingPayouts: 1,
-        referralEarnings: 127.50
+        pendingPayouts: 0,
+        referralEarnings: 0.00
       };
 
       setUserStats(stats);

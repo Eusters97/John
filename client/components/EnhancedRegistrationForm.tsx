@@ -109,6 +109,7 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<RegistrationFormData>({
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
     fullName: "",

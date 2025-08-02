@@ -791,6 +791,197 @@ export default function AdminPanel() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="promos" className="space-y-6">
+          {/* Header */}
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold">Promotional Pages</h2>
+              <p className="text-gray-600">Create and manage promotional landing pages with custom themes</p>
+            </div>
+            <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+              <Plus className="mr-2 h-4 w-4" />
+              Create New Promo Page
+            </Button>
+          </div>
+
+          {/* Existing Promo Pages */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Sample Promo Page 1 */}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">Black Friday Special</CardTitle>
+                    <p className="text-sm text-gray-600">50% off all investment plans</p>
+                  </div>
+                  <Badge className="bg-green-500">Active</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Theme:</span>
+                    <span className="font-medium">Dark Gold</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Views:</span>
+                    <span className="font-medium">2,340</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Conversions:</span>
+                    <span className="font-medium">156 (6.7%)</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Created:</span>
+                    <span className="font-medium">Nov 20, 2024</span>
+                  </div>
+
+                  <div className="flex space-x-2 pt-4">
+                    <Button size="sm" variant="outline" className="flex-1">
+                      <Eye className="mr-1 h-3 w-3" />
+                      Preview
+                    </Button>
+                    <Button size="sm" variant="outline" className="flex-1">
+                      <Edit className="mr-1 h-3 w-3" />
+                      Edit
+                    </Button>
+                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Sample Promo Page 2 */}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">New Year Boost</CardTitle>
+                    <p className="text-sm text-gray-600">Start 2024 with guaranteed returns</p>
+                  </div>
+                  <Badge variant="outline">Draft</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Theme:</span>
+                    <span className="font-medium">Luxury Blue</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Views:</span>
+                    <span className="font-medium">0</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Conversions:</span>
+                    <span className="font-medium">0 (0%)</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Created:</span>
+                    <span className="font-medium">Dec 28, 2024</span>
+                  </div>
+
+                  <div className="flex space-x-2 pt-4">
+                    <Button size="sm" variant="outline" className="flex-1">
+                      <Eye className="mr-1 h-3 w-3" />
+                      Preview
+                    </Button>
+                    <Button size="sm" variant="outline" className="flex-1">
+                      <Edit className="mr-1 h-3 w-3" />
+                      Edit
+                    </Button>
+                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Create New Promo Card */}
+            <Card className="border-2 border-dashed border-gray-300 hover:border-purple-400 transition-colors cursor-pointer">
+              <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4">
+                  <Plus className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Create New Promo Page</h3>
+                <p className="text-gray-600 text-sm mb-4">Design a custom promotional landing page</p>
+                <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                  Get Started
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Theme Templates */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Available Themes</CardTitle>
+              <p className="text-gray-600">Choose from pre-designed themes for your promotional pages</p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Theme 1 */}
+                <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded mb-3"></div>
+                  <h4 className="font-medium">Golden Opportunity</h4>
+                  <p className="text-xs text-gray-600">Luxury gold theme with elegant animations</p>
+                </div>
+
+                {/* Theme 2 */}
+                <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded mb-3"></div>
+                  <h4 className="font-medium">Professional Blue</h4>
+                  <p className="text-xs text-gray-600">Clean and professional business theme</p>
+                </div>
+
+                {/* Theme 3 */}
+                <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded mb-3"></div>
+                  <h4 className="font-medium">Success Green</h4>
+                  <p className="text-xs text-gray-600">Growth-focused theme with success elements</p>
+                </div>
+
+                {/* Theme 4 */}
+                <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded mb-3"></div>
+                  <h4 className="font-medium">Dark Elite</h4>
+                  <p className="text-xs text-gray-600">Premium dark theme for exclusive offers</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Analytics */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Promotional Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600">12</div>
+                  <div className="text-sm text-gray-600">Active Promos</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-600">15,240</div>
+                  <div className="text-sm text-gray-600">Total Views</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-purple-600">1,087</div>
+                  <div className="text-sm text-gray-600">Conversions</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-600">7.1%</div>
+                  <div className="text-sm text-gray-600">Avg Conversion Rate</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="users" className="space-y-6">
           <Card>
             <CardHeader>

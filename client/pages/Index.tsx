@@ -255,8 +255,91 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Investment Plans Section */}
+      <section id="investment-plans" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Investment Plans
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Choose the plan that fits your investment goals and start earning immediately
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {investmentPlans.map((plan, index) => (
+              <Card key={plan.id} className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 ${plan.popular ? 'ring-2 ring-forex-500 shadow-2xl' : 'shadow-lg'}`}>
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge className="bg-gradient-to-r from-forex-500 to-blue-500 text-white px-4 py-1">
+                      🔥 Most Popular
+                    </Badge>
+                  </div>
+                )}
+
+                <div className={`h-2 bg-gradient-to-r ${plan.popular ? 'from-forex-500 to-blue-500' : 'from-gray-300 to-gray-400'}`}></div>
+
+                <CardHeader className="text-center pb-4">
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${plan.popular ? 'from-forex-500 to-blue-500' : 'from-gray-400 to-gray-500'} flex items-center justify-center`}>
+                    <DollarSign className="h-8 w-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
+                  <div className="text-4xl font-bold text-forex-600 mb-2">{plan.roi}</div>
+                  <p className="text-gray-600">{plan.description}</p>
+                  <div className="mt-4 p-3 bg-forex-50 rounded-lg">
+                    <div className="text-sm text-gray-600">Investment Range</div>
+                    <div className="text-lg font-semibold">${plan.minAmount} - ${plan.maxAmount.toLocaleString()}</div>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Minimum Investment:</span>
+                      <span className="font-semibold">${plan.minAmount}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Expected Return:</span>
+                      <span className="font-semibold text-success-600">${plan.expectedReturn.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Duration:</span>
+                      <span className="font-semibold">{plan.duration}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-gray-700">Features:</div>
+                    <div className="space-y-1">
+                      {plan.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center space-x-2 text-sm text-gray-600">
+                          <CheckCircle className="h-4 w-4 text-success-500" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => handleInvestNow(plan)}
+                    className={`w-full py-3 text-lg font-semibold transition-all duration-200 ${
+                      plan.popular
+                        ? 'bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600 shadow-lg hover:shadow-xl'
+                        : 'bg-gray-700 hover:bg-gray-800'
+                    }`}
+                  >
+                    Invest Now
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">

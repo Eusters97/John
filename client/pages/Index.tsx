@@ -368,8 +368,35 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {investmentPlans.map((plan, index) => (
+          <div className="relative">
+            {/* Navigation Arrows */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg"
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg"
+              onClick={nextSlide}
+              disabled={currentSlide >= Math.max(0, investmentPlans.length - 3)}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+
+            {/* Sliding Container */}
+            <div className="overflow-hidden mx-12">
+              <div
+                className="flex transition-transform duration-500 ease-in-out gap-8"
+                style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
+              >
+                {investmentPlans.map((plan, index) => (
               <Card key={plan.id} className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 ${plan.popular ? 'ring-2 ring-forex-500 shadow-2xl' : 'shadow-lg'}`}>
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
@@ -434,7 +461,22 @@ export default function Index() {
                   </Button>
                 </CardContent>
               </Card>
-            ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: Math.max(1, investmentPlans.length - 2) }).map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    currentSlide === index ? 'bg-forex-600' : 'bg-gray-300'
+                  }`}
+                  onClick={() => goToSlide(index)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

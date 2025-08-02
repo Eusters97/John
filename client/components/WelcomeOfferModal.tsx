@@ -48,16 +48,25 @@ export default function WelcomeOfferModal() {
   };
 
   const handleAcceptOffer = () => {
-    // Set the starter offer and show payment modal
-    setCurrentOffer({
-      isActive: true,
-      plan: "Starter Plan",
-      amount: 100,
-      expectedReturn: 2500,
-      duration: "24 hours",
-      roi: "2,500%"
+    // Redirect to dashboard with starter offer
+    toast({
+      title: "Redirecting to Dashboard",
+      description: "Please complete the investment from your dashboard",
     });
-    setShowPaymentModal(true);
+
+    navigate("/dashboard?tab=plans", {
+      state: {
+        selectedPlan: {
+          id: "starter",
+          name: "Starter Plan",
+          minAmount: 100,
+          expectedReturn: 2500,
+          duration: "24 hours",
+          roi: "2,500%"
+        },
+        action: "invest"
+      }
+    });
     handleClose();
   };
 

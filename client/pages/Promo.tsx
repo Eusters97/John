@@ -18,7 +18,6 @@ import {
   Target,
   Rocket,
   Crown,
-  Lightning,
   Trophy,
   Sparkles
 } from "lucide-react";

@@ -50,11 +50,16 @@ export default function DashboardLayout({ children, isAdmin = false }: Dashboard
   const userNavItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard", key: "overview" },
     { icon: Wallet, label: "Balance", path: "/dashboard", key: "balance" },
+    { icon: ArrowDownToLine, label: "Deposit", path: "/dashboard", key: "deposit" },
+    { icon: ArrowUpFromLine, label: "Withdraw", path: "/dashboard", key: "withdraw" },
     { icon: Calculator, label: "Investment Plans", path: "/dashboard", key: "plans" },
+    { icon: Gift, label: "Special Offers", path: "/dashboard", key: "offers" },
     { icon: TrendingUp, label: "Active Investments", path: "/dashboard", key: "active" },
     { icon: History, label: "Investment History", path: "/dashboard", key: "history" },
-    { icon: DollarSign, label: "Payouts", path: "/dashboard", key: "payouts" },
+    { icon: DollarSign, label: "Transactions", path: "/dashboard", key: "transactions" },
     { icon: Award, label: "Referrals", path: "/dashboard", key: "referrals" },
+    { icon: Send, label: "Telegram Login", path: "/dashboard", key: "telegram" },
+    { icon: Phone, label: "Support Tickets", path: "/dashboard", key: "support" },
     { icon: Settings, label: "Settings", path: "/dashboard", key: "settings" }
   ];
 

@@ -193,8 +193,7 @@ export default function Index() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-forex-50">
-      <Navigation />
+    <FrontPageLayout>
       
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-32">
@@ -485,6 +484,7 @@ export default function Index() {
       </footer>
 
       <CookieBanner />
-    </div>
+      <PaymentModal />
+    </FrontPageLayout>
   );
 }

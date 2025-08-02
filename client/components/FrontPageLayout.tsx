@@ -23,7 +23,8 @@ import {
   Newspaper,
   BarChart3,
   DollarSign,
-  Wallet
+  Wallet,
+  BookOpen
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 

@@ -20,7 +20,9 @@ import {
   ArrowUp,
   ArrowDown,
   Target,
-  CheckCircle
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 export default function Index() {

@@ -14,6 +14,7 @@ import Blog from "./pages/Blog";
 import News from "./pages/News";
 import Dashboard from "./pages/Dashboard";
 import EnhancedUserDashboard from "./pages/EnhancedUserDashboard";
+import TestDashboard from "./pages/TestDashboard";
 import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
 import AdminLogin from "./pages/AdminLogin";

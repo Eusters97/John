@@ -25,14 +25,12 @@ import {
 } from "lucide-react";
 
 export default function Index() {
-  const { setCurrentOffer, setShowPaymentModal } = useInvestment();
   const [stats, setStats] = useState({
     signalsSent: 1247,
     winRate: 87.3,
     avgROI: 12.5,
     activeUsers: 3421
   });
-  const [currentSlide, setCurrentSlide] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Animate counters on load

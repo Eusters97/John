@@ -45,6 +45,18 @@ export default function Index() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleInvestNow = (plan: any) => {
+    setCurrentOffer({
+      isActive: true,
+      plan: plan.name,
+      amount: plan.minAmount,
+      expectedReturn: plan.expectedReturn,
+      duration: plan.duration,
+      roi: plan.roi
+    });
+    setShowPaymentModal(true);
+  };
+
   const features = [
     {
       icon: <MessageCircle className="h-8 w-8 text-forex-600" />,

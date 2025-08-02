@@ -239,12 +239,36 @@ export default function Index() {
               🔥 87.3% Win Rate • 12.5% Avg ROI
             </Badge>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-gray-900 via-forex-600 to-blue-600 bg-clip-text text-transparent">
+            {/* Floating Currency Icons */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-20 left-10 animate-bounce delay-700">
+                <div className="w-12 h-12 bg-gradient-to-r from-forex-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  €
+                </div>
+              </div>
+              <div className="absolute top-40 right-20 animate-bounce delay-1000">
+                <div className="w-10 h-10 bg-gradient-to-r from-success-500 to-success-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  $
+                </div>
+              </div>
+              <div className="absolute bottom-40 left-20 animate-bounce delay-500">
+                <div className="w-14 h-14 bg-gradient-to-r from-gold-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  ¥
+                </div>
+              </div>
+              <div className="absolute bottom-20 right-10 animate-bounce delay-300">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-sm">
+                  £
+                </div>
+              </div>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 animate-fade-in">
+              <span className="bg-gradient-to-r from-gray-900 via-forex-600 to-blue-600 bg-clip-text text-transparent animate-pulse">
                 FREE FOREX SIGNALS
               </span>
               <br />
-              <span className="text-gray-800">That Actually Work</span>
+              <span className="text-gray-800 animate-fade-in delay-500">That Actually Work</span>
             </h1>
             
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">

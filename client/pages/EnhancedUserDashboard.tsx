@@ -1076,6 +1076,135 @@ export default function EnhancedUserDashboard() {
           </Card>
         );
 
+      case 'active':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Investments</CardTitle>
+              <p className="text-gray-600">Monitor your current investment positions</p>
+            </CardHeader>
+            <CardContent>
+              {userStats.activeInvestments === 0 ? (
+                <div className="text-center py-12">
+                  <TrendingUp className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No Active Investments</h3>
+                  <p className="text-gray-500 mb-6">You don't have any active investments at the moment.</p>
+                  <Button
+                    onClick={() => navigate('/investment-plans')}
+                    className="bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Start Investing
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* This would be populated with actual investment data */}
+                    <div className="text-center text-gray-500">
+                      Active investments will appear here when you make an investment.
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        );
+
+      case 'history':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Investment History</CardTitle>
+              <p className="text-gray-600">View all your completed investments and returns</p>
+            </CardHeader>
+            <CardContent>
+              {userStats.completedInvestments === 0 ? (
+                <div className="text-center py-12">
+                  <History className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No Investment History</h3>
+                  <p className="text-gray-500 mb-6">Your completed investments will appear here.</p>
+                  <Button
+                    onClick={() => navigate('/investment-plans')}
+                    className="bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
+                  >
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Make Your First Investment
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-3">Plan</th>
+                          <th className="text-left p-3">Amount</th>
+                          <th className="text-left p-3">Return</th>
+                          <th className="text-left p-3">ROI</th>
+                          <th className="text-left p-3">Date</th>
+                          <th className="text-left p-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b">
+                          <td className="p-3 text-gray-500" colSpan={6}>
+                            No completed investments yet.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        );
+
+      case 'transactions':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Transaction History</CardTitle>
+              <p className="text-gray-600">View all your deposits, withdrawals, and transactions</p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <Badge variant="outline">All Transactions</Badge>
+                    <Badge variant="outline">Deposits</Badge>
+                    <Badge variant="outline">Withdrawals</Badge>
+                    <Badge variant="outline">Investments</Badge>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-3">Type</th>
+                        <th className="text-left p-3">Amount</th>
+                        <th className="text-left p-3">Method</th>
+                        <th className="text-left p-3">Status</th>
+                        <th className="text-left p-3">Date</th>
+                        <th className="text-left p-3">TXN ID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="p-3 text-gray-500" colSpan={6}>
+                          No transactions yet. Your transaction history will appear here.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+
       case 'support':
         return (
           <Card>

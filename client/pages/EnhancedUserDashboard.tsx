@@ -977,6 +977,105 @@ export default function EnhancedUserDashboard() {
           </Card>
         );
 
+      case 'referrals':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Referral Program</CardTitle>
+              <p className="text-gray-600">Earn commission by referring new investors to our platform</p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border border-blue-200">
+                <h3 className="text-lg font-semibold mb-4">Earn 10% Commission on Every Referral!</h3>
+                <p className="text-gray-600 mb-4">
+                  Share your unique referral link and earn 10% commission on every investment made by your referrals.
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="referral-link">Your Referral Link</Label>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <Input
+                        id="referral-link"
+                        value={`https://www.forextraderssignals.com/?ref=${user?.id?.slice(0, 8) || 'user'}`}
+                        readOnly
+                        className="bg-white"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`https://www.forextraderssignals.com/?ref=${user?.id?.slice(0, 8) || 'user'}`);
+                          toast({
+                            title: "Copied!",
+                            description: "Referral link copied to clipboard",
+                          });
+                        }}
+                      >
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="text-center p-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Users className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900">0</div>
+                  <div className="text-sm text-gray-600">Total Referrals</div>
+                </Card>
+
+                <Card className="text-center p-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <DollarSign className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-2xl font-bold text-green-600">${userStats.referralEarnings.toFixed(2)}</div>
+                  <div className="text-sm text-gray-600">Total Earned</div>
+                </Card>
+
+                <Card className="text-center p-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <TrendingUp className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-2xl font-bold text-purple-600">10%</div>
+                  <div className="text-sm text-gray-600">Commission Rate</div>
+                </Card>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-3">How It Works</h3>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>Share your unique referral link with friends and family</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>When someone signs up and makes their first investment, you earn 10% commission</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>Commissions are paid directly to your account balance</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>No limit on the number of referrals you can make</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Share on Social Media
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        );
+
       case 'support':
         return (
           <Card>
@@ -1024,7 +1123,7 @@ export default function EnhancedUserDashboard() {
                   />
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleSupportTicket}
                   disabled={loading || !supportTicket.subject || !supportTicket.category}
                   className="w-full bg-blue-600 hover:bg-blue-700"

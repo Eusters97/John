@@ -204,6 +204,64 @@ CREATE TABLE IF NOT EXISTS public.system_settings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Withdrawal requests table
+CREATE TABLE IF NOT EXISTS public.withdrawal_requests (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
+    amount DECIMAL(12,2) NOT NULL,
+    crypto_currency VARCHAR(10) NOT NULL,
+    wallet_address TEXT NOT NULL,
+    network VARCHAR(20) NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'cancelled', 'failed')),
+    admin_notes TEXT,
+    processed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Support tickets table
+CREATE TABLE IF NOT EXISTS public.support_tickets (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
+    subject VARCHAR(255) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    status VARCHAR(20) DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+    priority VARCHAR(10) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'urgent')),
+    admin_response TEXT,
+    responded_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- User balance table
+CREATE TABLE IF NOT EXISTS public.user_balances (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
+    balance DECIMAL(12,2) DEFAULT 0.00 NOT NULL,
+    pending_deposits DECIMAL(12,2) DEFAULT 0.00 NOT NULL,
+    pending_withdrawals DECIMAL(12,2) DEFAULT 0.00 NOT NULL,
+    total_deposited DECIMAL(12,2) DEFAULT 0.00 NOT NULL,
+    total_withdrawn DECIMAL(12,2) DEFAULT 0.00 NOT NULL,
+    last_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(user_id)
+);
+
+-- Deposits table
+CREATE TABLE IF NOT EXISTS public.deposits (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
+    amount DECIMAL(12,2) NOT NULL,
+    currency VARCHAR(10) NOT NULL DEFAULT 'USD',
+    crypto_currency VARCHAR(10),
+    payment_method VARCHAR(50) NOT NULL,
+    payment_id_external VARCHAR(255),
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'failed', 'cancelled')),
+    transaction_hash VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Insert default investment plans
 INSERT INTO public.investment_plans (name, description, minimum_amount, maximum_amount, roi_percentage, duration_days) VALUES
 ('Starter Plan', 'Perfect for beginners', 200.00, 999.00, 2500.00, 30),

@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Menu, X, TrendingUp, MessageCircle, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, MessageCircle, LogIn, LogOut, User } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1283,6 +1283,184 @@ export default function EnhancedUserDashboard() {
           </Card>
         );
 
+      case 'settings':
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Account Settings</CardTitle>
+                <p className="text-gray-600">Update your account information and preferences</p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Personal Information</h3>
+
+                    <div>
+                      <Label htmlFor="full-name">Full Name</Label>
+                      <Input
+                        id="full-name"
+                        placeholder="Enter your full name"
+                        defaultValue={user?.user_metadata?.full_name || ''}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email">Email Address</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={user?.email || ''}
+                        disabled
+                        className="bg-gray-50"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        placeholder="+1 (555) 123-4567"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="country">Country</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="us">United States</SelectItem>
+                          <SelectItem value="ca">Canada</SelectItem>
+                          <SelectItem value="uk">United Kingdom</SelectItem>
+                          <SelectItem value="de">Germany</SelectItem>
+                          <SelectItem value="fr">France</SelectItem>
+                          <SelectItem value="jp">Japan</SelectItem>
+                          <SelectItem value="au">Australia</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Withdrawal Settings</h3>
+
+                    <div>
+                      <Label htmlFor="btc-address">Bitcoin (BTC) Address</Label>
+                      <Input
+                        id="btc-address"
+                        placeholder="Enter your BTC wallet address"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="eth-address">Ethereum (ETH) Address</Label>
+                      <Input
+                        id="eth-address"
+                        placeholder="Enter your ETH wallet address"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="usdt-address">USDT Address</Label>
+                      <Input
+                        id="usdt-address"
+                        placeholder="Enter your USDT wallet address"
+                        defaultValue=""
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="preferred-network">Preferred Network</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select preferred network" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="mainnet">Bitcoin Mainnet</SelectItem>
+                          <SelectItem value="erc20">ERC20 (Ethereum)</SelectItem>
+                          <SelectItem value="bep20">BEP20 (BSC)</SelectItem>
+                          <SelectItem value="trc20">TRC20 (Tron)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Security Settings</h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="current-password">Current Password</Label>
+                      <Input
+                        id="current-password"
+                        type="password"
+                        placeholder="Enter current password"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="new-password">New Password</Label>
+                      <Input
+                        id="new-password"
+                        type="password"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-4">
+                  <Button variant="outline">
+                    Cancel
+                  </Button>
+                  <Button className="bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600">
+                    Save Changes
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Notification Preferences</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">Email Notifications</div>
+                    <div className="text-sm text-gray-600">Receive updates about your investments via email</div>
+                  </div>
+                  <Button variant="outline" size="sm">Enable</Button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">Telegram Notifications</div>
+                    <div className="text-sm text-gray-600">Get instant notifications via Telegram</div>
+                  </div>
+                  <Button variant="outline" size="sm">Connect</Button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">Investment Alerts</div>
+                    <div className="text-sm text-gray-600">Notifications when investments mature</div>
+                  </div>
+                  <Button variant="outline" size="sm">Enable</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+
       default:
         return (
           <Card>

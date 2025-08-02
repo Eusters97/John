@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import UserDashboard from "./pages/UserDashboard";
 import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
+import Promo from "./pages/Promo";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

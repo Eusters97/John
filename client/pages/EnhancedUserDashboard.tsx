@@ -100,6 +100,63 @@ export default function EnhancedUserDashboard() {
     }
   }, [user]);
 
+  const initializeUserData = async () => {
+    if (!user?.id) return;
+
+    try {
+      // Check if user profile exists
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError && profileError.code === 'PGRST116') {
+        // User profile doesn't exist, create it
+        console.log('Creating user profile...');
+        const { error: createError } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: user.id,
+            email: user.email || '',
+            full_name: user.user_metadata?.full_name || user.email || 'User'
+          });
+
+        if (createError) {
+          console.error('Failed to create user profile:', createError);
+        } else {
+          console.log('User profile created successfully');
+        }
+      }
+
+      // Check if user balance exists
+      const { data: balance, error: balanceError } = await supabase
+        .from('user_balances')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (balanceError && balanceError.code === 'PGRST116') {
+        // User balance doesn't exist, create it
+        console.log('Creating user balance entry...');
+        const { error: createBalanceError } = await supabase
+          .from('user_balances')
+          .insert({
+            user_id: user.id,
+            balance: 2450.00 // Default balance
+          });
+
+        if (createBalanceError) {
+          console.error('Failed to create user balance:', createBalanceError);
+        } else {
+          console.log('User balance created successfully');
+        }
+      }
+    } catch (error) {
+      console.warn('Error initializing user data:', error instanceof Error ? error.message : 'Unknown error');
+    }
+  };
+
   const loadUserStats = async () => {
     if (!user?.id) {
       console.warn('No user ID available for loading stats');

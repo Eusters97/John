@@ -264,23 +264,47 @@ export default function Navigation() {
             </TabsContent>
             
             <TabsContent value="email" className="space-y-4 mt-6">
-              <div className="space-y-4">
+              <form onSubmit={handleEmailAuth} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="your@email.com" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" placeholder="••••••••" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                  />
                 </div>
-                <Button className="w-full">Sign In</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
+                </Button>
                 <div className="text-center text-sm">
-                  <span className="text-gray-600">Don't have an account? </span>
-                  <Button variant="link" className="p-0 h-auto text-forex-600">
-                    Sign up
+                  <span className="text-gray-600">
+                    {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="p-0 h-auto text-forex-600"
+                    onClick={() => setIsSignUp(!isSignUp)}
+                  >
+                    {isSignUp ? "Sign in" : "Sign up"}
                   </Button>
                 </div>
-              </div>
+              </form>
             </TabsContent>
           </Tabs>
         </DialogContent>

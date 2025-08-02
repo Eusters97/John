@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  BookOpen, 
-  Download, 
-  Star, 
-  Clock, 
+import {
+  BookOpen,
+  Download,
+  Star,
+  Clock,
   Users,
   TrendingUp,
   Target,
-  Brain
+  Brain,
+  Eye
 } from "lucide-react";
 
 interface Ebook {

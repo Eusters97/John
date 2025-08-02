@@ -222,6 +222,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const activityInterval = setInterval(updateLastActivity, 60000)
 
     return () => {
+      clearTimeout(timer)
       subscription.unsubscribe()
       clearInterval(activityInterval)
     }

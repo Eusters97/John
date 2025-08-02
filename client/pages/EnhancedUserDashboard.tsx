@@ -150,7 +150,7 @@ export default function EnhancedUserDashboard() {
           .from('user_balances')
           .insert({
             user_id: user.id,
-            balance: 2450.00 // Default balance
+            balance: 0.00 // Starting balance
           });
 
         if (createBalanceError) {

@@ -873,6 +873,195 @@ export default function AdminPanel() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="settings" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Website Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Website Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="site-name">Website Name</Label>
+                  <Input
+                    id="site-name"
+                    defaultValue="FREE FOREX SIGNALS PROVIDER"
+                    placeholder="Website name"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="site-description">Website Description</Label>
+                  <Textarea
+                    id="site-description"
+                    defaultValue="Professional forex trading signals and investment platform"
+                    placeholder="Website description"
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="support-email">Support Email</Label>
+                  <Input
+                    id="support-email"
+                    type="email"
+                    defaultValue="support@forexsignals.com"
+                    placeholder="Support email address"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="telegram-channel">Telegram Channel</Label>
+                  <Input
+                    id="telegram-channel"
+                    defaultValue="@forex_traders_signalss"
+                    placeholder="Telegram channel username"
+                  />
+                </div>
+
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Update Website Settings
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Investment Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="min-investment">Minimum Investment (USD)</Label>
+                  <Input
+                    id="min-investment"
+                    type="number"
+                    defaultValue="200"
+                    placeholder="Minimum investment amount"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="min-deposit">Minimum Deposit (USD)</Label>
+                  <Input
+                    id="min-deposit"
+                    type="number"
+                    defaultValue="60"
+                    placeholder="Minimum deposit amount"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="roi-percentage">Default ROI Percentage</Label>
+                  <Input
+                    id="roi-percentage"
+                    type="number"
+                    defaultValue="2500"
+                    placeholder="ROI percentage"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="investment-duration">Default Duration (days)</Label>
+                  <Input
+                    id="investment-duration"
+                    type="number"
+                    defaultValue="10"
+                    placeholder="Investment duration in days"
+                  />
+                </div>
+
+                <Button className="w-full bg-green-600 hover:bg-green-700">
+                  Update Investment Settings
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Logo Upload */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Website Logo</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="logo-upload">Upload New Logo</Label>
+                  <Input
+                    id="logo-upload"
+                    type="file"
+                    accept="image/*"
+                    className="cursor-pointer"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    Recommended size: 200x50px, PNG or SVG format
+                  </p>
+                </div>
+
+                <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+                  <div className="text-gray-500">Current Logo Preview</div>
+                  <div className="mt-4 text-2xl font-bold bg-gradient-to-r from-forex-600 to-blue-600 bg-clip-text text-transparent">
+                    FREE FOREX SIGNALS PROVIDER
+                  </div>
+                </div>
+
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload Logo
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Popup Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Popup Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="popup-enabled"
+                    defaultChecked
+                  />
+                  <Label htmlFor="popup-enabled">Enable Welcome Popup</Label>
+                </div>
+
+                <div>
+                  <Label htmlFor="popup-title">Popup Title</Label>
+                  <Input
+                    id="popup-title"
+                    defaultValue="🎉 Welcome Exclusive Offer!"
+                    placeholder="Popup title"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="popup-content">Popup Content</Label>
+                  <Textarea
+                    id="popup-content"
+                    defaultValue="Get started with just $100 and earn $2,500 in 24 hours! Limited time offer for new investors."
+                    placeholder="Popup content"
+                    rows={4}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="popup-show-count">Times to Show (per user)</Label>
+                  <Input
+                    id="popup-show-count"
+                    type="number"
+                    defaultValue="10"
+                    placeholder="Number of times to show popup"
+                  />
+                </div>
+
+                <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                  Update Popup Settings
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );

@@ -45,8 +45,16 @@ export default function WelcomeOfferModal() {
   };
 
   const handleAcceptOffer = () => {
-    // Navigate to investment plans with starter plan selected
-    window.location.href = '/dashboard?tab=plans';
+    // Set the starter offer and show payment modal
+    setCurrentOffer({
+      isActive: true,
+      plan: "Starter Plan",
+      amount: 100,
+      expectedReturn: 2500,
+      duration: "24 hours",
+      roi: "2,500%"
+    });
+    setShowPaymentModal(true);
     handleClose();
   };
 

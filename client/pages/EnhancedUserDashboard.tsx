@@ -101,12 +101,17 @@ export default function EnhancedUserDashboard() {
   }, [user]);
 
   const loadUserStats = async () => {
+    if (!user?.id) {
+      console.warn('No user ID available for loading stats');
+      return;
+    }
+
     try {
       // Load user investments
       const { data: investments, error } = await supabase
         .from('user_investments')
         .select('*, payments(*)')
-        .eq('user_id', user?.id);
+        .eq('user_id', user.id);
 
       if (error) throw error;
 

@@ -95,8 +95,10 @@ export default function EnhancedUserDashboard() {
 
   useEffect(() => {
     if (user) {
-      loadUserStats();
-      checkTelegramConnection();
+      initializeUserData().then(() => {
+        loadUserStats();
+        checkTelegramConnection();
+      });
     }
   }, [user]);
 

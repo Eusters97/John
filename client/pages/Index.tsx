@@ -337,7 +337,15 @@ export default function Index() {
                     <div className="w-12 h-12 bg-gradient-to-r from-forex-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-3">
                       {testimonial.avatar}
                     </div>
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                    <div className="flex items-center justify-center space-x-2 mb-1">
+                      <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                      {testimonial.verified && (
+                        <Badge className="bg-success-500 text-white text-xs">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
                     <div className="text-sm text-gray-500">{testimonial.role}</div>
                   </div>
                 </CardContent>

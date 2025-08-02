@@ -24,7 +24,8 @@ import {
   Award,
   MessageSquare,
   Bell,
-  Search
+  Search,
+  BookOpen
 } from "lucide-react";
 
 interface DashboardLayoutProps {

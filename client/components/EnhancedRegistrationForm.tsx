@@ -60,7 +60,7 @@ const countries = [
   { code: "+971", name: "United Arab Emirates", flag: "🇦🇪" },
   { code: "+966", name: "Saudi Arabia", flag: "🇸🇦" },
   { code: "+965", name: "Kuwait", flag: "🇰🇼" },
-  { code: "+974", name: "Qatar", flag: "🇶🇦" },
+  { code: "+974", name: "Qatar", flag: "��🇦" },
   { code: "+973", name: "Bahrain", flag: "🇧🇭" },
   { code: "+968", name: "Oman", flag: "🇴🇲" },
   { code: "+962", name: "Jordan", flag: "🇯🇴" },
@@ -334,6 +334,22 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   onChange={(e) => updateFormData("fullName", e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="username" className="flex items-center space-x-2">
+                  <User className="h-4 w-4" />
+                  <span>Username *</span>
+                </Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Choose a unique username"
+                  value={formData.username}
+                  onChange={(e) => updateFormData("username", e.target.value)}
+                  required
+                />
+                <p className="text-xs text-gray-500">3-20 characters, letters, numbers, and underscores only</p>
               </div>
 
               <div className="space-y-2">

@@ -75,17 +75,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         timestamp: new Date().toISOString(),
         page: window.location.pathname
       }
-      
+
       // Store in localStorage for admin analytics
-      const visitors = JSON.parse(localStorage.getItem('forex_visitors') || '[]')
-      visitors.push(visitData)
-      // Keep only last 1000 visitors
-      if (visitors.length > 1000) {
-        visitors.splice(0, visitors.length - 1000)
+      try {
+        const visitors = JSON.parse(localStorage.getItem('forex_visitors') || '[]')
+        visitors.push(visitData)
+        // Keep only last 1000 visitors
+        if (visitors.length > 1000) {
+          visitors.splice(0, visitors.length - 1000)
+        }
+        localStorage.setItem('forex_visitors', JSON.stringify(visitors))
+      } catch (storageError) {
+        // Silently fail if localStorage is not available
+        console.warn('Unable to store visitor data:', storageError instanceof Error ? storageError.message : 'Unknown storage error')
       }
-      localStorage.setItem('forex_visitors', JSON.stringify(visitors))
     } catch (error) {
-      console.error('Error tracking visitor:', error)
+      // Don't throw errors for visitor tracking - it's not critical
+      console.warn('Error tracking visitor:', error instanceof Error ? error.message : 'Unknown error')
     }
   }
 

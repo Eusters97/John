@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface InvestmentOffer {
+  id?: string;
   isActive: boolean;
   plan: string;
+  name: string;
   amount: number;
   expectedReturn: number;
   duration: string;

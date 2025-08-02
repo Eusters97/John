@@ -51,6 +51,8 @@ export default function WelcomeOfferModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-4xl p-0 bg-gradient-to-br from-forex-50 via-white to-blue-50 border-0 overflow-hidden">
+        <DialogTitle className="sr-only">Welcome Offer - Exclusive Investment Opportunity</DialogTitle>
+
         {/* Close Button */}
         <Button
           variant="ghost"

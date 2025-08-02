@@ -61,7 +61,7 @@ const App = () => (
             path="/admin-panel"
             element={
               <ProtectedRoute>
-                <SuperAdmin />
+                <AdminPanel />
               </ProtectedRoute>
             }
           />

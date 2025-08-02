@@ -634,10 +634,13 @@ export default function UserDashboard() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-6">
-        {renderContent()}
-      </div>
-    </DashboardLayout>
+    <>
+      <DashboardLayout>
+        <div className="p-6">
+          {renderContent()}
+        </div>
+      </DashboardLayout>
+      <WelcomeOfferModal />
+    </>
   );
 }

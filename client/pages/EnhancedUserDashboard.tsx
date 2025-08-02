@@ -150,15 +150,19 @@ export default function EnhancedUserDashboard() {
   };
 
   const checkTelegramConnection = async () => {
-    // Check if user has connected Telegram
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .select('telegram_id')
-      .eq('id', user?.id)
-      .single();
+    try {
+      // Check if user has connected Telegram
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('telegram_id')
+        .eq('id', user?.id)
+        .single();
 
-    if (!error && data?.telegram_id) {
-      setTelegramConnected(true);
+      if (!error && data?.telegram_id) {
+        setTelegramConnected(true);
+      }
+    } catch (error) {
+      console.error('Error checking telegram connection:', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { useInvestment } from "@/contexts/InvestmentContext";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -185,7 +185,7 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
                 className="w-full text-xs"
               >
                 <Wallet className="h-3 w-3 mr-1" />
-                $1,000 → $4,000
+                $1,000 ��� $4,000
               </Button>
             </div>
           </div>

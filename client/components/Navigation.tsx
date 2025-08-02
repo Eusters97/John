@@ -94,13 +94,8 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-to-r from-forex-600 to-forex-500 p-2 rounded-lg">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-forex-600 to-forex-500 bg-clip-text text-transparent">
-                FREE FOREX SIGNALS
-              </span>
+            <Link to="/">
+              <Logo size="sm" />
             </Link>
 
             {/* Desktop Navigation */}

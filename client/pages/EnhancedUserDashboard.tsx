@@ -107,6 +107,21 @@ export default function EnhancedUserDashboard() {
     }
 
     try {
+      // First test basic Supabase connection
+      console.log('Testing Supabase connection...');
+      const { data: testData, error: testError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('id', user.id)
+        .limit(1);
+
+      if (testError) {
+        console.error('Supabase connection test failed:', testError);
+        throw new Error(`Connection failed: ${testError.message}`);
+      }
+
+      console.log('Supabase connection successful, user profile exists:', !!testData?.length);
+
       // Try to load user balance first (simpler query)
       let userBalance = 2450.00; // Default balance
 

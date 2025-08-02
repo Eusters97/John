@@ -48,6 +48,7 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
     { icon: Home, label: "Home", path: "/", key: "home" },
     { icon: Calculator, label: "Investment Plans", path: "/#investment-plans", key: "plans" },
     { icon: Target, label: "Live Signals", path: "/#live-signals", key: "signals" },
+    { icon: FileText, label: "Education", path: "/#education", key: "education" },
     { icon: FileText, label: "Blog", path: "/blog", key: "blog" },
     { icon: Star, label: "Testimonials", path: "/#testimonials", key: "testimonials" },
     { icon: Newspaper, label: "News", path: "/news", key: "news" },
@@ -185,7 +186,7 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
                 className="w-full text-xs"
               >
                 <Wallet className="h-3 w-3 mr-1" />
-                $1,000 ��� $4,000
+                $1,000 → $4,000
               </Button>
             </div>
           </div>

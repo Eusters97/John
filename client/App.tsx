@@ -22,6 +22,10 @@ import AdminPanel from "./pages/AdminPanel";
 import Promo from "./pages/Promo";
 import Offers from "./pages/Offers";
 import Education from "./pages/Education";
+import InvestmentPlans from "./pages/InvestmentPlans";
+import LiveSignals from "./pages/LiveSignals";
+import Testimonials from "./pages/Testimonials";
+import Reviews from "./pages/Reviews";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

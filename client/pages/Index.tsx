@@ -82,29 +82,32 @@ export default function Index() {
       entry: "1.0845",
       stopLoss: "1.0825",
       takeProfit: "1.0885",
-      time: "2 hours ago",
+      time: "30 minutes ago",
       status: "active",
-      change: "+0.24%"
+      change: "+0.34%",
+      confidence: "High"
     },
     {
-      pair: "GBP/JPY", 
+      pair: "GBP/JPY",
       action: "SELL",
       entry: "189.75",
       stopLoss: "190.25",
       takeProfit: "188.90",
-      time: "5 hours ago",
+      time: "2 hours ago",
       status: "profit",
-      change: "+1.47%"
+      change: "+2.47%",
+      confidence: "Very High"
     },
     {
       pair: "USD/CAD",
-      action: "BUY", 
+      action: "BUY",
       entry: "1.3520",
       stopLoss: "1.3495",
       takeProfit: "1.3565",
-      time: "1 day ago",
+      time: "5 hours ago",
       status: "profit",
-      change: "+2.13%"
+      change: "+3.13%",
+      confidence: "High"
     }
   ];
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import FrontPageLayout from "@/components/FrontPageLayout";
 import PaymentModal from "@/components/PaymentModal";
 import { useInvestment } from "@/contexts/InvestmentContext";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -132,7 +132,7 @@ export default function Promo() {
                 <span className="text-white">WEEKEND</span>
               </h1>
               <p className="text-2xl text-purple-100 mb-8 max-w-4xl mx-auto">
-                �� Turn $100 into $5,000 in 24 Hours! Limited time explosive returns!
+                🚀 Turn $100 into $5,000 in 24 Hours! Limited time explosive returns!
               </p>
             </div>
 

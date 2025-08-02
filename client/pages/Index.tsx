@@ -198,6 +198,41 @@ export default function Index() {
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-32">
         <div className="absolute inset-0 bg-gradient-to-r from-forex-600/10 to-blue-600/10"></div>
+
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-forex-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-gold-400/20 to-yellow-400/20 rounded-full blur-3xl animate-bounce delay-500"></div>
+        </div>
+
+        {/* Forex Chart Background */}
+        <div className="absolute inset-0 opacity-5">
+          <svg viewBox="0 0 1200 600" className="w-full h-full">
+            <defs>
+              <linearGradient id="chartGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor:"#0ea5e9", stopOpacity:1}} />
+                <stop offset="100%" style={{stopColor:"#3b82f6", stopOpacity:1}} />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 0 300 Q 200 200 400 250 T 800 180 Q 1000 160 1200 200"
+              stroke="url(#chartGradient)"
+              strokeWidth="3"
+              fill="none"
+              className="animate-pulse"
+            />
+            <path
+              d="M 0 350 Q 150 280 300 320 T 700 240 Q 900 220 1200 260"
+              stroke="url(#chartGradient)"
+              strokeWidth="2"
+              fill="none"
+              opacity="0.6"
+              className="animate-pulse delay-300"
+            />
+          </svg>
+        </div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Badge className="mb-6 bg-gradient-to-r from-forex-500 to-blue-500 text-white">

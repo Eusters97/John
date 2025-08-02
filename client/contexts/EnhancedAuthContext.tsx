@@ -168,8 +168,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    // Track visitor on page load
-    trackVisitor()
+    // Defer visitor tracking to avoid startup errors
+    const timer = setTimeout(() => {
+      trackVisitor()
+    }, 1000)
 
     // Get initial session
     const getInitialSession = async () => {

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navigation from "@/components/Navigation";
+import FrontPageLayout from "@/components/FrontPageLayout";
 import CookieBanner from "@/components/CookieBanner";
+import PaymentModal from "@/components/PaymentModal";
+import { useInvestment } from "@/contexts/InvestmentContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

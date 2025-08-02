@@ -51,8 +51,9 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route path="/eustersmain" element={<AdminLogin />} />
           <Route
-            path="/eustersmain"
+            path="/admin-panel"
             element={
               <ProtectedRoute>
                 <SuperAdmin />

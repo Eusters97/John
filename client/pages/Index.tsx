@@ -4,7 +4,7 @@ import FrontPageLayout from "@/components/FrontPageLayout";
 import CookieBanner from "@/components/CookieBanner";
 import PaymentModal from "@/components/PaymentModal";
 import EducationSection from "@/components/EducationSection";
-import InvestmentPlansCarousel from "@/components/InvestmentPlansCarousel";
+import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

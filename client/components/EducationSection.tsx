@@ -198,13 +198,12 @@ export default function EducationSection() {
                         </div>
                       </div>
                       
-                      <Button 
-                        onClick={() => handleDownload(ebook)}
-                        className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
-                      >
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Free
-                      </Button>
+                      <a href="/education">
+                    <Button className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Read Online
+                    </Button>
+                  </a>
                     </div>
                   </div>
                 </Card>

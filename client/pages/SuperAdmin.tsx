@@ -589,6 +589,8 @@ export default function SuperAdmin() {
             </div>
           </div>
         );
+      case 'ebooks':
+        return <EbookManager />;
       case 'testimonials':
         return (
           <div className="space-y-6">

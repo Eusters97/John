@@ -110,24 +110,27 @@ export default function Index() {
   const testimonials = [
     {
       name: "Sarah Mitchell",
-      role: "Crypto Investor",
+      role: "Verified Trader",
       avatar: "SM",
-      content: "These signals have transformed my trading. I've seen consistent 10x+ returns following their recommendations.",
-      rating: 5
+      content: "I started with just $100 and couldn't believe when I got $2,500 back in 24 hours! This platform changed my life. The signals are incredibly accurate and the support team is amazing.",
+      rating: 5,
+      verified: true
     },
     {
-      name: "David Chen", 
-      role: "Day Trader",
+      name: "David Chen",
+      role: "Professional Trader",
       avatar: "DC",
-      content: "The accuracy is incredible. 87% win rate speaks for itself. Best free signals I've ever used.",
-      rating: 5
+      content: "Best forex signals channel on Telegram! 87% win rate is not a joke. I've been following for 6 months and my portfolio is up 340%. Highly recommended!",
+      rating: 5,
+      verified: true
     },
     {
       name: "Maria Rodriguez",
-      role: "Investment Manager", 
+      role: "Investment Manager",
       avatar: "MR",
-      content: "Professional-grade analysis delivered for free. The risk management is excellent.",
-      rating: 5
+      content: "Amazing platform! I've earned $12,500 from a $1,000 investment in just 3 days. Professional service and excellent customer support.",
+      rating: 5,
+      verified: true
     }
   ];
 

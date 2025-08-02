@@ -4,11 +4,11 @@ import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  LayoutDashboard, 
-  Wallet, 
-  TrendingUp, 
-  History, 
+import {
+  LayoutDashboard,
+  Wallet,
+  TrendingUp,
+  History,
   DollarSign,
   Users,
   FileText,
@@ -25,7 +25,14 @@ import {
   MessageSquare,
   Bell,
   Search,
-  BookOpen
+  BookOpen,
+  ArrowUpDown,
+  ArrowDownToLine,
+  ArrowUpFromLine,
+  Send,
+  HandCoins,
+  Gift,
+  Phone
 } from "lucide-react";
 
 interface DashboardLayoutProps {

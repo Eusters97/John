@@ -60,7 +60,7 @@ const countries = [
   { code: "+971", name: "United Arab Emirates", flag: "🇦🇪" },
   { code: "+966", name: "Saudi Arabia", flag: "🇸🇦" },
   { code: "+965", name: "Kuwait", flag: "🇰🇼" },
-  { code: "+974", name: "Qatar", flag: "��🇦" },
+  { code: "+974", name: "Qatar", flag: "🇶🇦" },
   { code: "+973", name: "Bahrain", flag: "🇧🇭" },
   { code: "+968", name: "Oman", flag: "🇴🇲" },
   { code: "+962", name: "Jordan", flag: "🇯🇴" },
@@ -261,6 +261,7 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
     try {
       await signUp(formData.email, formData.password, {
         fullName: formData.fullName,
+        username: formData.username,
         countryCode: formData.countryCode,
         country: formData.country,
         phoneNumber: formData.phoneNumber,

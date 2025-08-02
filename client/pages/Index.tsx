@@ -114,6 +114,45 @@ export default function Index() {
     }
   ];
 
+  const investmentPlans = [
+    {
+      id: "starter",
+      name: "Starter Plan",
+      minAmount: 100,
+      maxAmount: 999,
+      roi: "2,500%",
+      duration: "24 hours",
+      description: "Perfect for beginners",
+      popular: false,
+      expectedReturn: 2500,
+      features: ["24/7 Support", "Telegram Signals", "Instant Payout"]
+    },
+    {
+      id: "premium",
+      name: "Premium Plan",
+      minAmount: 1000,
+      maxAmount: 4999,
+      roi: "400%",
+      duration: "3 days",
+      description: "Most popular choice",
+      popular: true,
+      expectedReturn: 4000,
+      features: ["Priority Support", "VIP Signals", "Fast Processing", "Risk Management"]
+    },
+    {
+      id: "vip",
+      name: "VIP Plan",
+      minAmount: 5000,
+      maxAmount: 20000,
+      roi: "600%",
+      duration: "7 days",
+      description: "Maximum returns",
+      popular: false,
+      expectedReturn: 30000,
+      features: ["Personal Manager", "Exclusive Signals", "Priority Payout", "Advanced Analytics"]
+    }
+  ];
+
   const testimonials = [
     {
       name: "Sarah Mitchell",

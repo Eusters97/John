@@ -414,6 +414,8 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      <CookieBanner />
     </div>
   );
 }

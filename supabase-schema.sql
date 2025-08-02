@@ -453,7 +453,75 @@ CREATE POLICY "Anyone can view public settings" ON public.system_settings
 CREATE POLICY "Admins can manage all settings" ON public.system_settings
     FOR ALL USING (
         EXISTS (
-            SELECT 1 FROM public.user_profiles 
+            SELECT 1 FROM public.user_profiles
+            WHERE id = auth.uid() AND is_admin = TRUE
+        )
+    );
+
+-- Withdrawal requests policies
+ALTER TABLE public.withdrawal_requests ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own withdrawal requests" ON public.withdrawal_requests
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own withdrawal requests" ON public.withdrawal_requests
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Admins can manage all withdrawal requests" ON public.withdrawal_requests
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles
+            WHERE id = auth.uid() AND is_admin = TRUE
+        )
+    );
+
+-- Support tickets policies
+ALTER TABLE public.support_tickets ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own support tickets" ON public.support_tickets
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own support tickets" ON public.support_tickets
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own support tickets" ON public.support_tickets
+    FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins can manage all support tickets" ON public.support_tickets
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles
+            WHERE id = auth.uid() AND is_admin = TRUE
+        )
+    );
+
+-- User balances policies
+ALTER TABLE public.user_balances ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own balance" ON public.user_balances
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Admins can manage all balances" ON public.user_balances
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles
+            WHERE id = auth.uid() AND is_admin = TRUE
+        )
+    );
+
+-- Deposits policies
+ALTER TABLE public.deposits ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own deposits" ON public.deposits
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own deposits" ON public.deposits
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Admins can manage all deposits" ON public.deposits
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles
             WHERE id = auth.uid() AND is_admin = TRUE
         )
     );

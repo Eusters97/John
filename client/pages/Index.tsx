@@ -398,8 +398,15 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gray-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2Fbad83449b7b24e7db0afbc974f1d42c1%2Fa791995d400f4474966bbf1f2f6c090a?format=webp&width=800"
+            alt="Forex Trading Dashboard"
+            className="w-full h-full object-cover animate-float"
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Why Choose Our Signals?

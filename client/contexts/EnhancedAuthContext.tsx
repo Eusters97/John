@@ -1,0 +1,364 @@
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { User, Session, AuthError } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
+import { useToast } from '@/hooks/use-toast'
+
+interface SessionData {
+  sessionId: string;
+  ipAddress: string;
+  userAgent: string;
+  loginTime: string;
+  lastActivity: string;
+  rememberMe: boolean;
+}
+
+interface AuthContextType {
+  user: User | null
+  session: Session | null
+  loading: boolean
+  isAdmin: boolean
+  sessionData: SessionData | null
+  signUp: (email: string, password: string, options?: { provider?: 'google' | 'telegram' }) => Promise<{ user: User | null; error: AuthError | null }>
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ user: User | null; error: AuthError | null }>
+  signInWithGoogle: () => Promise<{ user: User | null; error: AuthError | null }>
+  signInWithTelegram: () => Promise<{ user: User | null; error: AuthError | null }>
+  signOut: () => Promise<{ error: AuthError | null }>
+  resetPassword: (email: string) => Promise<{ error: AuthError | null }>
+  adminSignIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ user: User | null; error: AuthError | null }>
+  trackVisitor: () => void
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
+
+interface AuthProviderProps {
+  children: ReactNode
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [sessionData, setSessionData] = useState<SessionData | null>(null)
+  const { toast } = useToast()
+
+  // Get visitor IP and user agent
+  const getVisitorInfo = async () => {
+    try {
+      const response = await fetch('/api/visitor-info')
+      const data = await response.json()
+      return {
+        ipAddress: data.ip || 'unknown',
+        userAgent: navigator.userAgent
+      }
+    } catch {
+      return {
+        ipAddress: 'unknown',
+        userAgent: navigator.userAgent
+      }
+    }
+  }
+
+  // Track visitor for analytics
+  const trackVisitor = async () => {
+    try {
+      const visitorInfo = await getVisitorInfo()
+      const visitData = {
+        ...visitorInfo,
+        timestamp: new Date().toISOString(),
+        page: window.location.pathname
+      }
+      
+      // Store in localStorage for admin analytics
+      const visitors = JSON.parse(localStorage.getItem('forex_visitors') || '[]')
+      visitors.push(visitData)
+      // Keep only last 1000 visitors
+      if (visitors.length > 1000) {
+        visitors.splice(0, visitors.length - 1000)
+      }
+      localStorage.setItem('forex_visitors', JSON.stringify(visitors))
+    } catch (error) {
+      console.error('Error tracking visitor:', error)
+    }
+  }
+
+  // Create session data
+  const createSessionData = async (rememberMe: boolean = false): Promise<SessionData> => {
+    const visitorInfo = await getVisitorInfo()
+    const sessionId = crypto.randomUUID()
+    const now = new Date().toISOString()
+    
+    const sessionData: SessionData = {
+      sessionId,
+      ipAddress: visitorInfo.ipAddress,
+      userAgent: visitorInfo.userAgent,
+      loginTime: now,
+      lastActivity: now,
+      rememberMe
+    }
+
+    // Store session data
+    if (rememberMe) {
+      localStorage.setItem('forex_session', JSON.stringify(sessionData))
+    } else {
+      sessionStorage.setItem('forex_session', JSON.stringify(sessionData))
+    }
+
+    return sessionData
+  }
+
+  // Load existing session data
+  const loadSessionData = () => {
+    const stored = localStorage.getItem('forex_session') || sessionStorage.getItem('forex_session')
+    if (stored) {
+      try {
+        const data = JSON.parse(stored)
+        setSessionData(data)
+        return data
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  // Update last activity
+  const updateLastActivity = () => {
+    if (sessionData) {
+      const updated = { ...sessionData, lastActivity: new Date().toISOString() }
+      setSessionData(updated)
+      
+      if (sessionData.rememberMe) {
+        localStorage.setItem('forex_session', JSON.stringify(updated))
+      } else {
+        sessionStorage.setItem('forex_session', JSON.stringify(updated))
+      }
+    }
+  }
+
+  useEffect(() => {
+    // Track visitor on page load
+    trackVisitor()
+
+    // Get initial session
+    const getInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setSession(session)
+      setUser(session?.user ?? null)
+      
+      // Check if user is admin
+      if (session?.user?.email) {
+        const adminEmails = ['admin@forexsignals.com', 'reno@forexsignals.com'] // Add your admin emails
+        setIsAdmin(adminEmails.includes(session.user.email))
+      }
+      
+      // Load session data
+      loadSessionData()
+      
+      setLoading(false)
+    }
+
+    getInitialSession()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session)
+        setUser(session?.user ?? null)
+        
+        if (session?.user?.email) {
+          const adminEmails = ['admin@forexsignals.com', 'reno@forexsignals.com']
+          setIsAdmin(adminEmails.includes(session.user.email))
+        } else {
+          setIsAdmin(false)
+        }
+        
+        if (event === 'SIGNED_OUT') {
+          // Clear session data on signout
+          localStorage.removeItem('forex_session')
+          sessionStorage.removeItem('forex_session')
+          setSessionData(null)
+          setIsAdmin(false)
+        }
+        
+        setLoading(false)
+      }
+    )
+
+    // Update activity every minute
+    const activityInterval = setInterval(updateLastActivity, 60000)
+
+    return () => {
+      subscription.unsubscribe()
+      clearInterval(activityInterval)
+    }
+  }, [sessionData])
+
+  const signUp = async (email: string, password: string, options?: { provider?: 'google' | 'telegram' }) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`
+        }
+      })
+
+      if (!error && data.user) {
+        await createSessionData(false)
+        toast({
+          title: "Account created successfully!",
+          description: "Please check your email for verification.",
+        })
+      }
+
+      return { user: data.user, error }
+    } catch (error: any) {
+      return { user: null, error }
+    }
+  }
+
+  const signIn = async (email: string, password: string, rememberMe: boolean = false) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (!error && data.user) {
+        await createSessionData(rememberMe)
+        toast({
+          title: "Welcome back!",
+          description: "You have been signed in successfully.",
+        })
+      }
+
+      return { user: data.user, error }
+    } catch (error: any) {
+      return { user: null, error }
+    }
+  }
+
+  const signInWithGoogle = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      })
+      return { user: data.user, error }
+    } catch (error: any) {
+      return { user: null, error }
+    }
+  }
+
+  const signInWithTelegram = async () => {
+    // For now, redirect to Telegram bot - this would need backend integration
+    window.open('https://t.me/Blakehunterfxbot', '_blank')
+    return { user: null, error: null }
+  }
+
+  const adminSignIn = async (email: string, password: string, rememberMe: boolean = false) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (!error && data.user) {
+        const adminEmails = ['admin@forexsignals.com', 'reno@forexsignals.com']
+        if (!adminEmails.includes(data.user.email || '')) {
+          await supabase.auth.signOut()
+          return { 
+            user: null, 
+            error: { message: 'Access denied. Admin credentials required.' } as AuthError 
+          }
+        }
+
+        await createSessionData(rememberMe)
+        setIsAdmin(true)
+        toast({
+          title: "Admin access granted",
+          description: "Welcome to the admin panel.",
+        })
+      }
+
+      return { user: data.user, error }
+    } catch (error: any) {
+      return { user: null, error }
+    }
+  }
+
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      
+      // Clear all session data
+      localStorage.removeItem('forex_session')
+      sessionStorage.removeItem('forex_session')
+      setSessionData(null)
+      setIsAdmin(false)
+      
+      if (!error) {
+        toast({
+          title: "Signed out successfully",
+          description: "You have been logged out of your account.",
+        })
+      }
+      
+      return { error }
+    } catch (error: any) {
+      return { error }
+    }
+  }
+
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      })
+      
+      if (!error) {
+        toast({
+          title: "Password reset email sent",
+          description: "Check your email for password reset instructions.",
+        })
+      }
+      
+      return { error }
+    } catch (error: any) {
+      return { error }
+    }
+  }
+
+  const value = {
+    user,
+    session,
+    loading,
+    isAdmin,
+    sessionData,
+    signUp,
+    signIn,
+    signInWithGoogle,
+    signInWithTelegram,
+    signOut,
+    resetPassword,
+    adminSignIn,
+    trackVisitor
+  }
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  )
+}

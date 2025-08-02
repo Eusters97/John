@@ -275,12 +275,12 @@ export default function Offers() {
                       ))}
                     </div>
 
-                    <Button 
+                    <Button
                       onClick={() => handleInvest(offer.amount, offer.returns, offer.roi, offer.title)}
                       className={`w-full py-3 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-r ${offer.color} hover:opacity-90`}
                     >
                       <Sparkles className="h-5 w-5 mr-2" />
-                      GRAB DEAL
+                      {user ? 'GRAB DEAL' : 'LOGIN TO GRAB DEAL'}
                     </Button>
                   </CardContent>
                 </Card>

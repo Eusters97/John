@@ -155,12 +155,16 @@ export default function EnhancedUserDashboard() {
   };
 
   const checkTelegramConnection = async () => {
+    if (!user?.id) {
+      return;
+    }
+
     try {
       // Check if user has connected Telegram
       const { data, error } = await supabase
         .from('user_profiles')
         .select('telegram_id')
-        .eq('id', user?.id)
+        .eq('id', user.id)
         .single();
 
       if (!error && data?.telegram_id) {

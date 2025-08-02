@@ -298,6 +298,15 @@ export default function EnhancedUserDashboard() {
   };
 
   const handleSupportTicket = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to create a support ticket",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!supportTicket.subject || !supportTicket.category || !supportTicket.description) {
       toast({
         title: "Missing Information",
@@ -313,7 +322,7 @@ export default function EnhancedUserDashboard() {
       const { error } = await supabase
         .from('support_tickets')
         .insert({
-          user_id: user?.id,
+          user_id: user.id,
           subject: supportTicket.subject,
           category: supportTicket.category,
           description: supportTicket.description,

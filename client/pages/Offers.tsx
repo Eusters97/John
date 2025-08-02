@@ -51,15 +51,27 @@ export default function Offers() {
   }, []);
 
   const handleInvest = (amount: number, expectedReturn: number, roi: string, plan: string) => {
-    setCurrentOffer({
-      isActive: true,
-      plan,
-      amount,
-      expectedReturn,
-      duration: amount === 200 ? "24 hours" : amount === 500 ? "3 days" : amount === 1000 ? "5 days" : "7 days",
-      roi
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to your account to access special offers",
+      });
+      navigate("/");
+      return;
+    }
+
+    // Redirect to dashboard offers tab
+    navigate("/dashboard?tab=offers", {
+      state: {
+        selectedOffer: {
+          plan,
+          amount,
+          expectedReturn,
+          roi,
+          duration: amount === 200 ? "24 hours" : amount === 500 ? "3 days" : amount === 1000 ? "5 days" : "7 days"
+        }
+      }
     });
-    setShowPaymentModal(true);
   };
 
   const currentOffers = [

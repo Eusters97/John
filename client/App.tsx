@@ -78,6 +78,38 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/investment-plans"
+            element={
+              <ProtectedRoute>
+                <InvestmentPlans />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/live-signals"
+            element={
+              <ProtectedRoute>
+                <LiveSignals />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/testimonials"
+            element={
+              <ProtectedRoute>
+                <Testimonials />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reviews"
+            element={
+              <ProtectedRoute>
+                <Reviews />
+              </ProtectedRoute>
+            }
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -113,11 +113,17 @@ export default function Navigation() {
               <Link to="/news" className="text-gray-700 hover:text-forex-600 transition-colors">
                 News
               </Link>
-              
+
+              {user && (
+                <Link to="/dashboard" className="text-gray-700 hover:text-forex-600 transition-colors">
+                  Dashboard
+                </Link>
+              )}
+
               {/* Telegram CTA */}
-              <a 
-                href="https://t.me/forex_traders_signalss" 
-                target="_blank" 
+              <a
+                href="https://t.me/forex_traders_signalss"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
               >
@@ -126,14 +132,31 @@ export default function Navigation() {
               </a>
 
               {/* Auth Button */}
-              <Button 
-                onClick={() => setIsAuthModalOpen(true)}
-                variant="outline"
-                className="flex items-center space-x-2"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Login</span>
-              </Button>
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 text-gray-700">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm">{user.email}</span>
+                  </div>
+                  <Button
+                    onClick={handleSignOut}
+                    variant="outline"
+                    className="flex items-center space-x-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  variant="outline"
+                  className="flex items-center space-x-2"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </Button>
+              )}
             </div>
 
             {/* Mobile menu button */}

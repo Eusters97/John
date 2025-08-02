@@ -40,7 +40,8 @@ export default function WelcomeOfferModal() {
   const handleClose = () => {
     setIsOpen(false);
     if (user) {
-      localStorage.setItem(`welcome-offer-${user.id}`, 'true');
+      const currentCount = parseInt(localStorage.getItem(`welcome-offer-count-${user.id}`) || '0');
+      localStorage.setItem(`welcome-offer-count-${user.id}`, (currentCount + 1).toString());
     }
   };
 

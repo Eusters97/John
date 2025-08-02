@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 export default function Index() {
+  const { setCurrentOffer, setShowPaymentModal } = useInvestment();
   const [stats, setStats] = useState({
     signalsSent: 1247,
     winRate: 87.3,

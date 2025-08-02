@@ -132,7 +132,7 @@ export default function Promo() {
                 <span className="text-white">WEEKEND</span>
               </h1>
               <p className="text-2xl text-purple-100 mb-8 max-w-4xl mx-auto">
-                🚀 Turn $100 into $5,000 in 24 Hours! Limited time explosive returns!
+                �� Turn $100 into $5,000 in 24 Hours! Limited time explosive returns!
               </p>
             </div>
 
@@ -209,7 +209,7 @@ export default function Promo() {
 
                   <CardHeader className="text-center pb-4">
                     <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r ${offer.color} flex items-center justify-center shadow-lg`}>
-                      {index === 0 ? <Lightning className="h-10 w-10 text-white" /> :
+                      {index === 0 ? <Zap className="h-10 w-10 text-white" /> :
                        index === 1 ? <Rocket className="h-10 w-10 text-white" /> :
                        <Crown className="h-10 w-10 text-white" />}
                     </div>

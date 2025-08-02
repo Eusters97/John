@@ -22,7 +22,8 @@ import {
 export default function WelcomeOfferModal() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
-  const { setCurrentOffer, setShowPaymentModal } = useInvestment();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user) {

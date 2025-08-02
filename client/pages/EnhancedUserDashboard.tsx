@@ -249,14 +249,14 @@ export default function EnhancedUserDashboard() {
 
       // Set default stats on error
       const defaultStats = {
-        balance: 2450.00,
+        balance: 0.00,
         totalInvested: 0,
         totalProfit: 0,
         totalROI: 0,
         activeInvestments: 0,
         completedInvestments: 0,
-        pendingPayouts: 1,
-        referralEarnings: 127.50
+        pendingPayouts: 0,
+        referralEarnings: 0.00
       };
 
       setUserStats(defaultStats);

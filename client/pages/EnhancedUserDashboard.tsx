@@ -840,7 +840,7 @@ export default function EnhancedUserDashboard() {
                 <div className="space-y-4">
                   <h3 className="font-semibold">Withdrawal Information</h3>
                   <ul className="space-y-2 text-sm text-gray-600">
-                    <li>• Minimum withdrawal: $50 USD</li>
+                    <li>• Minimum withdrawal: $500 USD</li>
                     <li>• Processing time: 24-48 hours</li>
                     <li>• Network fees apply</li>
                     <li>• Double-check wallet address</li>

@@ -21,6 +21,72 @@ export default function Navigation() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let result;
+      if (isSignUp) {
+        result = await signUp(email, password);
+        if (result.error) {
+          toast({
+            title: "Sign up failed",
+            description: result.error.message,
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We sent you a confirmation link.",
+          });
+          setIsAuthModalOpen(false);
+        }
+      } else {
+        result = await signIn(email, password);
+        if (result.error) {
+          toast({
+            title: "Sign in failed",
+            description: result.error.message,
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Welcome back!",
+            description: "You have been signed in successfully.",
+          });
+          setIsAuthModalOpen(false);
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+      navigate("/");
+    }
+  };
+
   return (
     <>
       <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">

@@ -187,7 +187,7 @@ export default function EnhancedUserDashboard() {
       console.log('Supabase connection successful, user profile exists:', !!testData?.length);
 
       // Try to load user balance first (simpler query)
-      let userBalance = 2450.00; // Default balance
+      let userBalance = 0.00; // Default balance
 
       try {
         const { data: balanceData } = await supabase

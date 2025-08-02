@@ -319,8 +319,11 @@ export default function Offers() {
                       <Timer className="h-4 w-4" />
                       <span className="font-semibold">Valid until {offer.validUntil}</span>
                     </div>
-                    <Button className="bg-white text-gray-900 hover:bg-gray-100 font-bold">
-                      Claim Offer
+                    <Button
+                      onClick={() => handleInvest(2000, 50000, "2,500%", "Mega Deal")}
+                      className="bg-white text-gray-900 hover:bg-gray-100 font-bold"
+                    >
+                      {user ? 'Claim Offer' : 'Login to Claim'}
                     </Button>
                   </CardContent>
                 </Card>

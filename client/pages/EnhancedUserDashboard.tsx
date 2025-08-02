@@ -870,7 +870,7 @@ export default function EnhancedUserDashboard() {
               </CardContent>
             </Card>
             
-            <InvestmentPlansCarousel allowPayments={false} redirectToLogin={false} />
+            <SimpleInvestmentPlans allowPayments={false} redirectToLogin={false} />
           </div>
         );
 

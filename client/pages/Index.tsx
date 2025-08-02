@@ -5,18 +5,19 @@ import CookieBanner from "@/components/CookieBanner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  TrendingUp, 
-  MessageCircle, 
-  Shield, 
-  Zap, 
-  Users, 
+import {
+  TrendingUp,
+  MessageCircle,
+  Shield,
+  Zap,
+  Users,
   DollarSign,
   Clock,
   Star,
   ArrowUp,
   ArrowDown,
-  Target
+  Target,
+  CheckCircle
 } from "lucide-react";
 
 export default function Index() {

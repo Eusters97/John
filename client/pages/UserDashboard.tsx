@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import WelcomeOfferModal from "@/components/WelcomeOfferModal";
 import PaymentModal from "@/components/PaymentModal";

@@ -95,6 +95,7 @@ export default function DashboardLayout({ children, isAdmin = false }: Dashboard
   };
 
   const currentTab = new URLSearchParams(location.search).get('tab') || 'overview';
+  const currentPath = location.pathname;
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -109,9 +110,9 @@ export default function DashboardLayout({ children, isAdmin = false }: Dashboard
               {isAdmin ? "Admin Panel" : "Forex Signals"}
             </span>
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="lg:hidden text-gray-400 hover:text-white"
             onClick={() => setSidebarOpen(false)}
           >
@@ -122,12 +123,18 @@ export default function DashboardLayout({ children, isAdmin = false }: Dashboard
         <nav className="mt-8 px-4">
           <div className="space-y-2">
             {navItems.map((item) => {
-              const isActive = currentTab === item.key;
+              // Handle both tab-based and standalone page navigation
+              const isTabBased = item.path === "/dashboard";
+              const isActive = isTabBased
+                ? currentTab === item.key && currentPath === "/dashboard"
+                : currentPath === item.path;
+              const linkPath = isTabBased ? `${item.path}?tab=${item.key}` : item.path;
               const Icon = item.icon;
+
               return (
                 <Link
                   key={item.key}
-                  to={`${item.path}?tab=${item.key}`}
+                  to={linkPath}
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                     isActive
                       ? 'bg-forex-600 text-white'

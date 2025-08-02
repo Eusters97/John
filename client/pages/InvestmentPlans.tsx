@@ -7,16 +7,16 @@ import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from "@/components/DashboardLayout";
-import { 
-  DollarSign, 
-  CheckCircle, 
+import {
+  DollarSign,
+  CheckCircle,
   ArrowRight,
   TrendingUp,
   Calculator,
   Target,
   Crown,
   Zap,
-  Star
+  Star,
 } from "lucide-react";
 
 const investmentPlans = [
@@ -27,22 +27,23 @@ const investmentPlans = [
     maxAmount: 999,
     roi: "2,500%",
     duration: "10 days",
-    description: "Perfect for beginners looking to start their forex investment journey",
+    description:
+      "Perfect for beginners looking to start their forex investment journey",
     popular: false,
     expectedReturn: 5000,
     color: "blue",
     features: [
       "Basic market analysis and signals",
-      "Email support during business hours", 
+      "Email support during business hours",
       "Weekly performance reports",
       "Basic risk management tools",
       "Educational resources access",
-      "Entry-level trading tools"
-    ]
+      "Entry-level trading tools",
+    ],
   },
   {
     id: "basic",
-    name: "Basic Plan", 
+    name: "Basic Plan",
     minAmount: 1000,
     maxAmount: 4999,
     roi: "2,500%",
@@ -53,13 +54,13 @@ const investmentPlans = [
     color: "green",
     features: [
       "Advanced market analysis with technical indicators",
-      "Priority support with faster response times", 
+      "Priority support with faster response times",
       "Daily detailed performance reports",
       "Enhanced risk management strategies",
       "Professional trading tools suite",
       "Market insights and trend analysis",
-      "Portfolio optimization recommendations"
-    ]
+      "Portfolio optimization recommendations",
+    ],
   },
   {
     id: "premium",
@@ -67,7 +68,7 @@ const investmentPlans = [
     minAmount: 5000,
     maxAmount: 9999,
     roi: "2,500%",
-    duration: "10 days", 
+    duration: "10 days",
     description: "For serious investors who want premium features",
     popular: false,
     expectedReturn: 62500,
@@ -79,11 +80,11 @@ const investmentPlans = [
       "Advanced risk management with stop-loss automation",
       "Premium trading tools with custom indicators",
       "Personal account manager for strategy guidance",
-      "Exclusive webinars and market briefings"
-    ]
+      "Exclusive webinars and market briefings",
+    ],
   },
   {
-    id: "vip", 
+    id: "vip",
     name: "VIP Plan",
     minAmount: 10000,
     maxAmount: 24999,
@@ -101,8 +102,8 @@ const investmentPlans = [
       "Complete trading suite with all advanced tools",
       "Dedicated relationship manager available anytime",
       "Custom investment strategies tailored to your goals",
-      "Priority access to new investment opportunities"
-    ]
+      "Priority access to new investment opportunities",
+    ],
   },
   {
     id: "elite",
@@ -122,9 +123,9 @@ const investmentPlans = [
       "Exclusive market insights from institutional sources",
       "All premium benefits plus concierge services",
       "Direct line to C-level executives",
-      "Custom portfolio construction and management"
-    ]
-  }
+      "Custom portfolio construction and management",
+    ],
+  },
 ];
 
 const themes = {
@@ -133,36 +134,37 @@ const themes = {
     background: "bg-gradient-to-br from-gray-50 to-blue-50",
     cardStyle: "bg-white border-gray-200",
     textPrimary: "text-gray-900",
-    textSecondary: "text-gray-600"
+    textSecondary: "text-gray-600",
   },
   dark: {
     name: "Dark Mode",
     background: "bg-gradient-to-br from-gray-900 to-blue-900",
     cardStyle: "bg-gray-800 border-gray-700",
     textPrimary: "text-white",
-    textSecondary: "text-gray-300"
+    textSecondary: "text-gray-300",
   },
   luxury: {
     name: "Luxury Gold",
-    background: "bg-gradient-to-br from-yellow-50 to-gold-100", 
+    background: "bg-gradient-to-br from-yellow-50 to-gold-100",
     cardStyle: "bg-white border-gold-200 shadow-gold-200/20",
     textPrimary: "text-gray-900",
-    textSecondary: "text-gray-700"
+    textSecondary: "text-gray-700",
   },
   ocean: {
     name: "Ocean Blue",
     background: "bg-gradient-to-br from-blue-50 to-cyan-100",
     cardStyle: "bg-white border-blue-200 shadow-blue-200/20",
-    textPrimary: "text-gray-900", 
-    textSecondary: "text-blue-700"
-  }
+    textPrimary: "text-gray-900",
+    textSecondary: "text-blue-700",
+  },
 };
 
 export default function InvestmentPlans() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedTheme, setSelectedTheme] = useState<keyof typeof themes>("default");
+  const [selectedTheme, setSelectedTheme] =
+    useState<keyof typeof themes>("default");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const theme = themes[selectedTheme];
@@ -176,23 +178,23 @@ export default function InvestmentPlans() {
       navigate("/");
       return;
     }
-    
+
     // Redirect to dashboard for investment
-    navigate("/dashboard", { 
-      state: { 
+    navigate("/dashboard", {
+      state: {
         selectedPlan: plan,
-        action: "invest"
-      }
+        action: "invest",
+      },
     });
   };
 
   const getColorClasses = (color: string) => {
     const colorMap = {
       blue: "from-blue-500 to-blue-600",
-      green: "from-green-500 to-green-600", 
+      green: "from-green-500 to-green-600",
       purple: "from-purple-500 to-purple-600",
       gold: "from-yellow-500 to-yellow-600",
-      platinum: "from-gray-500 to-gray-600"
+      platinum: "from-gray-500 to-gray-600",
     };
     return colorMap[color as keyof typeof colorMap] || colorMap.blue;
   };
@@ -203,19 +205,21 @@ export default function InvestmentPlans() {
       basic: TrendingUp,
       premium: Target,
       vip: Crown,
-      elite: Star
+      elite: Star,
     };
     return icons[planId as keyof typeof icons] || Calculator;
   };
 
-  const filteredPlans = selectedCategory === "all" 
-    ? investmentPlans
-    : investmentPlans.filter(plan => {
-        if (selectedCategory === "low") return plan.minAmount < 1000;
-        if (selectedCategory === "medium") return plan.minAmount >= 1000 && plan.minAmount < 10000;
-        if (selectedCategory === "high") return plan.minAmount >= 10000;
-        return true;
-      });
+  const filteredPlans =
+    selectedCategory === "all"
+      ? investmentPlans
+      : investmentPlans.filter((plan) => {
+          if (selectedCategory === "low") return plan.minAmount < 1000;
+          if (selectedCategory === "medium")
+            return plan.minAmount >= 1000 && plan.minAmount < 10000;
+          if (selectedCategory === "high") return plan.minAmount >= 10000;
+          return true;
+        });
 
   return (
     <DashboardLayout>
@@ -226,15 +230,23 @@ export default function InvestmentPlans() {
             <h1 className={`text-4xl font-bold ${theme.textPrimary} mb-4`}>
               Investment Plans
             </h1>
-            <p className={`text-xl ${theme.textSecondary} max-w-3xl mx-auto mb-8`}>
-              Choose the investment plan that matches your financial goals and risk tolerance. 
-              All plans offer the same exceptional returns with varying levels of service and features.
+            <p
+              className={`text-xl ${theme.textSecondary} max-w-3xl mx-auto mb-8`}
+            >
+              Choose the investment plan that matches your financial goals and
+              risk tolerance. All plans offer the same exceptional returns with
+              varying levels of service and features.
             </p>
-            
+
             {/* Theme Selector */}
             <div className="flex justify-center items-center space-x-4 mb-6">
               <span className={`text-sm ${theme.textSecondary}`}>Theme:</span>
-              <Tabs value={selectedTheme} onValueChange={(value) => setSelectedTheme(value as keyof typeof themes)}>
+              <Tabs
+                value={selectedTheme}
+                onValueChange={(value) =>
+                  setSelectedTheme(value as keyof typeof themes)
+                }
+              >
                 <TabsList className="grid grid-cols-4 w-auto">
                   {Object.entries(themes).map(([key, themeData]) => (
                     <TabsTrigger key={key} value={key} className="text-xs">
@@ -247,8 +259,13 @@ export default function InvestmentPlans() {
 
             {/* Category Filter */}
             <div className="flex justify-center items-center space-x-4">
-              <span className={`text-sm ${theme.textSecondary}`}>Filter by Amount:</span>
-              <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
+              <span className={`text-sm ${theme.textSecondary}`}>
+                Filter by Amount:
+              </span>
+              <Tabs
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
                 <TabsList className="grid grid-cols-4 w-auto">
                   <TabsTrigger value="all">All Plans</TabsTrigger>
                   <TabsTrigger value="low">Under $1K</TabsTrigger>
@@ -264,9 +281,12 @@ export default function InvestmentPlans() {
             {filteredPlans.map((plan) => {
               const IconComponent = getIcon(plan.id);
               const colorClasses = getColorClasses(plan.color);
-              
+
               return (
-                <Card key={plan.id} className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 h-full ${theme.cardStyle} ${plan.popular ? 'ring-2 ring-forex-500 shadow-2xl' : 'shadow-lg'}`}>
+                <Card
+                  key={plan.id}
+                  className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 h-full ${theme.cardStyle} ${plan.popular ? "ring-2 ring-forex-500 shadow-2xl" : "shadow-lg"}`}
+                >
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
                       <Badge className="bg-gradient-to-r from-forex-500 to-blue-500 text-white px-4 py-1">
@@ -278,15 +298,25 @@ export default function InvestmentPlans() {
                   <div className={`h-2 bg-gradient-to-r ${colorClasses}`}></div>
 
                   <CardHeader className="text-center pb-4">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${colorClasses} flex items-center justify-center`}>
+                    <div
+                      className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${colorClasses} flex items-center justify-center`}
+                    >
                       <IconComponent className="h-8 w-8 text-white" />
                     </div>
-                    <CardTitle className={`text-2xl mb-2 ${theme.textPrimary}`}>{plan.name}</CardTitle>
-                    <div className="text-4xl font-bold text-forex-600 mb-2">{plan.roi}</div>
+                    <CardTitle className={`text-2xl mb-2 ${theme.textPrimary}`}>
+                      {plan.name}
+                    </CardTitle>
+                    <div className="text-4xl font-bold text-forex-600 mb-2">
+                      {plan.roi}
+                    </div>
                     <p className={theme.textSecondary}>{plan.description}</p>
                     <div className="mt-4 p-3 bg-forex-50 rounded-lg">
-                      <div className={`text-sm ${theme.textSecondary}`}>Investment Range</div>
-                      <div className={`text-lg font-semibold ${theme.textPrimary}`}>
+                      <div className={`text-sm ${theme.textSecondary}`}>
+                        Investment Range
+                      </div>
+                      <div
+                        className={`text-lg font-semibold ${theme.textPrimary}`}
+                      >
                         ${plan.minAmount} - ${plan.maxAmount.toLocaleString()}
                       </div>
                     </div>
@@ -295,26 +325,45 @@ export default function InvestmentPlans() {
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className={theme.textSecondary}>Minimum Investment:</span>
-                        <span className={`font-semibold ${theme.textPrimary}`}>${plan.minAmount}</span>
+                        <span className={theme.textSecondary}>
+                          Minimum Investment:
+                        </span>
+                        <span className={`font-semibold ${theme.textPrimary}`}>
+                          ${plan.minAmount}
+                        </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className={theme.textSecondary}>Expected Return:</span>
-                        <span className="font-semibold text-success-600">${plan.expectedReturn.toLocaleString()}</span>
+                        <span className={theme.textSecondary}>
+                          Expected Return:
+                        </span>
+                        <span className="font-semibold text-success-600">
+                          ${plan.expectedReturn.toLocaleString()}
+                        </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className={theme.textSecondary}>Duration:</span>
-                        <span className={`font-semibold ${theme.textPrimary}`}>{plan.duration}</span>
+                        <span className={`font-semibold ${theme.textPrimary}`}>
+                          {plan.duration}
+                        </span>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <div className={`text-sm font-medium ${theme.textPrimary}`}>Features:</div>
+                      <div
+                        className={`text-sm font-medium ${theme.textPrimary}`}
+                      >
+                        Features:
+                      </div>
                       <div className="space-y-1 max-h-40 overflow-y-auto">
                         {plan.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-start space-x-2 text-sm">
+                          <div
+                            key={idx}
+                            className="flex items-start space-x-2 text-sm"
+                          >
                             <CheckCircle className="h-4 w-4 text-success-500 flex-shrink-0 mt-0.5" />
-                            <span className={theme.textSecondary}>{feature}</span>
+                            <span className={theme.textSecondary}>
+                              {feature}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -324,7 +373,7 @@ export default function InvestmentPlans() {
                       onClick={() => handleInvestNow(plan)}
                       className={`w-full py-3 text-lg font-semibold transition-all duration-200 ${
                         plan.popular
-                          ? 'bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600 shadow-lg hover:shadow-xl'
+                          ? "bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600 shadow-lg hover:shadow-xl"
                           : `bg-gradient-to-r ${colorClasses} hover:shadow-lg`
                       }`}
                     >
@@ -343,9 +392,12 @@ export default function InvestmentPlans() {
               <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-6 w-6 text-white" />
               </div>
-              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>Instant Processing</h3>
+              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>
+                Instant Processing
+              </h3>
               <p className={`text-sm ${theme.textSecondary}`}>
-                All investments are processed instantly from your account balance. Start earning immediately.
+                All investments are processed instantly from your account
+                balance. Start earning immediately.
               </p>
             </Card>
 
@@ -353,9 +405,12 @@ export default function InvestmentPlans() {
               <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Target className="h-6 w-6 text-white" />
               </div>
-              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>Guaranteed Returns</h3>
+              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>
+                Guaranteed Returns
+              </h3>
               <p className={`text-sm ${theme.textSecondary}`}>
-                All plans offer guaranteed returns based on our proven forex trading strategies and market analysis.
+                All plans offer guaranteed returns based on our proven forex
+                trading strategies and market analysis.
               </p>
             </Card>
 
@@ -363,9 +418,12 @@ export default function InvestmentPlans() {
               <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Crown className="h-6 w-6 text-white" />
               </div>
-              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>VIP Support</h3>
+              <h3 className={`text-lg font-semibold ${theme.textPrimary} mb-2`}>
+                VIP Support
+              </h3>
               <p className={`text-sm ${theme.textSecondary}`}>
-                Get premium support and dedicated account management based on your investment level.
+                Get premium support and dedicated account management based on
+                your investment level.
               </p>
             </Card>
           </div>

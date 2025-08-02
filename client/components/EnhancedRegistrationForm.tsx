@@ -4,11 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, Mail, Phone, MapPin, Calendar, Briefcase, TrendingUp } from "lucide-react";
+import {
+  Loader2,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Briefcase,
+  TrendingUp,
+} from "lucide-react";
 
 const countries = [
   { code: "+1", name: "United States", flag: "🇺🇸" },
@@ -102,7 +117,10 @@ interface Props {
   onCancel?: () => void;
 }
 
-export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props) {
+export default function EnhancedRegistrationForm({
+  onSuccess,
+  onCancel,
+}: Props) {
   const { signUp } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -126,12 +144,15 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
     agreeToMarketing: false,
   });
 
-  const updateFormData = (field: keyof RegistrationFormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const updateFormData = (
+    field: keyof RegistrationFormData,
+    value: string | boolean,
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleCountrySelect = (countryName: string) => {
-    const selectedCountry = countries.find(c => c.name === countryName);
+    const selectedCountry = countries.find((c) => c.name === countryName);
     if (selectedCountry) {
       updateFormData("country", selectedCountry.name);
       updateFormData("countryCode", selectedCountry.code);
@@ -139,7 +160,13 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
   };
 
   const validateStep1 = () => {
-    if (!formData.email || !formData.username || !formData.password || !formData.confirmPassword || !formData.fullName) {
+    if (
+      !formData.email ||
+      !formData.username ||
+      !formData.password ||
+      !formData.confirmPassword ||
+      !formData.fullName
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
@@ -153,7 +180,8 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
     if (!usernameRegex.test(formData.username)) {
       toast({
         title: "Invalid Username",
-        description: "Username must be 3-20 characters and contain only letters, numbers, and underscores.",
+        description:
+          "Username must be 3-20 characters and contain only letters, numbers, and underscores.",
         variant: "destructive",
       });
       return false;
@@ -181,7 +209,12 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
   };
 
   const validateStep2 = () => {
-    if (!formData.countryCode || !formData.country || !formData.phoneNumber || !formData.dateOfBirth) {
+    if (
+      !formData.countryCode ||
+      !formData.country ||
+      !formData.phoneNumber ||
+      !formData.dateOfBirth
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required contact information.",
@@ -203,7 +236,7 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
     const birthDate = new Date(formData.dateOfBirth);
     const minAge = new Date();
     minAge.setFullYear(minAge.getFullYear() - 18);
-    
+
     if (birthDate > minAge) {
       toast({
         title: "Age Requirement",
@@ -217,7 +250,12 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
   };
 
   const validateStep3 = () => {
-    if (!formData.address || !formData.city || !formData.occupation || !formData.experienceLevel) {
+    if (
+      !formData.address ||
+      !formData.city ||
+      !formData.occupation ||
+      !formData.experienceLevel
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required personal information.",
@@ -254,7 +292,7 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateStep3()) return;
 
     setLoading(true);
@@ -282,7 +320,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
     } catch (error) {
       toast({
         title: "Registration Failed",
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -314,7 +355,12 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
           ))}
         </div>
         <div className="text-center text-sm text-gray-600 mt-2">
-          Step {step} of 3: {step === 1 ? "Account Details" : step === 2 ? "Contact Information" : "Personal Information"}
+          Step {step} of 3:{" "}
+          {step === 1
+            ? "Account Details"
+            : step === 2
+              ? "Contact Information"
+              : "Personal Information"}
         </div>
       </CardHeader>
 
@@ -323,7 +369,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
           {step === 1 && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="fullName"
+                  className="flex items-center space-x-2"
+                >
                   <User className="h-4 w-4" />
                   <span>Full Name *</span>
                 </Label>
@@ -338,7 +387,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="username" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="username"
+                  className="flex items-center space-x-2"
+                >
                   <User className="h-4 w-4" />
                   <span>Username *</span>
                 </Label>
@@ -350,7 +402,9 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   onChange={(e) => updateFormData("username", e.target.value)}
                   required
                 />
-                <p className="text-xs text-gray-500">3-20 characters, letters, numbers, and underscores only</p>
+                <p className="text-xs text-gray-500">
+                  3-20 characters, letters, numbers, and underscores only
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -388,7 +442,9 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   type="password"
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
-                  onChange={(e) => updateFormData("confirmPassword", e.target.value)}
+                  onChange={(e) =>
+                    updateFormData("confirmPassword", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -402,7 +458,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   <MapPin className="h-4 w-4" />
                   <span>Country *</span>
                 </Label>
-                <Select onValueChange={handleCountrySelect} value={formData.country}>
+                <Select
+                  onValueChange={handleCountrySelect}
+                  value={formData.country}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your country" />
                   </SelectTrigger>
@@ -412,7 +471,9 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                         <div className="flex items-center space-x-2">
                           <span>{country.flag}</span>
                           <span>{country.name}</span>
-                          <span className="text-gray-500">({country.code})</span>
+                          <span className="text-gray-500">
+                            ({country.code})
+                          </span>
                         </div>
                       </SelectItem>
                     ))}
@@ -421,7 +482,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phoneNumber" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="phoneNumber"
+                  className="flex items-center space-x-2"
+                >
                   <Phone className="h-4 w-4" />
                   <span>Phone Number *</span>
                 </Label>
@@ -439,7 +503,9 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                     type="tel"
                     placeholder="Enter your phone number"
                     value={formData.phoneNumber}
-                    onChange={(e) => updateFormData("phoneNumber", e.target.value)}
+                    onChange={(e) =>
+                      updateFormData("phoneNumber", e.target.value)
+                    }
                     required
                     className="flex-1"
                   />
@@ -447,7 +513,10 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dateOfBirth" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="dateOfBirth"
+                  className="flex items-center space-x-2"
+                >
                   <Calendar className="h-4 w-4" />
                   <span>Date of Birth *</span>
                 </Label>
@@ -455,11 +524,19 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   id="dateOfBirth"
                   type="date"
                   value={formData.dateOfBirth}
-                  onChange={(e) => updateFormData("dateOfBirth", e.target.value)}
+                  onChange={(e) =>
+                    updateFormData("dateOfBirth", e.target.value)
+                  }
                   required
-                  max={new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                  max={
+                    new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000)
+                      .toISOString()
+                      .split("T")[0]
+                  }
                 />
-                <p className="text-sm text-gray-500">You must be at least 18 years old</p>
+                <p className="text-sm text-gray-500">
+                  You must be at least 18 years old
+                </p>
               </div>
             </div>
           )}
@@ -498,13 +575,18 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                     type="text"
                     placeholder="Enter postal code"
                     value={formData.postalCode}
-                    onChange={(e) => updateFormData("postalCode", e.target.value)}
+                    onChange={(e) =>
+                      updateFormData("postalCode", e.target.value)
+                    }
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="occupation" className="flex items-center space-x-2">
+                <Label
+                  htmlFor="occupation"
+                  className="flex items-center space-x-2"
+                >
                   <Briefcase className="h-4 w-4" />
                   <span>Occupation *</span>
                 </Label>
@@ -523,14 +605,25 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   <TrendingUp className="h-4 w-4" />
                   <span>Trading Experience Level *</span>
                 </Label>
-                <Select onValueChange={(value) => updateFormData("experienceLevel", value)} value={formData.experienceLevel}>
+                <Select
+                  onValueChange={(value) =>
+                    updateFormData("experienceLevel", value)
+                  }
+                  value={formData.experienceLevel}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your experience level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner">Beginner (0-1 years)</SelectItem>
-                    <SelectItem value="intermediate">Intermediate (1-5 years)</SelectItem>
-                    <SelectItem value="advanced">Advanced (5+ years)</SelectItem>
+                    <SelectItem value="beginner">
+                      Beginner (0-1 years)
+                    </SelectItem>
+                    <SelectItem value="intermediate">
+                      Intermediate (1-5 years)
+                    </SelectItem>
+                    <SelectItem value="advanced">
+                      Advanced (5+ years)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -540,10 +633,23 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   <Checkbox
                     id="agreeToTerms"
                     checked={formData.agreeToTerms}
-                    onCheckedChange={(checked) => updateFormData("agreeToTerms", checked as boolean)}
+                    onCheckedChange={(checked) =>
+                      updateFormData("agreeToTerms", checked as boolean)
+                    }
                   />
                   <Label htmlFor="agreeToTerms" className="text-sm">
-                    I agree to the <a href="/terms" className="text-forex-600 hover:underline">Terms of Service</a> and <a href="/privacy" className="text-forex-600 hover:underline">Privacy Policy</a> *
+                    I agree to the{" "}
+                    <a href="/terms" className="text-forex-600 hover:underline">
+                      Terms of Service
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      href="/privacy"
+                      className="text-forex-600 hover:underline"
+                    >
+                      Privacy Policy
+                    </a>{" "}
+                    *
                   </Label>
                 </div>
 
@@ -551,10 +657,13 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   <Checkbox
                     id="agreeToMarketing"
                     checked={formData.agreeToMarketing}
-                    onCheckedChange={(checked) => updateFormData("agreeToMarketing", checked as boolean)}
+                    onCheckedChange={(checked) =>
+                      updateFormData("agreeToMarketing", checked as boolean)
+                    }
                   />
                   <Label htmlFor="agreeToMarketing" className="text-sm">
-                    I agree to receive marketing communications and forex signals
+                    I agree to receive marketing communications and forex
+                    signals
                   </Label>
                 </div>
               </div>
@@ -576,13 +685,21 @@ export default function EnhancedRegistrationForm({ onSuccess, onCancel }: Props)
                   Cancel
                 </Button>
               )}
-              
+
               {step < 3 ? (
-                <Button type="button" onClick={handleNext} className="bg-forex-600 hover:bg-forex-700">
+                <Button
+                  type="button"
+                  onClick={handleNext}
+                  className="bg-forex-600 hover:bg-forex-700"
+                >
                   Next
                 </Button>
               ) : (
-                <Button type="submit" disabled={loading} className="bg-forex-600 hover:bg-forex-700">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-forex-600 hover:bg-forex-700"
+                >
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -5,22 +5,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
-import { 
-  Upload, 
-  FileText, 
-  Users, 
-  DollarSign, 
-  TrendingUp, 
-  Settings, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
+import {
+  Upload,
+  FileText,
+  Users,
+  DollarSign,
+  TrendingUp,
+  Settings,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
   Download,
   CheckCircle,
   XCircle,
@@ -28,7 +34,7 @@ import {
   BookOpen,
   MessageSquare,
   Star,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 
 interface Ebook {
@@ -139,9 +145,9 @@ export default function AdminPanel() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('ebooks')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("ebooks")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setEbooks(data || []);
@@ -160,9 +166,9 @@ export default function AdminPanel() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("blog_posts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setBlogPosts(data || []);
@@ -181,9 +187,9 @@ export default function AdminPanel() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("testimonials")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setTestimonials(data || []);
@@ -202,9 +208,9 @@ export default function AdminPanel() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("user_profiles")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setUsers(data || []);
@@ -223,9 +229,9 @@ export default function AdminPanel() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('payments')
-        .select('*, user_profiles(full_name, email)')
-        .order('created_at', { ascending: false });
+        .from("payments")
+        .select("*, user_profiles(full_name, email)")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setPayments(data || []);
@@ -240,8 +246,11 @@ export default function AdminPanel() {
     }
   };
 
-  const uploadFile = async (file: File, bucket: string = 'ebooks'): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
+  const uploadFile = async (
+    file: File,
+    bucket: string = "ebooks",
+  ): Promise<string> => {
+    const fileExt = file.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `${bucket}/${fileName}`;
 
@@ -253,16 +262,14 @@ export default function AdminPanel() {
       throw new Error(`Upload failed: ${uploadError.message}`);
     }
 
-    const { data } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(filePath);
+    const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
 
     return data.publicUrl;
   };
 
   const handleEbookUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedFile) {
       toast({
         title: "Error",
@@ -274,18 +281,16 @@ export default function AdminPanel() {
 
     try {
       setUploading(true);
-      
+
       // Upload file to Supabase storage
-      const fileUrl = await uploadFile(selectedFile, 'ebooks');
+      const fileUrl = await uploadFile(selectedFile, "ebooks");
 
       // Save ebook metadata to database
-      const { error } = await supabase
-        .from('ebooks')
-        .insert({
-          ...ebookForm,
-          file_url: fileUrl,
-          file_size: selectedFile.size,
-        });
+      const { error } = await supabase.from("ebooks").insert({
+        ...ebookForm,
+        file_url: fileUrl,
+        file_size: selectedFile.size,
+      });
 
       if (error) throw error;
 
@@ -304,13 +309,14 @@ export default function AdminPanel() {
         required_investment_amount: 0,
       });
       setSelectedFile(null);
-      
+
       // Reload ebooks
       loadEbooks();
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to upload ebook",
+        description:
+          error instanceof Error ? error.message : "Failed to upload ebook",
         variant: "destructive",
       });
     } finally {
@@ -320,21 +326,20 @@ export default function AdminPanel() {
 
   const handleBlogCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setLoading(true);
-      
-      const slug = blogForm.title.toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
 
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert({
-          ...blogForm,
-          slug,
-          author_id: user?.id,
-        });
+      const slug = blogForm.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      const { error } = await supabase.from("blog_posts").insert({
+        ...blogForm,
+        slug,
+        author_id: user?.id,
+      });
 
       if (error) throw error;
 
@@ -351,13 +356,14 @@ export default function AdminPanel() {
         category: "",
         is_published: false,
       });
-      
+
       // Reload blog posts
       loadBlogPosts();
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create blog post",
+        description:
+          error instanceof Error ? error.message : "Failed to create blog post",
         variant: "destructive",
       });
     } finally {
@@ -368,15 +374,15 @@ export default function AdminPanel() {
   const toggleTestimonialApproval = async (id: string, isApproved: boolean) => {
     try {
       const { error } = await supabase
-        .from('testimonials')
+        .from("testimonials")
         .update({ is_approved: !isApproved })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: `Testimonial ${!isApproved ? 'approved' : 'rejected'}`,
+        description: `Testimonial ${!isApproved ? "approved" : "rejected"}`,
       });
 
       loadTestimonials();
@@ -392,9 +398,9 @@ export default function AdminPanel() {
   const updateUserKYC = async (userId: string, status: string) => {
     try {
       const { error } = await supabase
-        .from('user_profiles')
+        .from("user_profiles")
         .update({ kyc_status: status })
-        .eq('id', userId);
+        .eq("id", userId);
 
       if (error) throw error;
 
@@ -418,14 +424,20 @@ export default function AdminPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
-          <p className="text-gray-600">Manage your forex platform content and users</p>
+          <p className="text-gray-600">
+            Manage your forex platform content and users
+          </p>
         </div>
         <Badge variant="secondary" className="bg-green-100 text-green-800">
           Admin Access
         </Badge>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="overview" className="flex items-center space-x-2">
             <BarChart3 className="h-4 w-4" />
@@ -443,7 +455,10 @@ export default function AdminPanel() {
             <Star className="h-4 w-4" />
             <span>Promos</span>
           </TabsTrigger>
-          <TabsTrigger value="testimonials" className="flex items-center space-x-2">
+          <TabsTrigger
+            value="testimonials"
+            className="flex items-center space-x-2"
+          >
             <MessageSquare className="h-4 w-4" />
             <span>Testimonials</span>
           </TabsTrigger>
@@ -465,28 +480,39 @@ export default function AdminPanel() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Users
+                </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{users.length}</div>
-                <p className="text-xs text-muted-foreground">+2 from last week</p>
+                <p className="text-xs text-muted-foreground">
+                  +2 from last week
+                </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Payments</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Payments
+                </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${payments.reduce((sum, p) => sum + p.amount, 0).toLocaleString()}
+                  $
+                  {payments
+                    .reduce((sum, p) => sum + p.amount, 0)
+                    .toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground">+12% from last month</p>
+                <p className="text-xs text-muted-foreground">
+                  +12% from last month
+                </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Ebooks</CardTitle>
@@ -494,18 +520,24 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{ebooks.length}</div>
-                <p className="text-xs text-muted-foreground">{ebooks.filter(e => e.is_published).length} published</p>
+                <p className="text-xs text-muted-foreground">
+                  {ebooks.filter((e) => e.is_published).length} published
+                </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Blog Posts
+                </CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{blogPosts.length}</div>
-                <p className="text-xs text-muted-foreground">{blogPosts.filter(b => b.is_published).length} published</p>
+                <p className="text-xs text-muted-foreground">
+                  {blogPosts.filter((b) => b.is_published).length} published
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -527,7 +559,12 @@ export default function AdminPanel() {
                     <Input
                       id="title"
                       value={ebookForm.title}
-                      onChange={(e) => setEbookForm(prev => ({ ...prev, title: e.target.value }))}
+                      onChange={(e) =>
+                        setEbookForm((prev) => ({
+                          ...prev,
+                          title: e.target.value,
+                        }))
+                      }
                       required
                     />
                   </div>
@@ -536,18 +573,28 @@ export default function AdminPanel() {
                     <Input
                       id="author"
                       value={ebookForm.author}
-                      onChange={(e) => setEbookForm(prev => ({ ...prev, author: e.target.value }))}
+                      onChange={(e) =>
+                        setEbookForm((prev) => ({
+                          ...prev,
+                          author: e.target.value,
+                        }))
+                      }
                       required
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
                     value={ebookForm.description}
-                    onChange={(e) => setEbookForm(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setEbookForm((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                     rows={3}
                   />
                 </div>
@@ -555,37 +602,60 @@ export default function AdminPanel() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
-                    <Select onValueChange={(value) => setEbookForm(prev => ({ ...prev, category: value }))}>
+                    <Select
+                      onValueChange={(value) =>
+                        setEbookForm((prev) => ({ ...prev, category: value }))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="forex-basics">Forex Basics</SelectItem>
-                        <SelectItem value="technical-analysis">Technical Analysis</SelectItem>
-                        <SelectItem value="trading-strategies">Trading Strategies</SelectItem>
-                        <SelectItem value="risk-management">Risk Management</SelectItem>
-                        <SelectItem value="psychology">Trading Psychology</SelectItem>
+                        <SelectItem value="forex-basics">
+                          Forex Basics
+                        </SelectItem>
+                        <SelectItem value="technical-analysis">
+                          Technical Analysis
+                        </SelectItem>
+                        <SelectItem value="trading-strategies">
+                          Trading Strategies
+                        </SelectItem>
+                        <SelectItem value="risk-management">
+                          Risk Management
+                        </SelectItem>
+                        <SelectItem value="psychology">
+                          Trading Psychology
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="investment-amount">Required Investment ($)</Label>
+                    <Label htmlFor="investment-amount">
+                      Required Investment ($)
+                    </Label>
                     <Input
                       id="investment-amount"
                       type="number"
                       value={ebookForm.required_investment_amount}
-                      onChange={(e) => setEbookForm(prev => ({ ...prev, required_investment_amount: Number(e.target.value) }))}
+                      onChange={(e) =>
+                        setEbookForm((prev) => ({
+                          ...prev,
+                          required_investment_amount: Number(e.target.value),
+                        }))
+                      }
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="file">Ebook File (PDF)</Label>
                     <Input
                       id="file"
                       type="file"
                       accept=".pdf"
-                      onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                      onChange={(e) =>
+                        setSelectedFile(e.target.files?.[0] || null)
+                      }
                       required
                     />
                   </div>
@@ -621,23 +691,38 @@ export default function AdminPanel() {
               ) : (
                 <div className="space-y-4">
                   {ebooks.map((ebook) => (
-                    <div key={ebook.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={ebook.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex-1">
                         <h4 className="font-semibold">{ebook.title}</h4>
-                        <p className="text-sm text-gray-600">by {ebook.author}</p>
+                        <p className="text-sm text-gray-600">
+                          by {ebook.author}
+                        </p>
                         <div className="flex items-center space-x-2 mt-2">
-                          <Badge variant={ebook.is_published ? "success" : "secondary"}>
+                          <Badge
+                            variant={
+                              ebook.is_published ? "success" : "secondary"
+                            }
+                          >
                             {ebook.is_published ? "Published" : "Draft"}
                           </Badge>
                           <Badge variant="outline">{ebook.category}</Badge>
-                          <span className="text-sm text-gray-500">{ebook.download_count} downloads</span>
+                          <span className="text-sm text-gray-500">
+                            {ebook.download_count} downloads
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Button size="sm" variant="outline">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" className="text-red-600">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -664,17 +749,27 @@ export default function AdminPanel() {
                   <Input
                     id="blog-title"
                     value={blogForm.title}
-                    onChange={(e) => setBlogForm(prev => ({ ...prev, title: e.target.value }))}
+                    onChange={(e) =>
+                      setBlogForm((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="excerpt">Excerpt</Label>
                   <Textarea
                     id="excerpt"
                     value={blogForm.excerpt}
-                    onChange={(e) => setBlogForm(prev => ({ ...prev, excerpt: e.target.value }))}
+                    onChange={(e) =>
+                      setBlogForm((prev) => ({
+                        ...prev,
+                        excerpt: e.target.value,
+                      }))
+                    }
                     rows={2}
                   />
                 </div>
@@ -684,7 +779,12 @@ export default function AdminPanel() {
                   <Textarea
                     id="content"
                     value={blogForm.content}
-                    onChange={(e) => setBlogForm(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={(e) =>
+                      setBlogForm((prev) => ({
+                        ...prev,
+                        content: e.target.value,
+                      }))
+                    }
                     rows={10}
                     required
                   />
@@ -693,26 +793,39 @@ export default function AdminPanel() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="blog-category">Category</Label>
-                    <Select onValueChange={(value) => setBlogForm(prev => ({ ...prev, category: value }))}>
+                    <Select
+                      onValueChange={(value) =>
+                        setBlogForm((prev) => ({ ...prev, category: value }))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="market-analysis">Market Analysis</SelectItem>
-                        <SelectItem value="trading-tips">Trading Tips</SelectItem>
+                        <SelectItem value="market-analysis">
+                          Market Analysis
+                        </SelectItem>
+                        <SelectItem value="trading-tips">
+                          Trading Tips
+                        </SelectItem>
                         <SelectItem value="news">News</SelectItem>
                         <SelectItem value="education">Education</SelectItem>
                         <SelectItem value="strategy">Strategy</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 pt-6">
                     <input
                       type="checkbox"
                       id="published"
                       checked={blogForm.is_published}
-                      onChange={(e) => setBlogForm(prev => ({ ...prev, is_published: e.target.checked }))}
+                      onChange={(e) =>
+                        setBlogForm((prev) => ({
+                          ...prev,
+                          is_published: e.target.checked,
+                        }))
+                      }
                     />
                     <Label htmlFor="published">Publish immediately</Label>
                   </div>
@@ -753,27 +866,51 @@ export default function AdminPanel() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <h4 className="font-semibold">{testimonial.name}</h4>
+                            <h4 className="font-semibold">
+                              {testimonial.name}
+                            </h4>
                             <div className="flex items-center">
                               {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                <Star
+                                  key={i}
+                                  className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                                />
                               ))}
                             </div>
                           </div>
-                          <p className="text-gray-600 mb-2">{testimonial.content}</p>
+                          <p className="text-gray-600 mb-2">
+                            {testimonial.content}
+                          </p>
                           <div className="flex items-center space-x-2">
-                            <Badge variant={testimonial.is_approved ? "success" : "secondary"}>
+                            <Badge
+                              variant={
+                                testimonial.is_approved
+                                  ? "success"
+                                  : "secondary"
+                              }
+                            >
                               {testimonial.is_approved ? "Approved" : "Pending"}
                             </Badge>
-                            {testimonial.is_featured && <Badge variant="outline">Featured</Badge>}
-                            <span className="text-sm text-gray-500">{testimonial.location}</span>
+                            {testimonial.is_featured && (
+                              <Badge variant="outline">Featured</Badge>
+                            )}
+                            <span className="text-sm text-gray-500">
+                              {testimonial.location}
+                            </span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Button
                             size="sm"
-                            variant={testimonial.is_approved ? "outline" : "default"}
-                            onClick={() => toggleTestimonialApproval(testimonial.id, testimonial.is_approved)}
+                            variant={
+                              testimonial.is_approved ? "outline" : "default"
+                            }
+                            onClick={() =>
+                              toggleTestimonialApproval(
+                                testimonial.id,
+                                testimonial.is_approved,
+                              )
+                            }
                           >
                             {testimonial.is_approved ? (
                               <XCircle className="h-4 w-4" />
@@ -796,7 +933,9 @@ export default function AdminPanel() {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-bold">Promotional Pages</h2>
-              <p className="text-gray-600">Create and manage promotional landing pages with custom themes</p>
+              <p className="text-gray-600">
+                Create and manage promotional landing pages with custom themes
+              </p>
             </div>
             <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
               <Plus className="mr-2 h-4 w-4" />
@@ -811,8 +950,12 @@ export default function AdminPanel() {
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div>
-                    <CardTitle className="text-lg">Black Friday Special</CardTitle>
-                    <p className="text-sm text-gray-600">50% off all investment plans</p>
+                    <CardTitle className="text-lg">
+                      Black Friday Special
+                    </CardTitle>
+                    <p className="text-sm text-gray-600">
+                      50% off all investment plans
+                    </p>
                   </div>
                   <Badge className="bg-green-500">Active</Badge>
                 </div>
@@ -845,7 +988,11 @@ export default function AdminPanel() {
                       <Edit className="mr-1 h-3 w-3" />
                       Edit
                     </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
@@ -859,7 +1006,9 @@ export default function AdminPanel() {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="text-lg">New Year Boost</CardTitle>
-                    <p className="text-sm text-gray-600">Start 2024 with guaranteed returns</p>
+                    <p className="text-sm text-gray-600">
+                      Start 2024 with guaranteed returns
+                    </p>
                   </div>
                   <Badge variant="outline">Draft</Badge>
                 </div>
@@ -892,7 +1041,11 @@ export default function AdminPanel() {
                       <Edit className="mr-1 h-3 w-3" />
                       Edit
                     </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
@@ -906,8 +1059,12 @@ export default function AdminPanel() {
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4">
                   <Plus className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Create New Promo Page</h3>
-                <p className="text-gray-600 text-sm mb-4">Design a custom promotional landing page</p>
+                <h3 className="font-semibold text-lg mb-2">
+                  Create New Promo Page
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Design a custom promotional landing page
+                </p>
                 <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
                   Get Started
                 </Button>
@@ -919,7 +1076,9 @@ export default function AdminPanel() {
           <Card>
             <CardHeader>
               <CardTitle>Available Themes</CardTitle>
-              <p className="text-gray-600">Choose from pre-designed themes for your promotional pages</p>
+              <p className="text-gray-600">
+                Choose from pre-designed themes for your promotional pages
+              </p>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -927,28 +1086,36 @@ export default function AdminPanel() {
                 <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded mb-3"></div>
                   <h4 className="font-medium">Golden Opportunity</h4>
-                  <p className="text-xs text-gray-600">Luxury gold theme with elegant animations</p>
+                  <p className="text-xs text-gray-600">
+                    Luxury gold theme with elegant animations
+                  </p>
                 </div>
 
                 {/* Theme 2 */}
                 <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded mb-3"></div>
                   <h4 className="font-medium">Professional Blue</h4>
-                  <p className="text-xs text-gray-600">Clean and professional business theme</p>
+                  <p className="text-xs text-gray-600">
+                    Clean and professional business theme
+                  </p>
                 </div>
 
                 {/* Theme 3 */}
                 <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded mb-3"></div>
                   <h4 className="font-medium">Success Green</h4>
-                  <p className="text-xs text-gray-600">Growth-focused theme with success elements</p>
+                  <p className="text-xs text-gray-600">
+                    Growth-focused theme with success elements
+                  </p>
                 </div>
 
                 {/* Theme 4 */}
                 <div className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded mb-3"></div>
                   <h4 className="font-medium">Dark Elite</h4>
-                  <p className="text-xs text-gray-600">Premium dark theme for exclusive offers</p>
+                  <p className="text-xs text-gray-600">
+                    Premium dark theme for exclusive offers
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -966,16 +1133,22 @@ export default function AdminPanel() {
                   <div className="text-sm text-gray-600">Active Promos</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">15,240</div>
+                  <div className="text-3xl font-bold text-green-600">
+                    15,240
+                  </div>
                   <div className="text-sm text-gray-600">Total Views</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600">1,087</div>
+                  <div className="text-3xl font-bold text-purple-600">
+                    1,087
+                  </div>
                   <div className="text-sm text-gray-600">Conversions</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-orange-600">7.1%</div>
-                  <div className="text-sm text-gray-600">Avg Conversion Rate</div>
+                  <div className="text-sm text-gray-600">
+                    Avg Conversion Rate
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -995,21 +1168,38 @@ export default function AdminPanel() {
               ) : (
                 <div className="space-y-4">
                   {users.map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={user.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex-1">
                         <h4 className="font-semibold">{user.full_name}</h4>
                         <p className="text-sm text-gray-600">{user.email}</p>
                         <div className="flex items-center space-x-2 mt-2">
-                          <Badge variant={user.kyc_status === 'approved' ? "success" : user.kyc_status === 'rejected' ? "destructive" : "secondary"}>
+                          <Badge
+                            variant={
+                              user.kyc_status === "approved"
+                                ? "success"
+                                : user.kyc_status === "rejected"
+                                  ? "destructive"
+                                  : "secondary"
+                            }
+                          >
                             KYC: {user.kyc_status}
                           </Badge>
-                          {user.is_admin && <Badge variant="outline">Admin</Badge>}
-                          <span className="text-sm text-gray-500">{user.country}</span>
+                          {user.is_admin && (
+                            <Badge variant="outline">Admin</Badge>
+                          )}
+                          <span className="text-sm text-gray-500">
+                            {user.country}
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Select
-                          onValueChange={(value) => updateUserKYC(user.id, value)}
+                          onValueChange={(value) =>
+                            updateUserKYC(user.id, value)
+                          }
                           defaultValue={user.kyc_status}
                         >
                           <SelectTrigger className="w-32">
@@ -1043,19 +1233,33 @@ export default function AdminPanel() {
               ) : (
                 <div className="space-y-4">
                   {payments.map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={payment.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex-1">
-                        <h4 className="font-semibold">${payment.amount} {payment.currency.toUpperCase()}</h4>
-                        <p className="text-sm text-gray-600">{payment.user_profiles?.full_name} ({payment.user_profiles?.email})</p>
+                        <h4 className="font-semibold">
+                          ${payment.amount} {payment.currency.toUpperCase()}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {payment.user_profiles?.full_name} (
+                          {payment.user_profiles?.email})
+                        </p>
                         <div className="flex items-center space-x-2 mt-2">
-                          <Badge variant={
-                            payment.payment_status === 'finished' ? "success" :
-                            payment.payment_status === 'failed' ? "destructive" :
-                            "secondary"
-                          }>
+                          <Badge
+                            variant={
+                              payment.payment_status === "finished"
+                                ? "success"
+                                : payment.payment_status === "failed"
+                                  ? "destructive"
+                                  : "secondary"
+                            }
+                          >
                             {payment.payment_status}
                           </Badge>
-                          <Badge variant="outline">{payment.payment_method}</Badge>
+                          <Badge variant="outline">
+                            {payment.payment_method}
+                          </Badge>
                           <span className="text-sm text-gray-500">
                             {new Date(payment.created_at).toLocaleDateString()}
                           </span>
@@ -1128,7 +1332,9 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="min-investment">Minimum Investment (USD)</Label>
+                  <Label htmlFor="min-investment">
+                    Minimum Investment (USD)
+                  </Label>
                   <Input
                     id="min-investment"
                     type="number"
@@ -1158,7 +1364,9 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <Label htmlFor="investment-duration">Default Duration (days)</Label>
+                  <Label htmlFor="investment-duration">
+                    Default Duration (days)
+                  </Label>
                   <Input
                     id="investment-duration"
                     type="number"
@@ -1213,11 +1421,7 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="popup-enabled"
-                    defaultChecked
-                  />
+                  <input type="checkbox" id="popup-enabled" defaultChecked />
                   <Label htmlFor="popup-enabled">Enable Welcome Popup</Label>
                 </div>
 
@@ -1241,7 +1445,9 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <Label htmlFor="popup-show-count">Times to Show (per user)</Label>
+                  <Label htmlFor="popup-show-count">
+                    Times to Show (per user)
+                  </Label>
                   <Input
                     id="popup-show-count"
                     type="number"

@@ -7,14 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Shield, 
-  Lock, 
-  Eye, 
-  EyeOff, 
+import {
+  Shield,
+  Lock,
+  Eye,
+  EyeOff,
   Mail,
   ArrowLeft,
-  TrendingUp 
+  TrendingUp,
 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -24,7 +24,7 @@ export default function AdminLogin() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
-  
+
   const { adminSignIn, resetPassword, user, isAdmin } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function AdminLogin() {
   // Redirect if already logged in as admin
   useEffect(() => {
     if (user && isAdmin) {
-      navigate('/admin-panel');
+      navigate("/admin-panel");
     }
   }, [user, isAdmin, navigate]);
 
@@ -47,7 +47,7 @@ export default function AdminLogin() {
           toast({
             title: "Error",
             description: error.message,
-            variant: "destructive"
+            variant: "destructive",
           });
         } else {
           setForgotMode(false);
@@ -63,17 +63,17 @@ export default function AdminLogin() {
           toast({
             title: "Access denied",
             description: error.message,
-            variant: "destructive"
+            variant: "destructive",
           });
         } else {
-          navigate('/admin-panel');
+          navigate("/admin-panel");
         }
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "An unexpected error occurred.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -93,7 +93,7 @@ export default function AdminLogin() {
           <div className="mx-auto w-16 h-16 bg-gradient-to-r from-forex-500 to-blue-500 rounded-full flex items-center justify-center">
             <Shield className="h-8 w-8 text-white" />
           </div>
-          
+
           <div>
             <CardTitle className="text-2xl font-bold text-white mb-2">
               {forgotMode ? "Reset Password" : "Admin Access"}
@@ -110,37 +110,42 @@ export default function AdminLogin() {
             <div className="space-y-4">
               <div className="text-center">
                 <Mail className="h-12 w-12 text-forex-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">Forgot your password?</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Forgot your password?
+                </h3>
                 <p className="text-gray-300 text-sm">
-                  Enter your admin email address and we'll send you a reset link.
+                  Enter your admin email address and we'll send you a reset
+                  link.
                 </p>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="reset-email" className="text-gray-200">Admin Email</Label>
-                  <Input 
-                    id="reset-email" 
-                    type="email" 
-                    placeholder="admin@forexsignals.com" 
+                  <Label htmlFor="reset-email" className="text-gray-200">
+                    Admin Email
+                  </Label>
+                  <Input
+                    id="reset-email"
+                    type="email"
+                    placeholder="admin@forexsignals.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
                     required
                   />
                 </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600" 
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
                   disabled={loading}
                 >
                   {loading ? "Sending..." : "Send Reset Link"}
                 </Button>
-                
-                <Button 
+
+                <Button
                   type="button"
-                  variant="ghost" 
+                  variant="ghost"
                   className="w-full text-gray-300 hover:text-white hover:bg-white/10"
                   onClick={() => setForgotMode(false)}
                 >
@@ -154,12 +159,16 @@ export default function AdminLogin() {
               {/* Demo Credentials Info */}
               <div className="bg-blue-900/30 border border-blue-400/30 rounded-lg p-4 mb-4">
                 <div className="text-center mb-3">
-                  <h3 className="text-blue-300 font-semibold text-sm">Demo Admin Credentials</h3>
+                  <h3 className="text-blue-300 font-semibold text-sm">
+                    Demo Admin Credentials
+                  </h3>
                 </div>
                 <div className="text-xs space-y-1">
                   <div className="flex justify-between">
                     <span className="text-gray-300">Email:</span>
-                    <code className="text-blue-300">admin@forextraderssignals.com</code>
+                    <code className="text-blue-300">
+                      admin@forextraderssignals.com
+                    </code>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-300">Password:</span>
@@ -179,83 +188,100 @@ export default function AdminLogin() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-200">Admin Email</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="admin@forexsignals.com" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
-                  required
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-200">Password</Label>
-                <div className="relative">
-                  <Input 
-                    id="password" 
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-gray-200">
+                    Admin Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="admin@forexsignals.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
                     required
-                    minLength={6}
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-gray-200">
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                      required
+                      minLength={6}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400 hover:text-white"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="remember-me"
+                      checked={rememberMe}
+                      onCheckedChange={(checked) =>
+                        setRememberMe(checked as boolean)
+                      }
+                    />
+                    <Label
+                      htmlFor="remember-me"
+                      className="text-sm text-gray-300"
+                    >
+                      Remember me
+                    </Label>
+                  </div>
+
                   <Button
                     type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400 hover:text-white"
-                    onClick={() => setShowPassword(!showPassword)}
+                    variant="link"
+                    className="p-0 h-auto text-forex-400 text-sm hover:text-forex-300"
+                    onClick={() => setForgotMode(true)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    Forgot password?
                   </Button>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="remember-me"
-                    checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  />
-                  <Label htmlFor="remember-me" className="text-sm text-gray-300">Remember me</Label>
-                </div>
-                
-                <Button 
-                  type="button"
-                  variant="link" 
-                  className="p-0 h-auto text-forex-400 text-sm hover:text-forex-300"
-                  onClick={() => setForgotMode(true)}
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
+                  disabled={loading}
                 >
-                  Forgot password?
+                  <div className="flex items-center space-x-2">
+                    <Lock className="h-4 w-4" />
+                    <span>
+                      {loading ? "Verifying..." : "Access Admin Panel"}
+                    </span>
+                  </div>
                 </Button>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600" 
-                disabled={loading}
-              >
-                <div className="flex items-center space-x-2">
-                  <Lock className="h-4 w-4" />
-                  <span>{loading ? "Verifying..." : "Access Admin Panel"}</span>
-                </div>
-              </Button>
-            </form>
+              </form>
             </>
           )}
 
           <div className="text-center">
-            <Button 
-              variant="link" 
+            <Button
+              variant="link"
               className="text-gray-400 hover:text-gray-300 text-sm"
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
             >
               ← Back to Main Site
             </Button>

@@ -35,85 +35,85 @@ const App = () => (
     <AuthProvider>
       <InvestmentProvider>
         <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/offers" element={<Offers />} />
-          <Route path="/education" element={<Education />} />
-          <Route path="/promo" element={<Promo />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/news" element={<News />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <EnhancedUserDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/test-dashboard"
-            element={
-              <ProtectedRoute>
-                <TestDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/eustersmain" element={<AdminLogin />} />
-          <Route
-            path="/admin-panel"
-            element={
-              <ProtectedRoute>
-                <AdminPanel />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/investment-plans"
-            element={
-              <ProtectedRoute>
-                <InvestmentPlans />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/live-signals"
-            element={
-              <ProtectedRoute>
-                <LiveSignals />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/testimonials"
-            element={
-              <ProtectedRoute>
-                <Testimonials />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reviews"
-            element={
-              <ProtectedRoute>
-                <Reviews />
-              </ProtectedRoute>
-            }
-          />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        </BrowserRouter>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/offers" element={<Offers />} />
+              <Route path="/education" element={<Education />} />
+              <Route path="/promo" element={<Promo />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/news" element={<News />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <EnhancedUserDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/test-dashboard"
+                element={
+                  <ProtectedRoute>
+                    <TestDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/eustersmain" element={<AdminLogin />} />
+              <Route
+                path="/admin-panel"
+                element={
+                  <ProtectedRoute>
+                    <AdminPanel />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/investment-plans"
+                element={
+                  <ProtectedRoute>
+                    <InvestmentPlans />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/live-signals"
+                element={
+                  <ProtectedRoute>
+                    <LiveSignals />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/testimonials"
+                element={
+                  <ProtectedRoute>
+                    <Testimonials />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reviews"
+                element={
+                  <ProtectedRoute>
+                    <Reviews />
+                  </ProtectedRoute>
+                }
+              />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
         </TooltipProvider>
       </InvestmentProvider>
     </AuthProvider>

@@ -1063,6 +1063,19 @@ export default function EnhancedUserDashboard() {
     }
   };
 
+  if (!user) {
+    return (
+      <DashboardLayout>
+        <div className="p-6 space-y-6">
+          <div className="text-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p>Loading your dashboard...</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <div className="p-6 space-y-6">

@@ -250,14 +250,15 @@ export default function EducationSection() {
                       {ebook.downloadCount.toLocaleString()} downloads
                     </div>
                     
-                    <Button 
-                      onClick={() => handleDownload(ebook)}
+                    <a href="/education">
+                    <Button
                       variant="outline"
                       className="w-full"
                     >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download
+                      <Eye className="h-4 w-4 mr-2" />
+                      Read Online
                     </Button>
+                  </a>
                   </CardContent>
                 </Card>
               ))}

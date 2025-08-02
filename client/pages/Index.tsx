@@ -276,7 +276,7 @@ export default function Index() {
               Free access, 8x-15x ROI potential, and expert risk management included.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-slide-up delay-700">
               <a 
                 href="https://t.me/forex_traders_signalss" 
                 target="_blank" 

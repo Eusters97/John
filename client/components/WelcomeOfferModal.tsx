@@ -25,9 +25,9 @@ export default function WelcomeOfferModal() {
 
   useEffect(() => {
     if (user) {
-      // Check if user has seen this offer before
-      const hasSeenOffer = localStorage.getItem(`welcome-offer-${user.id}`);
-      if (!hasSeenOffer) {
+      // Check how many times user has seen this offer
+      const viewCount = parseInt(localStorage.getItem(`welcome-offer-count-${user.id}`) || '0');
+      if (viewCount < 10) {
         // Show after 2 seconds for better UX
         const timer = setTimeout(() => {
           setIsOpen(true);

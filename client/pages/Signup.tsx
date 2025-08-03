@@ -37,7 +37,7 @@ const countries = [
   { code: "+376", name: "Andorra", flag: "🇦🇩" },
   { code: "+244", name: "Angola", flag: "🇦🇴" },
   { code: "+54", name: "Argentina", flag: "🇦🇷" },
-  { code: "+374", name: "Armenia", flag: "����🇲" },
+  { code: "+374", name: "Armenia", flag: "🇦🇲" },
   { code: "+61", name: "Australia", flag: "🇦🇺" },
   { code: "+43", name: "Austria", flag: "🇦🇹" },
   { code: "+994", name: "Azerbaijan", flag: "🇦🇿" },
@@ -439,6 +439,21 @@ export default function Signup() {
                   onChange={(e) => updateFormData("fullName", e.target.value)}
                   className="pl-10"
                   required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="username">Username (Optional)</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Choose a username"
+                  value={formData.username}
+                  onChange={(e) => updateFormData("username", e.target.value)}
+                  className="pl-10"
                 />
               </div>
             </div>

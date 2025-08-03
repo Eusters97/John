@@ -97,6 +97,81 @@ export default function AdminLogin() {
     }
   };
 
+  const handleAdminCreation = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate form
+    if (!adminForm.username || !adminForm.email || !adminForm.password || !adminForm.fullName) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (adminForm.password !== adminForm.confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (adminForm.password.length < 8) {
+      toast({
+        title: "Weak Password",
+        description: "Password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setCreatingAdmin(true);
+
+    try {
+      const result = await enhancedAuth.createAdminUser({
+        username: adminForm.username,
+        email: adminForm.email,
+        password: adminForm.password,
+        full_name: adminForm.fullName,
+        role: adminForm.role
+      });
+
+      if (result.success) {
+        toast({
+          title: "Admin Created Successfully",
+          description: `Admin account for ${adminForm.username} has been created.`,
+        });
+
+        // Reset form
+        setAdminForm({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          fullName: "",
+          role: "admin"
+        });
+      } else {
+        toast({
+          title: "Admin Creation Failed",
+          description: result.error?.message || "Failed to create admin account",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred while creating admin account.",
+        variant: "destructive",
+      });
+    } finally {
+      setCreatingAdmin(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
       {/* Background Pattern */}

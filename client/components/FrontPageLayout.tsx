@@ -58,6 +58,11 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
     { icon: BarChart3, label: "Reviews", path: "/#reviews", key: "reviews" },
   ];
 
+  const authItems = [
+    { icon: LogIn, label: "Login", path: "/login", key: "login" },
+    { icon: UserPlus, label: "Sign Up", path: "/signup", key: "signup" },
+  ];
+
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

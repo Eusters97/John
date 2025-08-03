@@ -235,7 +235,12 @@ export default function EnhancedUserDashboard() {
         .limit(1);
 
       if (testError) {
-        console.error("Supabase connection test failed:", testError);
+        console.error("Supabase connection test failed:", {
+          message: testError.message,
+          code: testError.code,
+          details: testError.details,
+          hint: testError.hint
+        });
         throw new Error(`Connection failed: ${testError.message}`);
       }
 

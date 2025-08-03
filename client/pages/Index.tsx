@@ -617,6 +617,7 @@ export default function Index() {
 
       <CookieBanner />
       <PaymentModal />
+      <WelcomePopup />
     </FrontPageLayout>
   );
 }

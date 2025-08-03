@@ -475,7 +475,11 @@ class EnhancedAuthService {
       
       return false; // Username is taken
     } catch (error) {
-      console.error('Error validating username:', error);
+      console.error('Error validating username:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        username: username.substring(0, 10) + '...'
+      });
       return false; // Assume taken on error
     }
   }

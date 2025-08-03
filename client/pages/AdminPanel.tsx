@@ -798,6 +798,10 @@ export default function AdminPanel() {
               <HelpCircle className="h-4 w-4" />
               <span className="hidden sm:inline">Support</span>
             </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center space-x-1 text-xs">
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Analytics</span>
+            </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center space-x-1 text-xs">
               <Settings className="h-4 w-4" />
               <span className="hidden sm:inline">Settings</span>

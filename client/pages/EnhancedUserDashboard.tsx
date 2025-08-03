@@ -205,10 +205,12 @@ export default function EnhancedUserDashboard() {
         }
       }
     } catch (error) {
-      console.warn(
-        "Error initializing user data:",
-        error instanceof Error ? error.message : "Unknown error",
-      );
+      console.error("Unexpected error initializing user data:", {
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        user_id: user.id,
+        user_email: user.email
+      });
     }
   };
 

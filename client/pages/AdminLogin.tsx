@@ -31,6 +31,17 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
 
+  // Admin creation form state
+  const [adminForm, setAdminForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    role: "admin" as "admin" | "super_admin" | "moderator"
+  });
+  const [creatingAdmin, setCreatingAdmin] = useState(false);
+
   const { adminSignIn, resetPassword, user, isAdmin } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();

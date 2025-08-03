@@ -201,12 +201,8 @@ export default function EnhancedUserDashboard() {
             "user_balances table does not exist. Please run database migrations.",
           );
         } else {
-          console.error("Error checking user balance:", {
-            message: balanceError.message,
-            code: balanceError.code,
-            details: balanceError.details,
-            hint: balanceError.hint,
-          });
+          // Log error for admin monitoring without exposing details to user
+          console.warn("User balance check failed - contact support if issues persist");
         }
       }
     } catch (error) {

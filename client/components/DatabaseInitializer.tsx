@@ -83,7 +83,10 @@ export default function DatabaseInitializer() {
         });
       }
     } catch (error) {
-      console.error('Connection test error:', error);
+      console.error('Connection test error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Test Error",
         description: "Failed to run connection tests.",

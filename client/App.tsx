@@ -87,6 +87,14 @@ const App = () => (
                 }
               />
               <Route
+                path="/error-monitoring"
+                element={
+                  <ProtectedRoute>
+                    <ErrorMonitoring />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/investment-plans"
                 element={
                   <ProtectedRoute>

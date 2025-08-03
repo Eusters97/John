@@ -517,6 +517,102 @@ class EnhancedAuthService {
       return false; // Assume taken on error
     }
   }
+
+  // =====================================================
+  // TELEGRAM AUTHENTICATION
+  // =====================================================
+
+  async authenticateWithTelegram(authData: TelegramAuthData, action: 'login' | 'register' = 'login') {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ authData, action }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        return {
+          user: null,
+          error: { message: result.error || 'Telegram authentication failed' },
+          requiresRegistration: result.requiresRegistration,
+          telegramData: result.telegramData
+        };
+      }
+
+      return {
+        user: result.user,
+        error: null,
+        action: result.action
+      };
+    } catch (error) {
+      console.error('Telegram authentication error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      return {
+        user: null,
+        error: { message: error instanceof Error ? error.message : 'Telegram authentication failed' }
+      };
+    }
+  }
+
+  async initiateTelegramAuth(): Promise<string> {
+    const botUsername = import.meta.env.VITE_TELEGRAM_BOT_USERNAME || 'Blakehunterfxbot';
+    const domain = window.location.hostname;
+    const telegramUrl = `https://t.me/${botUsername}?start=auth_${domain}`;
+
+    return telegramUrl;
+  }
+
+  async linkTelegramAccount(userId: string, telegramData: TelegramAuthData) {
+    try {
+      if (this.useNeon) {
+        if (!sql) {
+          throw new Error('Neon database not configured');
+        }
+
+        await sql`
+          UPDATE user_profiles
+          SET
+            telegram_id = ${telegramData.id.toString()},
+            telegram_username = ${telegramData.username || null},
+            telegram_first_name = ${telegramData.first_name},
+            telegram_last_name = ${telegramData.last_name || null},
+            telegram_photo_url = ${telegramData.photo_url || null},
+            updated_at = NOW()
+          WHERE id = ${userId}
+        `;
+      } else {
+        await dualDb.updateUserProfile(userId, {
+          telegram_id: telegramData.id.toString(),
+          telegram_username: telegramData.username,
+          telegram_first_name: telegramData.first_name,
+          telegram_last_name: telegramData.last_name,
+          telegram_photo_url: telegramData.photo_url,
+        });
+      }
+
+      return { success: true, error: null };
+    } catch (error) {
+      console.error('Error linking Telegram account:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        userId,
+        telegramId: telegramData.id
+      });
+
+      return {
+        success: false,
+        error: { message: error instanceof Error ? error.message : 'Failed to link Telegram account' }
+      };
+    }
+  }
 }
 
 // Export singleton instance

@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import DatabaseInitializer from "@/components/DatabaseInitializer";
+import { enhancedAuth } from "@/lib/enhanced-auth";
 import {
   Shield,
   Lock,
@@ -18,6 +19,8 @@ import {
   ArrowLeft,
   TrendingUp,
   Settings,
+  UserPlus,
+  User,
 } from "lucide-react";
 
 export default function AdminLogin() {

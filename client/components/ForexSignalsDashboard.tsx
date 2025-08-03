@@ -75,7 +75,10 @@ export default function ForexSignalsDashboard() {
       setSignals(activeSignals);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('Error loading signals:', error);
+      console.error('Error loading signals:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Failed to load forex signals",
@@ -354,7 +357,7 @@ export default function ForexSignalsDashboard() {
             <div className="space-y-2">
               <h4 className="font-semibold text-forex-600">Risk Management</h4>
               <ul className="space-y-1 text-gray-600">
-                <li>• Never risk more than 2% of your account per trade</li>
+                <li>��� Never risk more than 2% of your account per trade</li>
                 <li>• Always use stop-loss orders</li>
                 <li>• Diversify your trading pairs</li>
                 <li>• Keep a trading journal</li>

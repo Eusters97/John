@@ -279,6 +279,9 @@ export default function EnhancedUserDashboard() {
         !!testData?.length,
       );
 
+      // Load user investments
+      await loadUserInvestments();
+
       // Try to load user balance first (simpler query)
       let userBalance = 0.0; // Default balance
 

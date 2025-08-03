@@ -54,7 +54,6 @@ const App = () => (
               <Route path="/education" element={<Education />} />
               <Route path="/promo" element={<Promo />} />
               <Route path="/blog" element={<Blog />} />
-        <Route path="/news" element={<News />} />
               <Route path="/news" element={<News />} />
               {/* Standalone pages accessible without login */}
               <Route path="/live-signals" element={<LiveSignalsStandalone />} />

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import FrontPageLayout from "@/components/FrontPageLayout";
 import CookieBanner from "@/components/CookieBanner";
 import PaymentModal from "@/components/PaymentModal";
+import WelcomePopup from "@/components/WelcomePopup";
 import EducationSection from "@/components/EducationSection";
 import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
 import { Button } from "@/components/ui/button";

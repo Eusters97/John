@@ -301,8 +301,8 @@ export default function ForexSignalsDashboard() {
 
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <div className="text-gray-600 text-sm">Current Price</div>
-                          <div className="font-semibold">{signal.current_price.toFixed(5)}</div>
+                          <div className="text-gray-600 text-sm">Status</div>
+                          <div className="font-semibold capitalize">{signal.status}</div>
                         </div>
                         <div className="text-right">
                           <div className="text-gray-600 text-sm">P&L</div>

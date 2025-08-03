@@ -150,8 +150,9 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
           </Button>
         </div>
 
-        <nav className="mt-8 px-4 overflow-y-auto">
-          <div className="space-y-2">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <nav className="mt-8 px-4 flex-1 overflow-y-auto">
+            <div className="space-y-2 pb-4">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path || location.hash === item.path.split('#')[1];
@@ -222,11 +223,12 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
                 </div>
               </>
             )}
-          </div>
-        </nav>
+            </div>
+          </nav>
+        </div>
 
         {/* Quick Investment Actions */}
-        <div className="mt-8 px-4">
+        <div className="mt-4 px-4 flex-shrink-0">
           <div className="bg-gradient-to-r from-forex-50 to-blue-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-3">Quick Invest</h4>
             <div className="space-y-2">

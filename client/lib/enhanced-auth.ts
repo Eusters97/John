@@ -63,19 +63,23 @@ class EnhancedAuthService {
       let userId: string;
 
       if (this.useNeon) {
+        if (!sql) {
+          throw new Error('Neon database not configured');
+        }
+
         // Create user in Neon's auth_users table
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         const result = await sql`
           INSERT INTO auth_users (email, encrypted_password, email_confirmed_at, confirmed_at)
           VALUES (${email}, ${hashedPassword}, NOW(), NOW())
           RETURNING id, email
         `;
-        
+
         if (!result[0]) {
           throw new Error('Failed to create user in Neon database');
         }
-        
+
         authResult = { user: result[0], error: null };
         userId = result[0].id;
       } else {

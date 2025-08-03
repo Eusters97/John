@@ -199,10 +199,14 @@ export default function AdminLogin() {
 
         <CardContent className="space-y-6">
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-white/10 border-white/20">
+            <TabsList className="grid w-full grid-cols-3 bg-white/10 border-white/20">
               <TabsTrigger value="login" className="text-gray-300 data-[state=active]:bg-white/20 data-[state=active]:text-white">
                 <Lock className="h-4 w-4 mr-2" />
                 Login
+              </TabsTrigger>
+              <TabsTrigger value="create" className="text-gray-300 data-[state=active]:bg-white/20 data-[state=active]:text-white">
+                <UserPlus className="h-4 w-4 mr-2" />
+                Create Admin
               </TabsTrigger>
               <TabsTrigger value="setup" className="text-gray-300 data-[state=active]:bg-white/20 data-[state=active]:text-white">
                 <Settings className="h-4 w-4 mr-2" />

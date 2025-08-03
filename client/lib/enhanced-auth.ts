@@ -29,12 +29,24 @@ class EnhancedAuthService {
   private useNeon: boolean = false;
 
   constructor() {
-    this.useNeon = import.meta.env.VITE_USE_NEON === 'true' || false;
+    const shouldUseNeon = import.meta.env.VITE_USE_NEON === 'true';
+    const neonAvailable = sql !== null;
+
+    if (shouldUseNeon && !neonAvailable) {
+      console.warn('Neon authentication requested but not available, falling back to Supabase');
+      this.useNeon = false;
+    } else {
+      this.useNeon = shouldUseNeon && neonAvailable;
+    }
   }
 
   setUseNeon(useNeon: boolean) {
+    if (useNeon && !sql) {
+      console.warn('Cannot switch to Neon: database not configured');
+      return false;
+    }
     this.useNeon = useNeon;
-    dualDb.setUseNeon(useNeon);
+    return dualDb.setUseNeon(useNeon);
   }
 
   getActiveDatabase() {

@@ -158,10 +158,14 @@ class EnhancedAuthService {
   async enhancedSignIn(email: string, password: string) {
     try {
       if (this.useNeon) {
+        if (!sql) {
+          throw new Error('Neon database not configured');
+        }
+
         // Authenticate against Neon
         const result = await sql`
-          SELECT id, email, encrypted_password 
-          FROM auth_users 
+          SELECT id, email, encrypted_password
+          FROM auth_users
           WHERE email = ${email} AND deleted_at IS NULL
         `;
         

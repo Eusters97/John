@@ -219,20 +219,7 @@ export default function Signup() {
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    setLoading(true);
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to sign up with Google",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const handleTelegramSignUp = async () => {
     await signInWithTelegram();

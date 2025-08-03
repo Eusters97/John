@@ -38,7 +38,7 @@ const countries = [
   { code: "+244", name: "Angola", flag: "🇦🇴" },
   { code: "+54", name: "Argentina", flag: "🇦🇷" },
   { code: "+374", name: "Armenia", flag: "🇦🇲" },
-  { code: "+61", name: "Australia", flag: "🇦🇺" },
+  { code: "+61", name: "Australia", flag: "🇦����" },
   { code: "+43", name: "Austria", flag: "🇦🇹" },
   { code: "+994", name: "Azerbaijan", flag: "🇦🇿" },
   { code: "+973", name: "Bahrain", flag: "🇧🇭" },
@@ -483,15 +483,28 @@ export default function Signup() {
                     <SelectValue placeholder="Select your country" />
                   </SelectTrigger>
                   <SelectContent className="max-h-60">
-                    {countries.map((country) => (
-                      <SelectItem key={country.name} value={country.name}>
-                        <div className="flex items-center space-x-2">
-                          <span>{country.flag}</span>
-                          <span>{country.name}</span>
-                          <span className="text-gray-500">({country.code})</span>
-                        </div>
-                      </SelectItem>
-                    ))}
+                    <div className="p-2">
+                      <Input
+                        placeholder="Search countries..."
+                        value={countrySearch}
+                        onChange={(e) => setCountrySearch(e.target.value)}
+                        className="mb-2"
+                      />
+                    </div>
+                    {countries
+                      .filter((country) =>
+                        country.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+                        country.code.includes(countrySearch)
+                      )
+                      .map((country) => (
+                        <SelectItem key={country.name} value={country.name}>
+                          <div className="flex items-center space-x-2">
+                            <span>{country.flag}</span>
+                            <span>{country.name}</span>
+                            <span className="text-gray-500">({country.code})</span>
+                          </div>
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>

@@ -20,6 +20,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
 import { nowPaymentsService } from "@/lib/nowpayments";
+import { investmentService, type Investment } from "@/lib/investment-service";
 import {
   Wallet,
   TrendingUp,

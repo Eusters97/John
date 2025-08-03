@@ -61,6 +61,12 @@ export async function validateStartup(): Promise<ValidationResult> {
       result.success = false;
     }
 
+    // Check for placeholder values
+    const neonUrl = import.meta.env.VITE_NEON_DATABASE_URL;
+    if (neonUrl === 'your_neon_database_connection_string') {
+      result.warnings.push('Neon database URL is using placeholder value - please configure with actual connection string');
+    }
+
     // Warnings for partial configuration
     if (dbInfo.dualEnabled) {
       if (!dbInfo.supabaseConfigured) {

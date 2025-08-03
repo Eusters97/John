@@ -127,26 +127,39 @@ export default function EnhancedUserDashboard() {
         .eq("id", user.id)
         .single();
 
-      if (profileError && profileError.code === "PGRST116") {
-        // User profile doesn't exist, create it
-        console.log("Creating user profile...");
-        const { error: createError } = await supabase
-          .from("user_profiles")
-          .insert({
-            id: user.id,
-            email: user.email || "",
-            full_name: user.user_metadata?.full_name || user.email || "User",
-          });
+      if (profileError) {
+        if (profileError.code === "PGRST116") {
+          // User profile doesn't exist, create it
+          console.log("Creating user profile...");
+          const { error: createError } = await supabase
+            .from("user_profiles")
+            .insert({
+              id: user.id,
+              email: user.email || "",
+              full_name: user.user_metadata?.full_name || user.email || "User",
+            });
 
-        if (createError) {
-          console.error("Failed to create user profile:", {
-            message: createError.message,
-            code: createError.code,
-            details: createError.details,
-            hint: createError.hint
-          });
+          if (createError) {
+            console.error("Failed to create user profile:", {
+              message: createError.message,
+              code: createError.code,
+              details: createError.details,
+              hint: createError.hint,
+              user_id: user.id,
+              user_email: user.email
+            });
+          } else {
+            console.log("User profile created successfully");
+          }
+        } else if (profileError.code === "42P01") {
+          console.warn("user_profiles table does not exist. Please run database migrations.");
         } else {
-          console.log("User profile created successfully");
+          console.error("Error checking user profile:", {
+            message: profileError.message,
+            code: profileError.code,
+            details: profileError.details,
+            hint: profileError.hint
+          });
         }
       }
 

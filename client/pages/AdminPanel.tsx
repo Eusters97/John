@@ -37,6 +37,12 @@ import {
   Star,
   BarChart3,
   AlertTriangle,
+  HelpCircle,
+  Clock,
+  CheckCircle2,
+  Mail,
+  Send,
+  Archive,
 } from "lucide-react";
 
 interface Ebook {
@@ -101,6 +107,22 @@ interface Payment {
   user_profiles: { full_name: string; email: string };
 }
 
+interface SupportTicket {
+  id: string;
+  user_id: string;
+  subject: string;
+  message: string;
+  category: string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  admin_response?: string;
+  responded_at?: string;
+  responded_by?: string;
+  created_at: string;
+  updated_at: string;
+  user_profiles: { full_name: string; email: string };
+}
+
 export default function AdminPanel() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -113,6 +135,7 @@ export default function AdminPanel() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
 
   // Form states
   const [ebookForm, setEbookForm] = useState({
@@ -134,6 +157,8 @@ export default function AdminPanel() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [ticketResponse, setTicketResponse] = useState<{[key: string]: string}>({});
+  const [respondingTo, setRespondingTo] = useState<string | null>(null);
 
   useEffect(() => {
     if (activeTab === "ebooks") loadEbooks();
@@ -141,6 +166,7 @@ export default function AdminPanel() {
     if (activeTab === "testimonials") loadTestimonials();
     if (activeTab === "users") loadUsers();
     if (activeTab === "payments") loadPayments();
+    if (activeTab === "support") loadSupportTickets();
   }, [activeTab]);
 
   const loadEbooks = async () => {
@@ -421,6 +447,109 @@ export default function AdminPanel() {
     }
   };
 
+  const loadSupportTickets = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("support_tickets")
+        .select("*, user_profiles(full_name, email)")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setSupportTickets(data || []);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load support tickets",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateTicketStatus = async (ticketId: string, status: string) => {
+    try {
+      const { error } = await supabase
+        .from("support_tickets")
+        .update({
+          status,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", ticketId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Ticket status updated to ${status}`,
+      });
+
+      loadSupportTickets();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update ticket status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const respondToTicket = async (ticketId: string, response: string) => {
+    try {
+      setLoading(true);
+      const { error } = await supabase
+        .from("support_tickets")
+        .update({
+          admin_response: response,
+          responded_at: new Date().toISOString(),
+          responded_by: user?.id,
+          status: 'in_progress',
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", ticketId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Response sent successfully",
+      });
+
+      setTicketResponse(prev => ({ ...prev, [ticketId]: '' }));
+      setRespondingTo(null);
+      loadSupportTickets();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send response",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'urgent': return 'bg-red-500 text-white';
+      case 'high': return 'bg-orange-500 text-white';
+      case 'medium': return 'bg-yellow-500 text-black';
+      case 'low': return 'bg-gray-500 text-white';
+      default: return 'bg-gray-500 text-white';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'open': return 'bg-blue-500 text-white';
+      case 'in_progress': return 'bg-orange-500 text-white';
+      case 'resolved': return 'bg-green-500 text-white';
+      case 'closed': return 'bg-gray-500 text-white';
+      default: return 'bg-gray-500 text-white';
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -441,7 +570,7 @@ export default function AdminPanel() {
         className="space-y-6"
       >
         <div className="flex flex-wrap gap-2 mb-6">
-          <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 lg:grid-cols-9">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 lg:grid-cols-10">
             <TabsTrigger value="overview" className="flex items-center space-x-1 text-xs">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -476,6 +605,10 @@ export default function AdminPanel() {
             <TabsTrigger value="payments" className="flex items-center space-x-1 text-xs">
               <DollarSign className="h-4 w-4" />
               <span className="hidden sm:inline">Payments</span>
+            </TabsTrigger>
+            <TabsTrigger value="support" className="flex items-center space-x-1 text-xs">
+              <HelpCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">Support</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center space-x-1 text-xs">
               <Settings className="h-4 w-4" />
@@ -1413,6 +1546,217 @@ export default function AdminPanel() {
                             {new Date(payment.created_at).toLocaleDateString()}
                           </span>
                         </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="support" className="space-y-6">
+          {/* Support Tickets Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Open Tickets</CardTitle>
+                <HelpCircle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">
+                  {supportTickets.filter(t => t.status === 'open').length}
+                </div>
+                <p className="text-xs text-muted-foreground">Awaiting response</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-orange-600">
+                  {supportTickets.filter(t => t.status === 'in_progress').length}
+                </div>
+                <p className="text-xs text-muted-foreground">Being handled</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Resolved</CardTitle>
+                <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">
+                  {supportTickets.filter(t => t.status === 'resolved').length}
+                </div>
+                <p className="text-xs text-muted-foreground">This week</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Urgent</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-red-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-red-600">
+                  {supportTickets.filter(t => t.priority === 'urgent').length}
+                </div>
+                <p className="text-xs text-muted-foreground">High priority</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Support Tickets List */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Mail className="h-5 w-5" />
+                <span>Support Tickets</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+              ) : supportTickets.length === 0 ? (
+                <div className="text-center py-8">
+                  <HelpCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">No support tickets found</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {supportTickets.map((ticket) => (
+                    <div
+                      key={ticket.id}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="font-semibold text-lg">{ticket.subject}</h4>
+                            <Badge className={getPriorityColor(ticket.priority)}>
+                              {ticket.priority.toUpperCase()}
+                            </Badge>
+                            <Badge className={getStatusColor(ticket.status)}>
+                              {ticket.status.replace('_', ' ').toUpperCase()}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
+                            <span>From: {ticket.user_profiles?.full_name}</span>
+                            <span>•</span>
+                            <span>{ticket.user_profiles?.email}</span>
+                            <span>•</span>
+                            <span>{ticket.category}</span>
+                            <span>•</span>
+                            <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Select
+                            onValueChange={(value) => updateTicketStatus(ticket.id, value)}
+                            defaultValue={ticket.status}
+                          >
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="open">Open</SelectItem>
+                              <SelectItem value="in_progress">In Progress</SelectItem>
+                              <SelectItem value="resolved">Resolved</SelectItem>
+                              <SelectItem value="closed">Closed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                        <p className="text-gray-700">{ticket.message}</p>
+                      </div>
+
+                      {ticket.admin_response && (
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <Mail className="h-4 w-4 text-blue-500" />
+                            <span className="text-sm font-medium text-blue-700">Admin Response</span>
+                            <span className="text-xs text-gray-500">
+                              {ticket.responded_at && new Date(ticket.responded_at).toLocaleString()}
+                            </span>
+                          </div>
+                          <p className="text-blue-800">{ticket.admin_response}</p>
+                        </div>
+                      )}
+
+                      <div className="flex items-center space-x-2">
+                        {respondingTo === ticket.id ? (
+                          <div className="flex-1 space-y-2">
+                            <Textarea
+                              placeholder="Type your response..."
+                              value={ticketResponse[ticket.id] || ''}
+                              onChange={(e) => setTicketResponse(prev => ({
+                                ...prev,
+                                [ticket.id]: e.target.value
+                              }))}
+                              rows={3}
+                            />
+                            <div className="flex space-x-2">
+                              <Button
+                                size="sm"
+                                onClick={() => respondToTicket(ticket.id, ticketResponse[ticket.id] || '')}
+                                disabled={!ticketResponse[ticket.id]?.trim() || loading}
+                              >
+                                <Send className="h-4 w-4 mr-1" />
+                                Send Response
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setRespondingTo(null);
+                                  setTicketResponse(prev => ({ ...prev, [ticket.id]: '' }));
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setRespondingTo(ticket.id)}
+                            >
+                              <Mail className="h-4 w-4 mr-1" />
+                              Respond
+                            </Button>
+                            {ticket.status !== 'resolved' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-green-600 hover:text-green-700"
+                                onClick={() => updateTicketStatus(ticket.id, 'resolved')}
+                              >
+                                <CheckCircle2 className="h-4 w-4 mr-1" />
+                                Mark Resolved
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-gray-600 hover:text-gray-700"
+                              onClick={() => updateTicketStatus(ticket.id, 'closed')}
+                            >
+                              <Archive className="h-4 w-4 mr-1" />
+                              Archive
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}

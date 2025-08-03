@@ -310,11 +310,8 @@ export default function EnhancedUserDashboard() {
       setUserStats(stats);
       console.log("User stats loaded successfully:", stats);
     } catch (error) {
-      console.error("Error loading user stats:", {
-        message: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-        user_id: user.id
-      });
+      // Log error for admin monitoring without exposing details to user
+      console.warn("Failed to load user statistics - using default values");
 
       // Set default stats on error
       const defaultStats = {

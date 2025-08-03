@@ -505,6 +505,10 @@ class DualDatabaseService {
   async testConnection(): Promise<boolean> {
     try {
       if (this.useNeon) {
+        if (!sql) {
+          console.warn('Neon connection test failed: database not configured');
+          return false;
+        }
         const result = await sql`SELECT NOW() as timestamp`;
         return !!result[0];
       } else {
@@ -512,7 +516,7 @@ class DualDatabaseService {
           .from('user_profiles')
           .select('count')
           .limit(1);
-        
+
         return !error;
       }
     } catch (error) {

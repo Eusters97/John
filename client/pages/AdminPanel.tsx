@@ -49,6 +49,7 @@ import {
   Activity,
   Calendar,
   TrendingDown,
+  TrendingUp,
 } from "lucide-react";
 
 interface Ebook {

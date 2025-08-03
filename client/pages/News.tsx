@@ -1,452 +1,411 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabase";
-import FrontPageLayout from "@/components/FrontPageLayout";
-import {
-  Newspaper,
-  Calendar,
-  Clock,
-  User,
-  Search,
-  Tag,
-  TrendingUp,
-  Globe,
-  ArrowRight,
-  MessageCircle,
-  BarChart3,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { Calendar, Search, Filter, Eye, ExternalLink } from 'lucide-react';
+import { FrontPageLayout } from '../components/FrontPageLayout';
+import { supabase } from '../lib/supabase';
 
 interface NewsArticle {
-  id: string;
+  id: number;
   title: string;
-  slug: string;
   content: string;
-  excerpt: string;
-  featured_image?: string;
-  author_id?: string;
-  status: string;
-  category?: string;
-  tags?: string[];
+  summary: string;
+  image_url?: string;
+  category: string;
   published_at: string;
-  created_at: string;
-  author_name?: string;
+  author: string;
+  views: number;
+  featured: boolean;
+  status: 'published' | 'draft';
 }
 
-export default function News() {
+const News: React.FC = () => {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [filteredArticles, setFilteredArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 6;
 
+  const categories = ['All', 'Market Analysis', 'Economic News', 'Trading Tips', 'Platform Updates', 'Regulation'];
+
+  // Default news articles as fallback
   const defaultArticles: NewsArticle[] = [
     {
-      id: "1",
-      title: "Federal Reserve Signals Potential Rate Cuts",
-      slug: "fed-signals-rate-cuts",
-      content: `<h2>Fed Chair Hints at Dovish Policy Shift</h2>
-        <p>In recent statements, Federal Reserve Chair Jerome Powell has indicated that the central bank may consider interest rate cuts in the coming months, citing concerns about global economic slowdown and inflation targets.</p>
-        
-        <h3>Market Impact</h3>
-        <p>This announcement has significant implications for forex markets:</p>
-        <ul>
-        <li>USD may weaken against major currencies</li>
-        <li>Increased volatility expected in USD pairs</li>
-        <li>Opportunity for strategic positioning</li>
-        </ul>`,
-      excerpt: "Federal Reserve hints at dovish policy shift, creating new opportunities in forex markets.",
-      status: "published",
-      category: "Market News",
-      tags: ["federal reserve", "interest rates", "USD", "market analysis"],
-      published_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      author_name: "Market Analyst",
-    },
-    {
-      id: "2",
-      title: "European Central Bank Maintains Aggressive Stance",
-      slug: "ecb-aggressive-stance",
-      content: `<h2>ECB Holds Rates Steady Amid Inflation Concerns</h2>
-        <p>The European Central Bank has decided to maintain its current interest rate policy, signaling continued commitment to fighting inflation despite economic headwinds.</p>`,
-      excerpt: "ECB maintains hawkish policy stance, supporting EUR strength across major pairs.",
-      status: "published",
-      category: "Central Banks",
-      tags: ["ECB", "interest rates", "EUR", "inflation"],
-      published_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      author_name: "ECB Correspondent",
-    },
-    {
-      id: "3",
-      title: "Asian Markets Rally on China Economic Data",
-      slug: "asian-markets-rally-china",
-      content: `<h2>Strong Chinese Manufacturing Data Boosts Asian Currencies</h2>
-        <p>Positive manufacturing PMI data from China has sparked a rally across Asian currencies, with particular strength seen in AUD, NZD, and JPY pairs.</p>`,
-      excerpt: "Chinese economic data drives Asian currency rally, creating new trading opportunities.",
-      status: "published",
-      category: "Market Analysis",
-      tags: ["China", "Asian markets", "AUD", "JPY", "economic data"],
+      id: 1,
+      title: "Fed Interest Rate Decision Impacts Forex Markets",
+      summary: "The Federal Reserve's latest interest rate decision has created significant movements in major currency pairs, affecting global forex trading strategies.",
+      content: "The Federal Reserve's decision to maintain interest rates has sent ripples through the forex market...",
+      category: "Economic News",
       published_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      author_name: "Asia Market Correspondent",
+      author: "Market Analysis Team",
+      views: 1247,
+      featured: true,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
     },
     {
-      id: "4",
-      title: "Gold Prices Surge Amid Global Uncertainty",
-      slug: "gold-prices-surge-uncertainty",
-      content: `<h2>Safe Haven Demand Drives Gold Higher</h2>
-        <p>Gold prices have reached new multi-month highs as investors seek safe haven assets amid global economic uncertainty and geopolitical tensions.</p>`,
-      excerpt: "Gold reaches new highs as safe haven demand increases, affecting major currency pairs.",
-      status: "published",
-      category: "Commodities",
-      tags: ["gold", "safe haven", "commodities", "market volatility"],
-      published_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      author_name: "Commodities Analyst",
+      id: 2,
+      title: "EUR/USD Technical Analysis: Key Support Levels",
+      summary: "Professional analysis of EUR/USD pair showing critical support and resistance levels for the coming week.",
+      content: "The EUR/USD pair has been showing strong consolidation patterns...",
+      category: "Market Analysis",
+      published_at: new Date(Date.now() - 86400000).toISOString(),
+      author: "Technical Analysis Team",
+      views: 892,
+      featured: true,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
     },
+    {
+      id: 3,
+      title: "New Trading Platform Features Released",
+      summary: "Enhanced charting tools and improved order execution speed now available to all users.",
+      content: "We're excited to announce the release of several new features...",
+      category: "Platform Updates",
+      published_at: new Date(Date.now() - 172800000).toISOString(),
+      author: "Development Team",
+      views: 654,
+      featured: false,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
+    },
+    {
+      id: 4,
+      title: "Risk Management in Volatile Markets",
+      summary: "Essential strategies for protecting your capital during periods of high market volatility.",
+      content: "Risk management is crucial for long-term trading success...",
+      category: "Trading Tips",
+      published_at: new Date(Date.now() - 259200000).toISOString(),
+      author: "Education Team",
+      views: 1105,
+      featured: false,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
+    },
+    {
+      id: 5,
+      title: "Global Economic Calendar This Week",
+      summary: "Key economic events and data releases that could impact forex markets in the upcoming week.",
+      content: "This week's economic calendar is packed with important events...",
+      category: "Economic News",
+      published_at: new Date(Date.now() - 345600000).toISOString(),
+      author: "Research Team",
+      views: 743,
+      featured: false,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
+    },
+    {
+      id: 6,
+      title: "Cryptocurrency Integration in Forex Trading",
+      summary: "How digital currencies are changing the landscape of traditional forex trading and new opportunities for traders.",
+      content: "The integration of cryptocurrency markets with traditional forex...",
+      category: "Market Analysis",
+      published_at: new Date(Date.now() - 432000000).toISOString(),
+      author: "Crypto Analysis Team",
+      views: 567,
+      featured: false,
+      status: 'published' as const,
+      image_url: "/api/placeholder/400/250"
+    }
   ];
 
   useEffect(() => {
-    fetchNewsArticles();
+    fetchArticles();
   }, []);
 
-  const fetchNewsArticles = async () => {
+  useEffect(() => {
+    filterArticles();
+  }, [articles, searchTerm, selectedCategory]);
+
+  const fetchArticles = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('news_articles')
-        .select(`
-          *,
-          user_profiles!news_articles_author_id_fkey(full_name)
-        `)
+        .select('*')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
 
       if (error) {
-        console.warn('Using default news articles:', error.message);
+        console.warn('Failed to fetch news from database, using default articles:', error);
         setArticles(defaultArticles);
       } else if (data && data.length > 0) {
-        const formattedArticles = data.map(article => ({
-          ...article,
-          author_name: article.user_profiles?.full_name || 'News Team',
-          tags: Array.isArray(article.tags) ? article.tags : []
-        }));
-        setArticles(formattedArticles);
+        setArticles(data);
       } else {
         setArticles(defaultArticles);
       }
     } catch (error) {
-      console.warn('Using default news articles due to fetch error');
+      console.warn('Error connecting to database, using default articles:', error);
       setArticles(defaultArticles);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredArticles = articles.filter(article => {
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || article.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filterArticles = () => {
+    let filtered = articles;
 
-  const categories = [...new Set(articles.map(article => article.category).filter(Boolean))];
+    if (searchTerm) {
+      filtered = filtered.filter(article =>
+        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.content.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(article => article.category === selectedCategory);
+    }
+
+    setFilteredArticles(filtered);
+    setCurrentPage(1);
+  };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffHours < 1) return 'Just now';
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffHours < 48) return 'Yesterday';
-    
-    return date.toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'short',
+      month: 'long',
       day: 'numeric'
     });
   };
 
-  const estimateReadTime = (content: string) => {
-    const wordsPerMinute = 200;
-    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
-    return Math.ceil(wordCount / wordsPerMinute);
+  const formatViews = (views: number) => {
+    if (views >= 1000) {
+      return `${(views / 1000).toFixed(1)}k`;
+    }
+    return views.toString();
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'Market News': return BarChart3;
-      case 'Central Banks': return Globe;
-      case 'Market Analysis': return TrendingUp;
-      case 'Commodities': return Tag;
-      default: return Newspaper;
-    }
-  };
+  // Pagination
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  if (loading) {
+    return (
+      <FrontPageLayout>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+          <div className="container mx-auto px-4 py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto"></div>
+              <p className="text-gray-300 mt-4">Loading latest news...</p>
+            </div>
+          </div>
+        </div>
+      </FrontPageLayout>
+    );
+  }
+
+  const featuredArticles = filteredArticles.filter(article => article.featured).slice(0, 2);
+  const regularArticles = currentArticles.filter(article => !article.featured);
 
   return (
     <FrontPageLayout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-forex-50">
-        {/* Hero Section */}
-        <section className="py-12 md:py-20 bg-gradient-to-r from-forex-600 to-blue-600">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center text-white">
-              <div className="flex items-center justify-center mb-6">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
-                  <Newspaper className="h-6 w-6 md:h-8 md:w-8" />
-                </div>
-                <div>
-                  <h1 className="text-2xl md:text-4xl font-bold">Market News</h1>
-                  <p className="text-sm md:text-lg text-forex-100 mt-2">
-                    Latest market updates and economic analysis
-                  </p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                {[
-                  { label: "Breaking News", value: articles.length.toString(), icon: Newspaper },
-                  { label: "Daily Updates", value: "5-10", icon: Clock },
-                  { label: "Market Coverage", value: "24/7", icon: Globe },
-                ].map((stat, index) => (
-                  <div key={index} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
-                    <div className="flex items-center justify-center mb-2">
-                      <stat.icon className="h-5 w-5" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+        <div className="container mx-auto px-4 py-12">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Latest <span className="text-blue-400">Forex News</span>
+            </h1>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Stay informed with the latest market developments, economic insights, and trading opportunities.
+            </p>
+          </div>
+
+          {/* Search and Filter Controls */}
+          <div className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+            {/* Search Bar */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Search news articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                    selectedCategory === category
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Featured Articles */}
+          {featuredArticles.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <Filter className="h-6 w-6 text-blue-400 mr-2" />
+                Featured Stories
+              </h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                {featuredArticles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="bg-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300 group"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={article.image_url || "/api/placeholder/400/250"}
+                        alt={article.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          Featured
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-xl md:text-2xl font-bold">{stat.value}</div>
-                    <div className="text-sm text-forex-100">{stat.label}</div>
+                    <div className="p-6">
+                      <div className="flex items-center text-sm text-gray-400 mb-3">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {formatDate(article.published_at)}
+                        <span className="mx-2">•</span>
+                        <span className="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">
+                          {article.category}
+                        </span>
+                        <span className="mx-2">•</span>
+                        <Eye className="h-4 w-4 mr-1" />
+                        {formatViews(article.views)}
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                        {article.title}
+                      </h3>
+                      <p className="text-gray-300 mb-4 line-clamp-3">
+                        {article.summary}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-400">By {article.author}</span>
+                        <button className="flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                          Read More
+                          <ExternalLink className="h-4 w-4 ml-1" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </section>
+          )}
 
-        {/* Search and Filter Section */}
-        <section className="py-8 bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Search news..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={selectedCategory === null ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(null)}
-                  className="min-h-[36px]"
-                >
-                  All Categories
-                </Button>
-                {categories.map((category) => {
-                  const IconComponent = getCategoryIcon(category);
-                  return (
-                    <Button
-                      key={category}
-                      variant={selectedCategory === category ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setSelectedCategory(category)}
-                      className="min-h-[36px]"
-                    >
-                      <IconComponent className="h-3 w-3 mr-1" />
-                      {category}
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* News Articles Section */}
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {loading ? (
-              <div className="space-y-8">
-                {[...Array(5)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <div className="md:flex">
-                      <div className="md:w-1/3 h-48 bg-gray-200 rounded-l-lg"></div>
-                      <CardContent className="md:w-2/3 p-6">
-                        <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                        <div className="h-16 bg-gray-200 rounded mb-4"></div>
-                        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                      </CardContent>
+          {/* Regular Articles Grid */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Latest Articles</h2>
+            {regularArticles.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {regularArticles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="bg-slate-800/30 backdrop-blur-sm border border-slate-600 rounded-xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300 group"
+                  >
+                    <div className="relative h-40 overflow-hidden">
+                      <img
+                        src={article.image_url || "/api/placeholder/400/250"}
+                        alt={article.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
                     </div>
-                  </Card>
+                    <div className="p-4">
+                      <div className="flex items-center text-sm text-gray-400 mb-2">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {formatDate(article.published_at)}
+                        <span className="mx-2">•</span>
+                        <Eye className="h-4 w-4 mr-1" />
+                        {formatViews(article.views)}
+                      </div>
+                      <div className="mb-2">
+                        <span className="bg-slate-700 text-gray-300 px-2 py-1 rounded text-xs">
+                          {article.category}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-gray-300 text-sm mb-3 line-clamp-2">
+                        {article.summary}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400">By {article.author}</span>
+                        <button className="text-blue-400 hover:text-blue-300 transition-colors text-sm">
+                          Read More
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-            ) : filteredArticles.length === 0 ? (
-              <div className="text-center py-12">
-                <Newspaper className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                  No news articles found
-                </h3>
-                <p className="text-gray-500">
-                  Try adjusting your search terms or selected categories.
-                </p>
-              </div>
             ) : (
-              <div className="space-y-8">
-                {/* Featured Article */}
-                {filteredArticles.length > 0 && (
-                  <Card className="overflow-hidden border-2 border-forex-200 shadow-lg">
-                    <div className="md:flex">
-                      <div className="md:w-1/2 h-64 md:h-auto">
-                        {filteredArticles[0].featured_image ? (
-                          <img
-                            src={filteredArticles[0].featured_image}
-                            alt={filteredArticles[0].title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-forex-500 to-blue-500 flex items-center justify-center">
-                            <Newspaper className="h-16 w-16 text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <CardContent className="md:w-1/2 p-6 md:p-8">
-                        <Badge className="bg-forex-500 text-white mb-4">
-                          Featured Story
-                        </Badge>
-                        
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                          {filteredArticles[0].title}
-                        </h2>
-                        
-                        <p className="text-gray-600 mb-6 text-lg">
-                          {filteredArticles[0].excerpt}
-                        </p>
-                        
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <div className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-1" />
-                              {formatDate(filteredArticles[0].published_at)}
-                            </div>
-                            <div className="flex items-center">
-                              <Clock className="h-4 w-4 mr-1" />
-                              {estimateReadTime(filteredArticles[0].content)} min read
-                            </div>
-                          </div>
-                          
-                          {filteredArticles[0].category && (
-                            <Badge variant="secondary">
-                              {filteredArticles[0].category}
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <Button
-                          className="bg-gradient-to-r from-forex-500 to-blue-500 hover:from-forex-600 hover:to-blue-600"
-                          onClick={() => navigate(`/news/${filteredArticles[0].slug}`)}
-                        >
-                          Read Full Article
-                          <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                      </CardContent>
-                    </div>
-                  </Card>
-                )}
-
-                {/* Other Articles */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredArticles.slice(1).map((article) => (
-                    <Card key={article.id} className="overflow-hidden border-2 border-gray-100 hover:border-forex-200 transition-all duration-200 hover:shadow-lg">
-                      {article.featured_image ? (
-                        <div className="h-48 bg-gradient-to-r from-forex-500 to-blue-500 relative">
-                          <img
-                            src={article.featured_image}
-                            alt={article.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="h-48 bg-gradient-to-r from-forex-500 to-blue-500 flex items-center justify-center">
-                          <Newspaper className="h-12 w-12 text-white" />
-                        </div>
-                      )}
-                      
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center text-sm text-gray-500">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            {formatDate(article.published_at)}
-                          </div>
-                          
-                          {article.category && (
-                            <Badge variant="secondary" className="text-xs">
-                              {article.category}
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
-                          {article.title}
-                        </h3>
-                        
-                        <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
-                          {article.excerpt}
-                        </p>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-500">
-                            <User className="h-4 w-4 mr-1" />
-                            {article.author_name}
-                          </div>
-                          
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-forex-600 hover:text-forex-700"
-                            onClick={() => navigate(`/news/${article.slug}`)}
-                          >
-                            Read More
-                            <ArrowRight className="h-4 w-4 ml-1" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+              <div className="text-center py-12">
+                <p className="text-gray-400 text-lg">No articles found matching your criteria.</p>
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedCategory('All');
+                  }}
+                  className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Clear Filters
+                </button>
               </div>
             )}
-
-            {/* CTA Section */}
-            <div className="mt-16 text-center">
-              <Card className="bg-gradient-to-r from-forex-50 to-blue-50 border-forex-200">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Stay Ahead of the Markets
-                  </h3>
-                  <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Get real-time market updates, expert analysis, and profitable trading signals delivered to your Telegram.
-                  </p>
-                  <a
-                    href="https://t.me/forex_traders_signalss"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 bg-gradient-to-r from-forex-500 to-blue-500 text-white px-8 py-4 rounded-xl hover:from-forex-600 hover:to-blue-600 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
-                  >
-                    <MessageCircle className="h-6 w-6" />
-                    <span>Join Free Telegram Channel</span>
-                  </a>
-                </CardContent>
-              </Card>
-            </div>
           </div>
-        </section>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center space-x-2">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 bg-slate-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors"
+              >
+                Previous
+              </button>
+              
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => paginate(i + 1)}
+                  className={`px-3 py-2 rounded-lg transition-colors ${
+                    currentPage === i + 1
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 bg-slate-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </FrontPageLayout>
   );
-}
+};
+
+export default News;

@@ -260,22 +260,24 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <Button 
-                    onClick={() => {setIsSignUp(true); setIsAuthModalOpen(true);}}
-                    size="sm"
-                    className="bg-forex-600 hover:bg-forex-700"
-                  >
-                    <UserPlus className="h-4 w-4 mr-1" />
-                    <span className="hidden sm:inline">Sign Up</span>
-                  </Button>
-                  <Button 
-                    onClick={() => {setIsSignUp(false); setIsAuthModalOpen(true);}}
-                    variant="outline"
-                    size="sm"
-                  >
-                    <LogIn className="h-4 w-4 mr-1" />
-                    <span className="hidden sm:inline">Login</span>
-                  </Button>
+                  <Link to="/signup">
+                    <Button
+                      size="sm"
+                      className="bg-forex-600 hover:bg-forex-700"
+                    >
+                      <UserPlus className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">Sign Up</span>
+                    </Button>
+                  </Link>
+                  <Link to="/login">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                    >
+                      <LogIn className="h-4 w-4 mr-1" />
+                      <span className="hidden sm:inline">Login</span>
+                    </Button>
+                  </Link>
                 </div>
               )}
             </div>

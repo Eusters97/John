@@ -139,7 +139,12 @@ export default function EnhancedUserDashboard() {
           });
 
         if (createError) {
-          console.error("Failed to create user profile:", createError);
+          console.error("Failed to create user profile:", {
+            message: createError.message,
+            code: createError.code,
+            details: createError.details,
+            hint: createError.hint
+          });
         } else {
           console.log("User profile created successfully");
         }

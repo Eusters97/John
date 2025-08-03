@@ -170,25 +170,38 @@ export default function EnhancedUserDashboard() {
         .eq("user_id", user.id)
         .single();
 
-      if (balanceError && balanceError.code === "PGRST116") {
-        // User balance doesn't exist, create it
-        console.log("Creating user balance entry...");
-        const { error: createBalanceError } = await supabase
-          .from("user_balances")
-          .insert({
-            user_id: user.id,
-            balance: 0.0, // Starting balance
-          });
+      if (balanceError) {
+        if (balanceError.code === "PGRST116") {
+          // User balance doesn't exist, create it
+          console.log("Creating user balance entry...");
+          const { error: createBalanceError } = await supabase
+            .from("user_balances")
+            .insert({
+              user_id: user.id,
+              balance: 0.0, // Starting balance
+              currency: "USD"
+            });
 
-        if (createBalanceError) {
-          console.error("Failed to create user balance:", {
-            message: createBalanceError.message,
-            code: createBalanceError.code,
-            details: createBalanceError.details,
-            hint: createBalanceError.hint
-          });
+          if (createBalanceError) {
+            console.error("Failed to create user balance:", {
+              message: createBalanceError.message,
+              code: createBalanceError.code,
+              details: createBalanceError.details,
+              hint: createBalanceError.hint,
+              user_id: user.id
+            });
+          } else {
+            console.log("User balance created successfully");
+          }
+        } else if (balanceError.code === "42P01") {
+          console.warn("user_balances table does not exist. Please run database migrations.");
         } else {
-          console.log("User balance created successfully");
+          console.error("Error checking user balance:", {
+            message: balanceError.message,
+            code: balanceError.code,
+            details: balanceError.details,
+            hint: balanceError.hint
+          });
         }
       }
     } catch (error) {

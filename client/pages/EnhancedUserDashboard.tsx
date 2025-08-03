@@ -88,6 +88,16 @@ export default function EnhancedUserDashboard() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [telegramConnected, setTelegramConnected] = useState(false);
 
+  // Investment data
+  const [userInvestments, setUserInvestments] = useState<Investment[]>([]);
+  const [investmentStats, setInvestmentStats] = useState({
+    totalInvested: 0,
+    totalReturns: 0,
+    activeInvestments: 0,
+    completedInvestments: 0,
+    totalProfit: 0
+  });
+
   const currentTab =
     new URLSearchParams(location.search).get("tab") || "overview";
 

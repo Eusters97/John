@@ -168,7 +168,12 @@ export default function EnhancedUserDashboard() {
           });
 
         if (createBalanceError) {
-          console.error("Failed to create user balance:", createBalanceError);
+          console.error("Failed to create user balance:", {
+            message: createBalanceError.message,
+            code: createBalanceError.code,
+            details: createBalanceError.details,
+            hint: createBalanceError.hint
+          });
         } else {
           console.log("User balance created successfully");
         }

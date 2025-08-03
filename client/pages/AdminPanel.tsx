@@ -439,43 +439,49 @@ export default function AdminPanel() {
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <TabsList className="grid w-full grid-cols-8">
-          <TabsTrigger value="overview" className="flex items-center space-x-2">
-            <BarChart3 className="h-4 w-4" />
-            <span>Overview</span>
-          </TabsTrigger>
-          <TabsTrigger value="ebooks" className="flex items-center space-x-2">
-            <BookOpen className="h-4 w-4" />
-            <span>Ebooks</span>
-          </TabsTrigger>
-          <TabsTrigger value="blog" className="flex items-center space-x-2">
-            <FileText className="h-4 w-4" />
-            <span>Blog</span>
-          </TabsTrigger>
-          <TabsTrigger value="promos" className="flex items-center space-x-2">
-            <Star className="h-4 w-4" />
-            <span>Promos</span>
-          </TabsTrigger>
-          <TabsTrigger
-            value="testimonials"
-            className="flex items-center space-x-2"
-          >
-            <MessageSquare className="h-4 w-4" />
-            <span>Testimonials</span>
-          </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center space-x-2">
-            <Users className="h-4 w-4" />
-            <span>Users</span>
-          </TabsTrigger>
-          <TabsTrigger value="payments" className="flex items-center space-x-2">
-            <DollarSign className="h-4 w-4" />
-            <span>Payments</span>
-          </TabsTrigger>
-          <TabsTrigger value="settings" className="flex items-center space-x-2">
-            <Settings className="h-4 w-4" />
-            <span>Settings</span>
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex flex-wrap gap-2 mb-6">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 lg:grid-cols-9">
+            <TabsTrigger value="overview" className="flex items-center space-x-1 text-xs">
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="errors" className="flex items-center space-x-1 text-xs">
+              <AlertTriangle className="h-4 w-4" />
+              <span className="hidden sm:inline">Errors</span>
+            </TabsTrigger>
+            <TabsTrigger value="ebooks" className="flex items-center space-x-1 text-xs">
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">Ebooks</span>
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="flex items-center space-x-1 text-xs">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
+            <TabsTrigger value="promos" className="flex items-center space-x-1 text-xs">
+              <Star className="h-4 w-4" />
+              <span className="hidden sm:inline">Promos</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="testimonials"
+              className="flex items-center space-x-1 text-xs"
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span className="hidden sm:inline">Reviews</span>
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center space-x-1 text-xs">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Users</span>
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="flex items-center space-x-1 text-xs">
+              <DollarSign className="h-4 w-4" />
+              <span className="hidden sm:inline">Payments</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center space-x-1 text-xs">
+              <Settings className="h-4 w-4" />
+              <span className="hidden sm:inline">Settings</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

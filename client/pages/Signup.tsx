@@ -37,7 +37,7 @@ const countries = [
   { code: "+376", name: "Andorra", flag: "🇦🇩" },
   { code: "+244", name: "Angola", flag: "🇦🇴" },
   { code: "+54", name: "Argentina", flag: "🇦🇷" },
-  { code: "+374", name: "Armenia", flag: "🇦🇲" },
+  { code: "+374", name: "Armenia", flag: "����🇲" },
   { code: "+61", name: "Australia", flag: "🇦🇺" },
   { code: "+43", name: "Austria", flag: "🇦🇹" },
   { code: "+994", name: "Azerbaijan", flag: "🇦🇿" },
@@ -231,6 +231,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
 
   const { signUp, signInWithGoogle, signInWithTelegram, user } = useAuth();
   const { toast } = useToast();

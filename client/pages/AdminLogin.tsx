@@ -409,6 +409,152 @@ export default function AdminLogin() {
               </div>
             </TabsContent>
 
+            <TabsContent value="create" className="space-y-6 mt-6">
+              <div className="text-center mb-6">
+                <UserPlus className="h-12 w-12 text-forex-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Create Admin Account
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  Create a new administrator account with appropriate role and permissions.
+                </p>
+              </div>
+
+              <form onSubmit={handleAdminCreation} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-username" className="text-gray-200">
+                      Username *
+                    </Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="admin-username"
+                        type="text"
+                        placeholder="admin_username"
+                        value={adminForm.username}
+                        onChange={(e) => setAdminForm(prev => ({ ...prev, username: e.target.value }))}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-email" className="text-gray-200">
+                      Email Address *
+                    </Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="admin-email"
+                        type="email"
+                        placeholder="admin@example.com"
+                        value={adminForm.email}
+                        onChange={(e) => setAdminForm(prev => ({ ...prev, email: e.target.value }))}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="admin-fullname" className="text-gray-200">
+                    Full Name *
+                  </Label>
+                  <Input
+                    id="admin-fullname"
+                    type="text"
+                    placeholder="Administrator Full Name"
+                    value={adminForm.fullName}
+                    onChange={(e) => setAdminForm(prev => ({ ...prev, fullName: e.target.value }))}
+                    className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-password" className="text-gray-200">
+                      Password *
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="admin-password"
+                        type="password"
+                        placeholder="Secure password"
+                        value={adminForm.password}
+                        onChange={(e) => setAdminForm(prev => ({ ...prev, password: e.target.value }))}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-10"
+                        required
+                        minLength={8}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-confirm-password" className="text-gray-200">
+                      Confirm Password *
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="admin-confirm-password"
+                        type="password"
+                        placeholder="Confirm password"
+                        value={adminForm.confirmPassword}
+                        onChange={(e) => setAdminForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 pl-10"
+                        required
+                        minLength={8}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="admin-role" className="text-gray-200">
+                    Admin Role
+                  </Label>
+                  <select
+                    id="admin-role"
+                    value={adminForm.role}
+                    onChange={(e) => setAdminForm(prev => ({ ...prev, role: e.target.value as any }))}
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-md px-3 py-2"
+                  >
+                    <option value="admin" className="bg-gray-800">Administrator</option>
+                    <option value="super_admin" className="bg-gray-800">Super Admin</option>
+                    <option value="moderator" className="bg-gray-800">Moderator</option>
+                  </select>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                  disabled={creatingAdmin}
+                >
+                  <div className="flex items-center space-x-2">
+                    <UserPlus className="h-4 w-4" />
+                    <span>
+                      {creatingAdmin ? "Creating Admin..." : "Create Admin Account"}
+                    </span>
+                  </div>
+                </Button>
+              </form>
+
+              <div className="bg-green-900/20 border border-green-400/30 rounded-lg p-3">
+                <div className="flex items-center space-x-2 text-green-400 text-sm">
+                  <Shield className="h-4 w-4" />
+                  <span className="font-medium">Admin Creation</span>
+                </div>
+                <div className="text-green-300/80 text-xs mt-1">
+                  Only existing administrators can create new admin accounts. This creates accounts in both databases.
+                </div>
+              </div>
+            </TabsContent>
+
             <TabsContent value="setup" className="space-y-6 mt-6">
               <div className="bg-white/5 p-4 rounded-lg">
                 <DatabaseInitializer />

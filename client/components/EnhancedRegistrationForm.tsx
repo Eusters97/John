@@ -63,7 +63,7 @@ const countries = [
   { code: "+380", name: "Ukraine", flag: "🇺🇦" },
   { code: "+375", name: "Belarus", flag: "🇧🇾" },
   { code: "+81", name: "Japan", flag: "🇯🇵" },
-  { code: "+82", name: "South Korea", flag: "🇰🇷" },
+  { code: "+82", name: "South Korea", flag: "��🇷" },
   { code: "+86", name: "China", flag: "🇨🇳" },
   { code: "+91", name: "India", flag: "🇮🇳" },
   { code: "+65", name: "Singapore", flag: "🇸🇬" },
@@ -299,7 +299,34 @@ export default function EnhancedRegistrationForm({
 
     setLoading(true);
     try {
-      await signUp(formData.email, formData.password, {
+      // Check if username and email are available
+      const [usernameAvailable, emailAvailable] = await Promise.all([
+        enhancedAuth.validateUsername(formData.username),
+        enhancedAuth.validateEmail(formData.email)
+      ]);
+
+      if (!usernameAvailable) {
+        toast({
+          title: "Username Taken",
+          description: "This username is already in use. Please choose another.",
+          variant: "destructive",
+        });
+        setStep(1);
+        return;
+      }
+
+      if (!emailAvailable) {
+        toast({
+          title: "Email Already Registered",
+          description: "This email is already registered. Please use a different email or sign in.",
+          variant: "destructive",
+        });
+        setStep(1);
+        return;
+      }
+
+      // Use enhanced authentication for registration
+      const result = await enhancedAuth.enhancedSignUp(formData.email, formData.password, {
         fullName: formData.fullName,
         username: formData.username,
         countryCode: formData.countryCode,
@@ -313,13 +340,28 @@ export default function EnhancedRegistrationForm({
         experienceLevel: formData.experienceLevel,
       });
 
+      if (result.error) {
+        toast({
+          title: "Registration Failed",
+          description: result.error.message || "An unexpected error occurred",
+          variant: "destructive",
+        });
+        return;
+      }
+
       toast({
         title: "Registration Successful!",
-        description: "Please check your email to verify your account.",
+        description: `Account created successfully using ${enhancedAuth.getActiveDatabase()} database. ${enhancedAuth.getActiveDatabase() === 'Supabase' ? 'Please check your email to verify your account.' : 'You can now sign in to your account.'}`,
       });
 
       onSuccess?.();
     } catch (error) {
+      console.error('Registration error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        formData: { ...formData, password: '[REDACTED]', confirmPassword: '[REDACTED]' }
+      });
+
       toast({
         title: "Registration Failed",
         description:

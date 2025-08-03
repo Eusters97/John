@@ -758,7 +758,7 @@ export default function AdminPanel() {
         className="space-y-6"
       >
         <div className="flex flex-wrap gap-2 mb-6">
-          <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 lg:grid-cols-10">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-9 lg:grid-cols-11">
             <TabsTrigger value="overview" className="flex items-center space-x-1 text-xs">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Overview</span>

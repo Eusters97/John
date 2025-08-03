@@ -35,6 +35,7 @@ import InvestmentPlansStandalone from "./pages/InvestmentPlansStandalone";
 import Reviews from "./pages/Reviews";
 import DatabaseDiagnostic from "./pages/DatabaseDiagnostic";
 import NotFound from "./pages/NotFound";
+import VisitorTracker from "./components/VisitorTracker";
 
 const queryClient = new QueryClient();
 

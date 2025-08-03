@@ -94,7 +94,10 @@ export default function ForexSignalsDashboard() {
       const marketOverview = await alphaVantageService.getMarketOverview();
       setQuotes(marketOverview);
     } catch (error) {
-      console.error('Error loading market quotes:', error);
+      console.error('Error loading market quotes:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 

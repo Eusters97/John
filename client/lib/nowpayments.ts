@@ -234,7 +234,10 @@ class NOWPaymentsService {
 
       return paymentStatus;
     } catch (error) {
-      console.error('Error updating payment status:', error);
+      console.error('Error updating payment status:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

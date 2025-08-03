@@ -43,6 +43,11 @@ import {
   Mail,
   Send,
   Archive,
+  Globe,
+  MapPin,
+  Activity,
+  Calendar,
+  TrendingDown,
 } from "lucide-react";
 
 interface Ebook {
@@ -123,6 +128,36 @@ interface SupportTicket {
   user_profiles: { full_name: string; email: string };
 }
 
+interface VisitorAnalytics {
+  id: string;
+  ip_address: string;
+  country: string;
+  city: string;
+  device_type: string;
+  browser: string;
+  operating_system: string;
+  page_visited: string;
+  referrer: string;
+  session_duration: number;
+  is_mobile: boolean;
+  user_agent: string;
+  visited_at: string;
+}
+
+interface PageView {
+  id: string;
+  page_path: string;
+  page_title: string;
+  visitor_ip: string;
+  country: string;
+  city: string;
+  device_type: string;
+  browser: string;
+  referrer: string;
+  view_duration: number;
+  created_at: string;
+}
+
 export default function AdminPanel() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -136,6 +171,15 @@ export default function AdminPanel() {
   const [users, setUsers] = useState<User[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
+  const [visitorAnalytics, setVisitorAnalytics] = useState<VisitorAnalytics[]>([]);
+  const [pageViews, setPageViews] = useState<PageView[]>([]);
+  const [analyticsStats, setAnalyticsStats] = useState({
+    totalVisitors: 0,
+    uniqueVisitors: 0,
+    topCountries: [] as {country: string, count: number}[],
+    topPages: [] as {page: string, count: number}[],
+    deviceBreakdown: [] as {device: string, count: number}[]
+  });
 
   // Form states
   const [ebookForm, setEbookForm] = useState({
@@ -167,6 +211,7 @@ export default function AdminPanel() {
     if (activeTab === "users") loadUsers();
     if (activeTab === "payments") loadPayments();
     if (activeTab === "support") loadSupportTickets();
+    if (activeTab === "analytics") loadAnalytics();
   }, [activeTab]);
 
   const loadEbooks = async () => {

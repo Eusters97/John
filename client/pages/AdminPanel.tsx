@@ -35,6 +35,7 @@ import {
   MessageSquare,
   Star,
   BarChart3,
+  AlertTriangle,
 } from "lucide-react";
 
 interface Ebook {

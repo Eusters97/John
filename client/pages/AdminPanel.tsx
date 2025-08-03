@@ -836,6 +836,108 @@ export default function AdminPanel() {
     });
   };
 
+  const loadSignals = async () => {
+    try {
+      setLoading(true);
+      const result = await signalsService.getAllSignals(1, 50);
+
+      if (result.success) {
+        setForexSignals(result.data);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to load forex signals",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignalCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user?.id) {
+      toast({
+        title: "Error",
+        description: "User session not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const result = await signalsService.createSignal({
+        ...signalForm,
+        created_by: user.id,
+      });
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Forex signal created successfully",
+        });
+
+        // Reset form
+        setSignalForm({
+          pair: "",
+          signal_type: "buy",
+          entry_price: 0,
+          stop_loss: 0,
+          take_profit_1: 0,
+          take_profit_2: 0,
+          take_profit_3: 0,
+          confidence: 85,
+          analysis: "",
+        });
+
+        // Reload signals
+        loadSignals();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to create signal",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseSignal = async (signalId: string, result: "win" | "loss" | "breakeven", closePrice: number, pips?: number) => {
+    try {
+      const closeResult = await signalsService.closeSignal(signalId, {
+        result,
+        close_price: closePrice,
+        pips_gained: pips,
+      });
+
+      if (closeResult.success) {
+        toast({
+          title: "Success",
+          description: "Signal closed successfully",
+        });
+        loadSignals();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to close signal",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while closing the signal",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">

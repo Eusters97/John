@@ -306,9 +306,77 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   const signInWithTelegram = async () => {
-    // For now, redirect to Telegram bot - this would need backend integration
-    window.open('https://t.me/Blakehunterfxbot', '_blank')
-    return { user: null, error: null }
+    try {
+      // Get Telegram bot URL from enhanced auth
+      const telegramUrl = await enhancedAuth.initiateTelegramAuth();
+
+      // Open Telegram bot in new window
+      const telegramWindow = window.open(telegramUrl, '_blank', 'width=400,height=600');
+
+      // Set up message listener for Telegram authentication result
+      const handleTelegramAuth = (event: MessageEvent) => {
+        if (event.origin !== window.location.origin) return;
+
+        if (event.data.type === 'TELEGRAM_AUTH_SUCCESS') {
+          const { authData, action } = event.data;
+
+          // Process Telegram authentication
+          enhancedAuth.authenticateWithTelegram(authData, action)
+            .then((result) => {
+              if (result.error) {
+                toast({
+                  title: "Telegram Authentication Failed",
+                  description: result.error.message,
+                  variant: "destructive",
+                });
+              } else if (result.user) {
+                toast({
+                  title: "Telegram Authentication Successful",
+                  description: `Welcome back! Authenticated via Telegram.`,
+                });
+
+                // Trigger Supabase session update or manual session creation
+                if (action === 'login') {
+                  // Simulate successful authentication
+                  setUser(result.user as any);
+                  createSessionData(false);
+                }
+              }
+            })
+            .catch((error) => {
+              toast({
+                title: "Authentication Error",
+                description: error.message || "Failed to process Telegram authentication",
+                variant: "destructive",
+              });
+            });
+
+          // Clean up
+          window.removeEventListener('message', handleTelegramAuth);
+          if (telegramWindow) telegramWindow.close();
+        }
+      };
+
+      window.addEventListener('message', handleTelegramAuth);
+
+      toast({
+        title: "Telegram Authentication",
+        description: "Please complete authentication in the Telegram bot that just opened.",
+      });
+
+      // Clean up after 5 minutes
+      setTimeout(() => {
+        window.removeEventListener('message', handleTelegramAuth);
+      }, 300000);
+
+      return { user: null, error: null };
+    } catch (error: any) {
+      console.error('Telegram authentication error:', error);
+      return {
+        user: null,
+        error: { message: error.message || 'Failed to initiate Telegram authentication' }
+      };
+    }
   }
 
   const adminSignIn = async (email: string, password: string, rememberMe: boolean = false) => {

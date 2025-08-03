@@ -66,7 +66,7 @@ const countries = [
   { code: "+86", name: "China", flag: "🇨🇳" },
   { code: "+57", name: "Colombia", flag: "🇨🇴" },
   { code: "+269", name: "Comoros", flag: "🇰🇲" },
-  { code: "+242", name: "Congo", flag: "����🇬" },
+  { code: "+242", name: "Congo", flag: "🇨🇬" },
   { code: "+243", name: "Congo DRC", flag: "🇨🇩" },
   { code: "+506", name: "Costa Rica", flag: "🇨🇷" },
   { code: "+385", name: "Croatia", flag: "🇭🇷" },
@@ -98,7 +98,7 @@ const countries = [
   { code: "+509", name: "Haiti", flag: "🇭🇹" },
   { code: "+504", name: "Honduras", flag: "🇭🇳" },
   { code: "+36", name: "Hungary", flag: "🇭🇺" },
-  { code: "+354", name: "Iceland", flag: "🇮🇸" },
+  { code: "+354", name: "Iceland", flag: "��🇸" },
   { code: "+91", name: "India", flag: "🇮🇳" },
   { code: "+62", name: "Indonesia", flag: "🇮🇩" },
   { code: "+98", name: "Iran", flag: "🇮🇷" },
@@ -163,7 +163,7 @@ const countries = [
   { code: "+966", name: "Saudi Arabia", flag: "🇸🇦" },
   { code: "+221", name: "Senegal", flag: "🇸🇳" },
   { code: "+381", name: "Serbia", flag: "🇷🇸" },
-  { code: "+248", name: "Seychelles", flag: "🇸🇨" },
+  { code: "+248", name: "Seychelles", flag: "���🇨" },
   { code: "+232", name: "Sierra Leone", flag: "🇸🇱" },
   { code: "+65", name: "Singapore", flag: "🇸🇬" },
   { code: "+421", name: "Slovakia", flag: "🇸🇰" },
@@ -207,6 +207,7 @@ interface SignupFormData {
   password: string;
   confirmPassword: string;
   fullName: string;
+  username: string;
   phoneNumber: string;
   country: string;
   countryCode: string;

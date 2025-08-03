@@ -161,12 +161,8 @@ export default function EnhancedUserDashboard() {
             "user_profiles table does not exist. Please run database migrations.",
           );
         } else {
-          console.error("Error checking user profile:", {
-            message: profileError.message,
-            code: profileError.code,
-            details: profileError.details,
-            hint: profileError.hint,
-          });
+          // Log error for admin monitoring without exposing details to user
+          console.warn("User profile check failed - contact support if issues persist");
         }
       }
 

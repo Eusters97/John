@@ -26,6 +26,7 @@ import InvestmentPlans from "./pages/InvestmentPlans";
 import LiveSignals from "./pages/LiveSignals";
 import Testimonials from "./pages/Testimonials";
 import Reviews from "./pages/Reviews";
+import DatabaseDiagnostic from "./pages/DatabaseDiagnostic";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

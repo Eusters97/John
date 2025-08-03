@@ -186,15 +186,23 @@ export default function EnhancedUserDashboard() {
             });
 
           if (createBalanceError) {
-            console.error("Failed to create user balance:", {
-              message: createBalanceError.message,
-              code: createBalanceError.code,
-              details: createBalanceError.details,
-              hint: createBalanceError.hint,
+            // Enhanced error logging with fallback for undefined properties
+            const errorInfo = {
+              message: createBalanceError.message || 'Unknown error',
+              code: createBalanceError.code || 'NO_CODE',
+              details: createBalanceError.details || 'No details available',
+              hint: createBalanceError.hint || 'No hint available',
               user_id: user.id,
-            });
+              error_type: typeof createBalanceError,
+              timestamp: new Date().toISOString()
+            };
+
+            console.error("Failed to create user balance:", errorInfo);
+
+            // Log to system for admin monitoring
+            console.warn("User balance creation failed - initializing with default values");
           } else {
-            console.log("User balance created successfully");
+            console.log("User balance created successfully for user:", user.id);
           }
         } else if (balanceError.code === "42P01") {
           console.warn(

@@ -141,12 +141,12 @@ export default function ForexSignalsDashboard() {
     }
   };
 
-  const getSignalIcon = (type: 'BUY' | 'SELL') => {
-    return type === 'BUY' ? TrendingUp : TrendingDown;
+  const getSignalIcon = (type: 'buy' | 'sell') => {
+    return type === 'buy' ? TrendingUp : TrendingDown;
   };
 
-  const getSignalColor = (type: 'BUY' | 'SELL') => {
-    return type === 'BUY' ? 'text-green-600' : 'text-red-600';
+  const getSignalColor = (type: 'buy' | 'sell') => {
+    return type === 'buy' ? 'text-green-600' : 'text-red-600';
   };
 
   const getConfidenceColor = (confidence: number) => {

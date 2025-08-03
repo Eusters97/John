@@ -55,6 +55,10 @@ const App = () => (
               <Route path="/promo" element={<Promo />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/news" element={<News />} />
+              {/* Standalone pages accessible without login */}
+              <Route path="/live-signals" element={<LiveSignalsStandalone />} />
+              <Route path="/testimonials" element={<TestimonialsStandalone />} />
+              <Route path="/investment-plans" element={<InvestmentPlansStandalone />} />
               <Route
                 path="/dashboard"
                 element={

@@ -313,32 +313,60 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const adminSignIn = async (email: string, password: string, rememberMe: boolean = false) => {
     try {
+      // Try enhanced admin authentication first
+      const { user: adminUser, error: adminError } = await enhancedAuth.verifyAdminCredentials(email, password);
+
+      if (!adminError && adminUser) {
+        await createSessionData(rememberMe);
+        setIsAdmin(true);
+        toast({
+          title: "Admin access granted",
+          description: `Welcome to the admin panel (${enhancedAuth.getActiveDatabase()}).`,
+        });
+        return { user: adminUser as any, error: null };
+      }
+
+      // Fallback to Supabase auth for backward compatibility
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
-      })
+      });
 
       if (!error && data.user) {
-        const adminEmails = ['admin@forexsignals.com', 'reno@forexsignals.com']
+        const adminEmails = [
+          'admin@forexsignals.com',
+          'reno@forexsignals.com',
+          'admin@forextraderssignals.com',
+          'demo@forextraderssignals.com'
+        ];
+
         if (!adminEmails.includes(data.user.email || '')) {
-          await supabase.auth.signOut()
-          return { 
-            user: null, 
-            error: { message: 'Access denied. Admin credentials required.' } as AuthError 
-          }
+          await supabase.auth.signOut();
+          return {
+            user: null,
+            error: { message: 'Access denied. Admin credentials required.' } as AuthError
+          };
         }
 
-        await createSessionData(rememberMe)
-        setIsAdmin(true)
+        await createSessionData(rememberMe);
+        setIsAdmin(true);
         toast({
           title: "Admin access granted",
-          description: "Welcome to the admin panel.",
-        })
+          description: "Welcome to the admin panel (Supabase).",
+        });
+        return { user: data.user, error: null };
       }
 
-      return { user: data.user, error }
+      return {
+        user: null,
+        error: adminError || error || { message: 'Invalid admin credentials' } as AuthError
+      };
     } catch (error: any) {
-      return { user: null, error }
+      console.error('Admin sign-in error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        email
+      });
+      return { user: null, error: { message: error.message || 'Admin sign-in failed' } };
     }
   }
 

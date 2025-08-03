@@ -958,7 +958,7 @@ export default function AdminPanel() {
         className="space-y-6"
       >
         <div className="flex flex-wrap gap-2 mb-6">
-          <TabsList className="grid w-full grid-cols-4 md:grid-cols-9 lg:grid-cols-11">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-10 lg:grid-cols-12">
             <TabsTrigger
               value="overview"
               className="flex items-center space-x-1 text-xs"

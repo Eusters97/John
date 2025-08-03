@@ -2,17 +2,20 @@ import { neon } from '@neondatabase/serverless';
 
 const neonUrl = import.meta.env.VITE_NEON_DATABASE_URL;
 
-if (!neonUrl) {
-  console.error('Environment variables check:', {
-    VITE_NEON_DATABASE_URL: neonUrl ? 'Set' : 'Missing'
+// Check if Neon URL is properly configured (not placeholder or missing)
+const isValidNeonUrl = neonUrl &&
+  neonUrl !== 'your_neon_database_connection_string' &&
+  neonUrl.startsWith('postgresql://');
+
+if (!isValidNeonUrl) {
+  console.warn('Neon database not configured:', {
+    VITE_NEON_DATABASE_URL: neonUrl ? 'Invalid/Placeholder' : 'Missing',
+    message: 'Neon features will be disabled'
   });
-  throw new Error(
-    `Missing Neon environment variables. ` +
-    `URL: ${neonUrl ? 'Set' : 'Missing'}`
-  );
 }
 
-export const sql = neon(neonUrl);
+// Only initialize Neon client if properly configured
+export const sql = isValidNeonUrl ? neon(neonUrl) : null;
 
 // Helper function to execute Neon queries
 export async function executeNeonQuery<T = any>(

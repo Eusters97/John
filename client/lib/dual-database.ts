@@ -73,7 +73,12 @@ class DualDatabaseService {
 
   // Toggle between databases
   setUseNeon(useNeon: boolean) {
+    if (useNeon && !sql) {
+      console.warn('Cannot switch to Neon: database not configured');
+      return false;
+    }
     this.useNeon = useNeon;
+    return true;
   }
 
   getActiveDatabase() {

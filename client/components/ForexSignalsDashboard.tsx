@@ -18,20 +18,7 @@ import {
   Signal
 } from "lucide-react";
 
-interface ForexSignal {
-  id: string;
-  currency_pair: string;
-  signal_type: 'BUY' | 'SELL';
-  entry_price: number;
-  stop_loss: number;
-  take_profit: number;
-  current_price: number;
-  confidence_level: number;
-  analysis: string;
-  status: 'active' | 'closed' | 'cancelled';
-  created_at: string;
-  updated_at: string;
-}
+// Using ForexSignal interface from signals-service
 
 interface ForexQuote {
   symbol: string;

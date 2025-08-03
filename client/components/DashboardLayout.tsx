@@ -200,7 +200,7 @@ export default function DashboardLayout({
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform lg:translate-x-0 lg:static lg:inset-0`}
+        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}
       >
         <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
           <div className="flex items-center space-x-2">
@@ -221,55 +221,57 @@ export default function DashboardLayout({
           </Button>
         </div>
 
-        <nav className="mt-8 px-4">
-          <div className="space-y-2">
-            {navItems.map((item) => {
-              // Handle both tab-based and standalone page navigation
-              const isTabBased = item.path === "/dashboard";
-              const isActive = isTabBased
-                ? currentTab === item.key && currentPath === "/dashboard"
-                : currentPath === item.path;
-              const linkPath = isTabBased
-                ? `${item.path}?tab=${item.key}`
-                : item.path;
-              const Icon = item.icon;
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <nav className="mt-8 px-4 flex-1 overflow-y-auto pb-4">
+            <div className="space-y-2">
+              {navItems.map((item) => {
+                // Handle both tab-based and standalone page navigation
+                const isTabBased = item.path === "/dashboard";
+                const isActive = isTabBased
+                  ? currentTab === item.key && currentPath === "/dashboard"
+                  : currentPath === item.path;
+                const linkPath = isTabBased
+                  ? `${item.path}?tab=${item.key}`
+                  : item.path;
+                const Icon = item.icon;
 
-              return (
-                <Link
-                  key={item.key}
-                  to={linkPath}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-forex-600 text-white"
-                      : "text-gray-300 hover:text-white hover:bg-gray-800"
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Icon className="w-5 h-5 mr-3" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
+                return (
+                  <Link
+                    key={item.key}
+                    to={linkPath}
+                    className={`flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
+                      isActive
+                        ? "bg-forex-600 text-white"
+                        : "text-gray-300 hover:text-white hover:bg-gray-800"
+                    }`}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <Icon className="w-5 h-5 mr-3 flex-shrink-0" />
+                    <span className="truncate">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
+        </div>
 
         {/* Need AI Help Section */}
-        <div className="absolute bottom-8 left-4 right-4">
+        <div className="px-4 pb-6 mt-4 flex-shrink-0">
           <div className="bg-gradient-to-r from-forex-600 to-blue-600 rounded-lg p-4 text-center">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-              <MessageSquare className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+              <MessageSquare className="w-5 h-5 text-white" />
             </div>
-            <h4 className="text-white font-semibold text-sm mb-2">
+            <h4 className="text-white font-semibold text-xs mb-1">
               Need Help?
             </h4>
-            <p className="text-white/80 text-xs mb-3">
-              Join our Telegram for instant support
+            <p className="text-white/80 text-xs mb-2">
+              Join Telegram support
             </p>
             <a
               href="https://t.me/forex_traders_signalss"
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full bg-white text-forex-600 text-xs font-medium py-2 rounded-md hover:bg-gray-100 transition-colors"
+              className="block w-full bg-white text-forex-600 text-xs font-medium py-2 rounded-md hover:bg-gray-100 transition-colors min-h-[36px]"
             >
               Get Help Now
             </a>

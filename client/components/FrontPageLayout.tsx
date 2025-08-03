@@ -150,7 +150,7 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
           </Button>
         </div>
 
-        <nav className="mt-8 px-4">
+        <nav className="mt-8 px-4 overflow-y-auto">
           <div className="space-y-2">
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -171,6 +171,57 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
                 </Link>
               );
             })}
+
+            {/* Auth items for non-logged-in users */}
+            {!user && (
+              <>
+                <div className="border-t border-gray-200 my-4"></div>
+                <div className="px-2">
+                  <p className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">
+                    Account
+                  </p>
+                  {authItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.key}
+                        to={item.path}
+                        className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                          isActive
+                            ? 'bg-forex-600 text-white'
+                            : 'text-gray-700 hover:text-forex-600 hover:bg-forex-50'
+                        }`}
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <Icon className="w-5 h-5 mr-3" />
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {/* Dashboard link for logged-in users */}
+            {user && (
+              <>
+                <div className="border-t border-gray-200 my-4"></div>
+                <div className="px-2">
+                  <p className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">
+                    Account
+                  </p>
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-700 hover:text-forex-600 hover:bg-forex-50"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <BarChart3 className="w-5 h-5 mr-3" />
+                    Dashboard
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </nav>
 

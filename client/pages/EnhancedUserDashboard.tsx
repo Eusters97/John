@@ -112,7 +112,11 @@ export default function EnhancedUserDashboard() {
           checkTelegramConnection();
         })
         .catch((error) => {
-          console.error("Error in user initialization chain:", error);
+          console.error("Error in user initialization chain:", {
+            message: error instanceof Error ? error.message : "Unknown error",
+            stack: error instanceof Error ? error.stack : undefined,
+            user_id: user?.id
+          });
         });
     }
   }, [user]);

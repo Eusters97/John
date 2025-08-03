@@ -1843,11 +1843,11 @@ export default function EnhancedUserDashboard() {
     <DashboardLayout>
       <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">
               Welcome back, {user?.user_metadata?.full_name || user?.email}!
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm md:text-base text-gray-600">
               Manage your investments and track your portfolio
             </p>
           </div>

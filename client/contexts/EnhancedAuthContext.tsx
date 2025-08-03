@@ -230,27 +230,43 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [sessionData])
 
-  const signUp = async (email: string, password: string, options?: { provider?: 'google' | 'telegram' }) => {
+  const signUp = async (email: string, password: string, userData?: EnhancedUserData) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`
-        }
-      })
+      let result;
 
-      if (!error && data.user) {
-        await createSessionData(false)
-        toast({
-          title: "Account created successfully!",
-          description: "Please check your email for verification.",
-        })
+      if (userData) {
+        // Use enhanced authentication with additional user data
+        result = await enhancedAuth.enhancedSignUp(email, password, userData);
+      } else {
+        // Fallback to basic Supabase auth
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`
+          }
+        });
+        result = { user: data.user, error };
       }
 
-      return { user: data.user, error }
+      if (!result.error && result.user) {
+        await createSessionData(false);
+        toast({
+          title: "Account created successfully!",
+          description: userData
+            ? `Registration completed using ${enhancedAuth.getActiveDatabase()} database.`
+            : "Please check your email for verification.",
+        });
+      }
+
+      return { user: result.user, error: result.error };
     } catch (error: any) {
-      return { user: null, error }
+      console.error('SignUp error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        email,
+        hasUserData: !!userData
+      });
+      return { user: null, error: { message: error.message || 'Sign up failed' } };
     }
   }
 

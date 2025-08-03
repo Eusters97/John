@@ -551,6 +551,147 @@ export default function AdminPanel() {
           </div>
         </TabsContent>
 
+        <TabsContent value="errors" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold">Error Monitoring</h2>
+              <p className="text-gray-600">Monitor and track application errors</p>
+            </div>
+            <Link to="/error-monitoring">
+              <Button className="bg-red-600 hover:bg-red-700">
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                View Full Error Dashboard
+              </Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <span>Critical Errors</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-red-600">3</div>
+                <p className="text-sm text-gray-600">Unresolved critical errors</p>
+                <div className="mt-4 space-y-2">
+                  <div className="text-sm">
+                    <div className="font-medium">Database Connection Failed</div>
+                    <div className="text-gray-500">2 hours ago</div>
+                  </div>
+                  <div className="text-sm">
+                    <div className="font-medium">Payment Processing Error</div>
+                    <div className="text-gray-500">5 hours ago</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                  <span>Warnings</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-yellow-600">7</div>
+                <p className="text-sm text-gray-600">Active warnings</p>
+                <div className="mt-4 space-y-2">
+                  <div className="text-sm">
+                    <div className="font-medium">High API Usage</div>
+                    <div className="text-gray-500">1 hour ago</div>
+                  </div>
+                  <div className="text-sm">
+                    <div className="font-medium">Slow Query Detected</div>
+                    <div className="text-gray-500">3 hours ago</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span>System Health</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-green-600">98%</div>
+                <p className="text-sm text-gray-600">Uptime (24h)</p>
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Database:</span>
+                    <span className="text-green-600">Online</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>API:</span>
+                    <span className="text-green-600">Online</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Payments:</span>
+                    <span className="text-green-600">Online</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Error Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4 p-4 border rounded-lg">
+                  <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+                  <div className="flex-1">
+                    <div className="font-medium">Database connection timeout</div>
+                    <div className="text-sm text-gray-600">
+                      Connection to user_profiles table failed after 30s timeout
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">2024-01-15 14:30:22</div>
+                  </div>
+                  <Badge variant="destructive">Critical</Badge>
+                </div>
+
+                <div className="flex items-start space-x-4 p-4 border rounded-lg">
+                  <AlertTriangle className="h-5 w-5 text-yellow-500 mt-0.5" />
+                  <div className="flex-1">
+                    <div className="font-medium">Failed login attempts spike</div>
+                    <div className="text-sm text-gray-600">
+                      15 failed login attempts detected from IP 192.168.1.100
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">2024-01-15 13:45:10</div>
+                  </div>
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Warning</Badge>
+                </div>
+
+                <div className="flex items-start space-x-4 p-4 border rounded-lg">
+                  <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+                  <div className="flex-1">
+                    <div className="font-medium">Payment gateway error</div>
+                    <div className="text-sm text-gray-600">
+                      NowPayments API returned 500 error for transaction #TX123
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">2024-01-15 12:15:33</div>
+                  </div>
+                  <Badge variant="destructive">Critical</Badge>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-center">
+                <Link to="/error-monitoring">
+                  <Button variant="outline">View All Errors</Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="ebooks" className="space-y-6">
           <Card>
             <CardHeader>

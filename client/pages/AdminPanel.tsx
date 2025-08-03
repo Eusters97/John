@@ -211,6 +211,19 @@ export default function AdminPanel() {
   }>({});
   const [respondingTo, setRespondingTo] = useState<string | null>(null);
 
+  // Signal form state
+  const [signalForm, setSignalForm] = useState({
+    pair: "",
+    signal_type: "buy" as "buy" | "sell",
+    entry_price: 0,
+    stop_loss: 0,
+    take_profit_1: 0,
+    take_profit_2: 0,
+    take_profit_3: 0,
+    confidence: 85,
+    analysis: "",
+  });
+
   useEffect(() => {
     if (activeTab === "ebooks") loadEbooks();
     if (activeTab === "blog") loadBlogPosts();

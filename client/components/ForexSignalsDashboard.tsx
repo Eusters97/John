@@ -126,7 +126,16 @@ export default function ForexSignalsDashboard() {
 
   const closeSignal = async (signalId: string) => {
     try {
-      await alphaVantageService.updateSignalStatus(signalId, 'closed');
+      const closePrice = prompt('Enter close price:');
+      const result = prompt('Enter result (win/loss/breakeven):') as 'win' | 'loss' | 'breakeven';
+
+      if (!closePrice || !result) return;
+
+      await signalsService.closeSignal(signalId, {
+        result,
+        close_price: parseFloat(closePrice),
+      });
+
       toast({
         title: "Signal Closed",
         description: "Signal has been closed successfully",

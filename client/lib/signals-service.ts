@@ -1,10 +1,10 @@
-import { supabase } from './supabase';
-import { logger } from './logger';
+import { supabase } from "./supabase";
+import { logger } from "./logger";
 
 export interface ForexSignal {
   id: string;
   pair: string;
-  signal_type: 'buy' | 'sell';
+  signal_type: "buy" | "sell";
   entry_price: number;
   stop_loss: number;
   take_profit_1: number;
@@ -12,8 +12,8 @@ export interface ForexSignal {
   take_profit_3?: number;
   confidence: number;
   analysis: string;
-  status: 'active' | 'closed' | 'cancelled';
-  result?: 'win' | 'loss' | 'breakeven';
+  status: "active" | "closed" | "cancelled";
+  result?: "win" | "loss" | "breakeven";
   close_price?: number;
   pips_gained?: number;
   created_at: string;
@@ -37,13 +37,12 @@ export interface SignalAnalytics {
 }
 
 class SignalsService {
-  
   /**
    * Create a new forex signal
    */
   async createSignal(signalData: {
     pair: string;
-    signal_type: 'buy' | 'sell';
+    signal_type: "buy" | "sell";
     entry_price: number;
     stop_loss: number;
     take_profit_1: number;
@@ -54,34 +53,34 @@ class SignalsService {
     created_by: string;
   }) {
     try {
-      logger.info('Creating new forex signal', { 
-        pair: signalData.pair, 
+      logger.info("Creating new forex signal", {
+        pair: signalData.pair,
         type: signalData.signal_type,
-        confidence: signalData.confidence 
+        confidence: signalData.confidence,
       });
 
       const { data, error } = await supabase
-        .from('forex_signals')
+        .from("forex_signals")
         .insert({
           ...signalData,
-          status: 'active',
-          created_at: new Date().toISOString()
+          status: "active",
+          created_at: new Date().toISOString(),
         })
         .select()
         .single();
 
       if (error) {
-        logger.error('Failed to create signal', { error: error.message });
+        logger.error("Failed to create signal", { error: error.message });
         throw error;
       }
 
       // Send Telegram notification
       await this.sendTelegramSignal(data);
 
-      logger.info('Signal created successfully', { signalId: data.id });
+      logger.info("Signal created successfully", { signalId: data.id });
       return { success: true, data };
     } catch (error) {
-      logger.error('Signal creation error', { error });
+      logger.error("Signal creation error", { error });
       return { success: false, error };
     }
   }
@@ -92,22 +91,24 @@ class SignalsService {
   async getActiveSignals() {
     try {
       const { data, error } = await supabase
-        .from('forex_signals')
-        .select(`
+        .from("forex_signals")
+        .select(
+          `
           *,
           user_profiles:created_by(full_name)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+        `,
+        )
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
 
       if (error) {
-        logger.error('Failed to get active signals', { error: error.message });
+        logger.error("Failed to get active signals", { error: error.message });
         throw error;
       }
 
       return { success: true, data: data || [] };
     } catch (error) {
-      logger.error('Get active signals error', { error });
+      logger.error("Get active signals error", { error });
       return { success: false, error, data: [] };
     }
   }
@@ -117,34 +118,35 @@ class SignalsService {
    */
   async getAllSignals(page = 1, limit = 20, status?: string) {
     try {
-      let query = supabase
-        .from('forex_signals')
-        .select(`
+      let query = supabase.from("forex_signals").select(
+        `
           *,
           user_profiles:created_by(full_name)
-        `, { count: 'exact' });
+        `,
+        { count: "exact" },
+      );
 
       if (status) {
-        query = query.eq('status', status);
+        query = query.eq("status", status);
       }
 
       const { data, error, count } = await query
-        .order('created_at', { ascending: false })
+        .order("created_at", { ascending: false })
         .range((page - 1) * limit, page * limit - 1);
 
       if (error) {
-        logger.error('Failed to get signals', { error: error.message });
+        logger.error("Failed to get signals", { error: error.message });
         throw error;
       }
 
-      return { 
-        success: true, 
-        data: data || [], 
+      return {
+        success: true,
+        data: data || [],
         count: count || 0,
-        totalPages: Math.ceil((count || 0) / limit)
+        totalPages: Math.ceil((count || 0) / limit),
       };
     } catch (error) {
-      logger.error('Get signals error', { error });
+      logger.error("Get signals error", { error });
       return { success: false, error, data: [], count: 0, totalPages: 0 };
     }
   }
@@ -152,40 +154,43 @@ class SignalsService {
   /**
    * Close a signal with result
    */
-  async closeSignal(signalId: string, result: {
-    result: 'win' | 'loss' | 'breakeven';
-    close_price: number;
-    pips_gained?: number;
-    notes?: string;
-  }) {
+  async closeSignal(
+    signalId: string,
+    result: {
+      result: "win" | "loss" | "breakeven";
+      close_price: number;
+      pips_gained?: number;
+      notes?: string;
+    },
+  ) {
     try {
-      logger.info('Closing signal', { signalId, result: result.result });
+      logger.info("Closing signal", { signalId, result: result.result });
 
       const { data, error } = await supabase
-        .from('forex_signals')
+        .from("forex_signals")
         .update({
-          status: 'closed',
+          status: "closed",
           result: result.result,
           close_price: result.close_price,
           pips_gained: result.pips_gained,
-          closed_at: new Date().toISOString()
+          closed_at: new Date().toISOString(),
         })
-        .eq('id', signalId)
+        .eq("id", signalId)
         .select()
         .single();
 
       if (error) {
-        logger.error('Failed to close signal', { error: error.message });
+        logger.error("Failed to close signal", { error: error.message });
         throw error;
       }
 
       // Send Telegram update
       await this.sendTelegramSignalUpdate(data);
 
-      logger.info('Signal closed successfully', { signalId });
+      logger.info("Signal closed successfully", { signalId });
       return { success: true, data };
     } catch (error) {
-      logger.error('Signal close error', { error });
+      logger.error("Signal close error", { error });
       return { success: false, error };
     }
   }
@@ -193,41 +198,53 @@ class SignalsService {
   /**
    * Get signals analytics
    */
-  async getSignalsAnalytics(days = 30): Promise<{ success: boolean; data?: SignalAnalytics; error?: any }> {
+  async getSignalsAnalytics(
+    days = 30,
+  ): Promise<{ success: boolean; data?: SignalAnalytics; error?: any }> {
     try {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
 
       const { data, error } = await supabase
-        .from('forex_signals')
-        .select('*')
-        .gte('created_at', startDate.toISOString());
+        .from("forex_signals")
+        .select("*")
+        .gte("created_at", startDate.toISOString());
 
       if (error) {
-        logger.error('Failed to get signals analytics', { error: error.message });
+        logger.error("Failed to get signals analytics", {
+          error: error.message,
+        });
         throw error;
       }
 
       const signals = data || [];
-      const closedSignals = signals.filter(s => s.status === 'closed');
-      const winningSignals = closedSignals.filter(s => s.result === 'win');
+      const closedSignals = signals.filter((s) => s.status === "closed");
+      const winningSignals = closedSignals.filter((s) => s.result === "win");
 
       // Calculate analytics
       const analytics: SignalAnalytics = {
         total_signals: signals.length,
-        win_rate: closedSignals.length > 0 ? (winningSignals.length / closedSignals.length) * 100 : 0,
-        average_pips: closedSignals.length > 0 
-          ? closedSignals.reduce((sum, s) => sum + (s.pips_gained || 0), 0) / closedSignals.length 
-          : 0,
-        active_signals: signals.filter(s => s.status === 'active').length,
-        total_pips: closedSignals.reduce((sum, s) => sum + (s.pips_gained || 0), 0),
+        win_rate:
+          closedSignals.length > 0
+            ? (winningSignals.length / closedSignals.length) * 100
+            : 0,
+        average_pips:
+          closedSignals.length > 0
+            ? closedSignals.reduce((sum, s) => sum + (s.pips_gained || 0), 0) /
+              closedSignals.length
+            : 0,
+        active_signals: signals.filter((s) => s.status === "active").length,
+        total_pips: closedSignals.reduce(
+          (sum, s) => sum + (s.pips_gained || 0),
+          0,
+        ),
         best_pair: this.getBestPerformingPair(closedSignals),
-        recent_performance: this.getRecentPerformance(closedSignals, 7)
+        recent_performance: this.getRecentPerformance(closedSignals, 7),
       };
 
       return { success: true, data: analytics };
     } catch (error) {
-      logger.error('Signals analytics error', { error });
+      logger.error("Signals analytics error", { error });
       return { success: false, error };
     }
   }
@@ -238,22 +255,24 @@ class SignalsService {
   async getRecentSignals(limit = 10) {
     try {
       const { data, error } = await supabase
-        .from('forex_signals')
-        .select(`
+        .from("forex_signals")
+        .select(
+          `
           *,
           user_profiles:created_by(full_name)
-        `)
-        .order('created_at', { ascending: false })
+        `,
+        )
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) {
-        logger.error('Failed to get recent signals', { error: error.message });
+        logger.error("Failed to get recent signals", { error: error.message });
         throw error;
       }
 
       return { success: true, data: data || [] };
     } catch (error) {
-      logger.error('Get recent signals error', { error });
+      logger.error("Get recent signals error", { error });
       return { success: false, error, data: [] };
     }
   }
@@ -263,26 +282,26 @@ class SignalsService {
    */
   async updateSignal(signalId: string, updates: Partial<ForexSignal>) {
     try {
-      logger.info('Updating signal', { signalId });
+      logger.info("Updating signal", { signalId });
 
       const { data, error } = await supabase
-        .from('forex_signals')
+        .from("forex_signals")
         .update({
           ...updates,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', signalId)
+        .eq("id", signalId)
         .select()
         .single();
 
       if (error) {
-        logger.error('Failed to update signal', { error: error.message });
+        logger.error("Failed to update signal", { error: error.message });
         throw error;
       }
 
       return { success: true, data };
     } catch (error) {
-      logger.error('Signal update error', { error });
+      logger.error("Signal update error", { error });
       return { success: false, error };
     }
   }
@@ -292,26 +311,26 @@ class SignalsService {
    */
   async cancelSignal(signalId: string, reason?: string) {
     try {
-      logger.info('Cancelling signal', { signalId, reason });
+      logger.info("Cancelling signal", { signalId, reason });
 
       const { data, error } = await supabase
-        .from('forex_signals')
+        .from("forex_signals")
         .update({
-          status: 'cancelled',
-          closed_at: new Date().toISOString()
+          status: "cancelled",
+          closed_at: new Date().toISOString(),
         })
-        .eq('id', signalId)
+        .eq("id", signalId)
         .select()
         .single();
 
       if (error) {
-        logger.error('Failed to cancel signal', { error: error.message });
+        logger.error("Failed to cancel signal", { error: error.message });
         throw error;
       }
 
       return { success: true, data };
     } catch (error) {
-      logger.error('Signal cancel error', { error });
+      logger.error("Signal cancel error", { error });
       return { success: false, error };
     }
   }
@@ -323,19 +342,19 @@ class SignalsService {
     try {
       // This would integrate with your Telegram bot
       const message = this.formatSignalForTelegram(signal);
-      
-      logger.info('Sending Telegram signal notification', { 
-        signalId: signal.id, 
-        pair: signal.pair 
+
+      logger.info("Sending Telegram signal notification", {
+        signalId: signal.id,
+        pair: signal.pair,
       });
 
       // In production, this would call your Telegram bot API
       // For now, we'll just log the message that would be sent
-      logger.debug('Telegram message', { message });
+      logger.debug("Telegram message", { message });
 
       return { success: true };
     } catch (error) {
-      logger.error('Telegram signal send error', { error });
+      logger.error("Telegram signal send error", { error });
       return { success: false, error };
     }
   }
@@ -346,17 +365,17 @@ class SignalsService {
   private async sendTelegramSignalUpdate(signal: ForexSignal) {
     try {
       const message = this.formatSignalUpdateForTelegram(signal);
-      
-      logger.info('Sending Telegram signal update', { 
-        signalId: signal.id, 
-        result: signal.result 
+
+      logger.info("Sending Telegram signal update", {
+        signalId: signal.id,
+        result: signal.result,
       });
 
-      logger.debug('Telegram update message', { message });
+      logger.debug("Telegram update message", { message });
 
       return { success: true };
     } catch (error) {
-      logger.error('Telegram signal update error', { error });
+      logger.error("Telegram signal update error", { error });
       return { success: false, error };
     }
   }
@@ -373,8 +392,8 @@ class SignalsService {
 💰 Entry: ${signal.entry_price}
 🛑 Stop Loss: ${signal.stop_loss}
 🎯 Take Profit 1: ${signal.take_profit_1}
-${signal.take_profit_2 ? `🎯 Take Profit 2: ${signal.take_profit_2}` : ''}
-${signal.take_profit_3 ? `🎯 Take Profit 3: ${signal.take_profit_3}` : ''}
+${signal.take_profit_2 ? `🎯 Take Profit 2: ${signal.take_profit_2}` : ""}
+${signal.take_profit_3 ? `🎯 Take Profit 3: ${signal.take_profit_3}` : ""}
 ⭐ Confidence: ${signal.confidence}%
 
 📈 Analysis:
@@ -390,8 +409,9 @@ Join our premium signals: @forex_traders_signalss
    * Format signal update for Telegram
    */
   private formatSignalUpdateForTelegram(signal: ForexSignal): string {
-    const resultEmoji = signal.result === 'win' ? '✅' : signal.result === 'loss' ? '❌' : '⚖️';
-    
+    const resultEmoji =
+      signal.result === "win" ? "✅" : signal.result === "loss" ? "❌" : "⚖️";
+
     return `
 ${resultEmoji} SIGNAL UPDATE ${resultEmoji}
 
@@ -399,10 +419,10 @@ ${resultEmoji} SIGNAL UPDATE ${resultEmoji}
 🎯 Action: ${signal.signal_type.toUpperCase()}
 💰 Entry: ${signal.entry_price}
 💰 Close: ${signal.close_price}
-${signal.pips_gained ? `📈 Pips: ${signal.pips_gained > 0 ? '+' : ''}${signal.pips_gained}` : ''}
+${signal.pips_gained ? `📈 Pips: ${signal.pips_gained > 0 ? "+" : ""}${signal.pips_gained}` : ""}
 📊 Result: ${signal.result?.toUpperCase()}
 
-⏰ Closed: ${signal.closed_at ? new Date(signal.closed_at).toLocaleString() : ''}
+⏰ Closed: ${signal.closed_at ? new Date(signal.closed_at).toLocaleString() : ""}
     `.trim();
   }
 
@@ -410,25 +430,29 @@ ${signal.pips_gained ? `📈 Pips: ${signal.pips_gained > 0 ? '+' : ''}${signal.
    * Get best performing currency pair
    */
   private getBestPerformingPair(signals: ForexSignal[]): string {
-    const pairStats: { [key: string]: { wins: number; total: number; pips: number } } = {};
+    const pairStats: {
+      [key: string]: { wins: number; total: number; pips: number };
+    } = {};
 
-    signals.forEach(signal => {
+    signals.forEach((signal) => {
       if (!pairStats[signal.pair]) {
         pairStats[signal.pair] = { wins: 0, total: 0, pips: 0 };
       }
       pairStats[signal.pair].total++;
-      if (signal.result === 'win') {
+      if (signal.result === "win") {
         pairStats[signal.pair].wins++;
       }
       pairStats[signal.pair].pips += signal.pips_gained || 0;
     });
 
-    let bestPair = 'N/A';
+    let bestPair = "N/A";
     let bestScore = 0;
 
     Object.entries(pairStats).forEach(([pair, stats]) => {
-      if (stats.total >= 3) { // Only consider pairs with at least 3 signals
-        const score = (stats.wins / stats.total) * 100 + (stats.pips / stats.total);
+      if (stats.total >= 3) {
+        // Only consider pairs with at least 3 signals
+        const score =
+          (stats.wins / stats.total) * 100 + stats.pips / stats.total;
         if (score > bestScore) {
           bestScore = score;
           bestPair = pair;
@@ -449,17 +473,17 @@ ${signal.pips_gained ? `📈 Pips: ${signal.pips_gained > 0 ? '+' : ''}${signal.
     for (let i = 0; i < days; i++) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toISOString().split("T")[0];
 
-      const daySignals = signals.filter(s => 
-        s.closed_at && s.closed_at.startsWith(dateStr)
+      const daySignals = signals.filter(
+        (s) => s.closed_at && s.closed_at.startsWith(dateStr),
       );
 
       performance.push({
         date: dateStr,
-        wins: daySignals.filter(s => s.result === 'win').length,
-        losses: daySignals.filter(s => s.result === 'loss').length,
-        pips: daySignals.reduce((sum, s) => sum + (s.pips_gained || 0), 0)
+        wins: daySignals.filter((s) => s.result === "win").length,
+        losses: daySignals.filter((s) => s.result === "loss").length,
+        pips: daySignals.reduce((sum, s) => sum + (s.pips_gained || 0), 0),
       });
     }
 

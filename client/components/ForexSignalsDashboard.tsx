@@ -6,16 +6,16 @@ import { useToast } from "@/hooks/use-toast";
 import { alphaVantageService } from "@/lib/alphavantage";
 import { supabase } from "@/lib/supabase";
 import { signalsService, type ForexSignal } from "@/lib/signals-service";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  RefreshCw, 
-  Loader2, 
-  Target, 
-  Shield, 
+import {
+  TrendingUp,
+  TrendingDown,
+  RefreshCw,
+  Loader2,
+  Target,
+  Shield,
   Clock,
   BarChart3,
-  Signal
+  Signal,
 } from "lucide-react";
 
 // Using ForexSignal interface from signals-service
@@ -39,15 +39,16 @@ export default function ForexSignalsDashboard() {
   useEffect(() => {
     loadActiveSignals();
     loadMarketQuotes();
-    
+
     // Set up real-time subscription for new signals
     const signalsSubscription = supabase
-      .channel('forex_signals')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'forex_signals' },
+      .channel("forex_signals")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "forex_signals" },
         () => {
           loadActiveSignals();
-        }
+        },
       )
       .subscribe();
 
@@ -65,12 +66,12 @@ export default function ForexSignalsDashboard() {
         setSignals(result.data);
         setLastUpdate(new Date());
       } else {
-        throw new Error('Failed to load signals');
+        throw new Error("Failed to load signals");
       }
     } catch (error) {
-      console.error('Error loading signals:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+      console.error("Error loading signals:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
       toast({
         title: "Error",
@@ -87,9 +88,9 @@ export default function ForexSignalsDashboard() {
       const marketOverview = await alphaVantageService.getMarketOverview();
       setQuotes(marketOverview);
     } catch (error) {
-      console.error('Error loading market quotes:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+      console.error("Error loading market quotes:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     }
   };
@@ -97,22 +98,24 @@ export default function ForexSignalsDashboard() {
   const generateNewSignals = async () => {
     try {
       setRefreshing(true);
-      
+
       // Call Edge Function to generate signals
-      const { data, error } = await supabase.functions.invoke('generate-forex-signals');
-      
+      const { data, error } = await supabase.functions.invoke(
+        "generate-forex-signals",
+      );
+
       if (error) throw error;
-      
+
       toast({
         title: "Success",
         description: `Generated ${data.signals_generated} new forex signals`,
       });
-      
+
       loadActiveSignals();
     } catch (error) {
-      console.error('Error generating signals:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+      console.error("Error generating signals:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
       toast({
         title: "Error",
@@ -126,8 +129,11 @@ export default function ForexSignalsDashboard() {
 
   const closeSignal = async (signalId: string) => {
     try {
-      const closePrice = prompt('Enter close price:');
-      const result = prompt('Enter result (win/loss/breakeven):') as 'win' | 'loss' | 'breakeven';
+      const closePrice = prompt("Enter close price:");
+      const result = prompt("Enter result (win/loss/breakeven):") as
+        | "win"
+        | "loss"
+        | "breakeven";
 
       if (!closePrice || !result) return;
 
@@ -150,18 +156,18 @@ export default function ForexSignalsDashboard() {
     }
   };
 
-  const getSignalIcon = (type: 'buy' | 'sell') => {
-    return type === 'buy' ? TrendingUp : TrendingDown;
+  const getSignalIcon = (type: "buy" | "sell") => {
+    return type === "buy" ? TrendingUp : TrendingDown;
   };
 
-  const getSignalColor = (type: 'buy' | 'sell') => {
-    return type === 'buy' ? 'text-green-600' : 'text-red-600';
+  const getSignalColor = (type: "buy" | "sell") => {
+    return type === "buy" ? "text-green-600" : "text-red-600";
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'bg-green-500';
-    if (confidence >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (confidence >= 80) return "bg-green-500";
+    if (confidence >= 60) return "bg-yellow-500";
+    return "bg-red-500";
   };
 
   const calculatePnL = (signal: ForexSignal) => {
@@ -171,7 +177,7 @@ export default function ForexSignalsDashboard() {
 
     return {
       percentage: pnlPercentage,
-      isProfit: pnlPercentage > 0
+      isProfit: pnlPercentage > 0,
     };
   };
 
@@ -180,9 +186,12 @@ export default function ForexSignalsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Forex Signals Dashboard</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Forex Signals Dashboard
+          </h2>
           <p className="text-gray-600">
-            Real-time forex trading signals powered by advanced technical analysis
+            Real-time forex trading signals powered by advanced technical
+            analysis
           </p>
           {lastUpdate && (
             <p className="text-sm text-gray-500 mt-1">
@@ -190,8 +199,8 @@ export default function ForexSignalsDashboard() {
             </p>
           )}
         </div>
-        <Button 
-          onClick={generateNewSignals} 
+        <Button
+          onClick={generateNewSignals}
           disabled={refreshing}
           className="bg-forex-600 hover:bg-forex-700"
         >
@@ -220,11 +229,19 @@ export default function ForexSignalsDashboard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {quotes.map((quote) => (
-              <div key={quote.symbol} className="text-center p-3 bg-gray-50 rounded-lg">
+              <div
+                key={quote.symbol}
+                className="text-center p-3 bg-gray-50 rounded-lg"
+              >
                 <div className="font-semibold text-sm">{quote.symbol}</div>
-                <div className="text-lg font-bold">{quote.price.toFixed(5)}</div>
-                <div className={`text-xs ${quote.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {quote.changePercent >= 0 ? '+' : ''}{quote.changePercent.toFixed(2)}%
+                <div className="text-lg font-bold">
+                  {quote.price.toFixed(5)}
+                </div>
+                <div
+                  className={`text-xs ${quote.changePercent >= 0 ? "text-green-600" : "text-red-600"}`}
+                >
+                  {quote.changePercent >= 0 ? "+" : ""}
+                  {quote.changePercent.toFixed(2)}%
                 </div>
               </div>
             ))}
@@ -241,8 +258,15 @@ export default function ForexSignalsDashboard() {
               <span>Active Signals</span>
               <Badge variant="secondary">{signals.length}</Badge>
             </div>
-            <Button variant="outline" size="sm" onClick={loadActiveSignals} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadActiveSignals}
+              disabled={loading}
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              />
             </Button>
           </CardTitle>
         </CardHeader>
@@ -255,8 +279,8 @@ export default function ForexSignalsDashboard() {
             <div className="text-center py-8 text-gray-500">
               <Signal className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No active signals available</p>
-              <Button 
-                onClick={generateNewSignals} 
+              <Button
+                onClick={generateNewSignals}
                 className="mt-4 bg-forex-600 hover:bg-forex-700"
                 disabled={refreshing}
               >
@@ -268,17 +292,26 @@ export default function ForexSignalsDashboard() {
               {signals.map((signal) => {
                 const SignalIcon = getSignalIcon(signal.signal_type);
                 const pnl = calculatePnL(signal);
-                
+
                 return (
-                  <Card key={signal.id} className="border-l-4 border-l-forex-500">
+                  <Card
+                    key={signal.id}
+                    className="border-l-4 border-l-forex-500"
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-2">
-                          <SignalIcon className={`h-5 w-5 ${getSignalColor(signal.signal_type)}`} />
+                          <SignalIcon
+                            className={`h-5 w-5 ${getSignalColor(signal.signal_type)}`}
+                          />
                           <div>
                             <div className="font-semibold">{signal.pair}</div>
                             <Badge
-                              variant={signal.signal_type === 'buy' ? 'default' : 'destructive'}
+                              variant={
+                                signal.signal_type === "buy"
+                                  ? "default"
+                                  : "destructive"
+                              }
                               className="text-xs"
                             >
                               {signal.signal_type.toUpperCase()}
@@ -286,8 +319,12 @@ export default function ForexSignalsDashboard() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-sm text-gray-600">Confidence</div>
-                          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getConfidenceColor(signal.confidence)}`}>
+                          <div className="text-sm text-gray-600">
+                            Confidence
+                          </div>
+                          <div
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getConfidenceColor(signal.confidence)}`}
+                          >
                             {signal.confidence}%
                           </div>
                         </div>
@@ -296,33 +333,46 @@ export default function ForexSignalsDashboard() {
                       <div className="grid grid-cols-3 gap-3 text-sm mb-3">
                         <div>
                           <div className="text-gray-600">Entry</div>
-                          <div className="font-semibold">{signal.entry_price.toFixed(5)}</div>
+                          <div className="font-semibold">
+                            {signal.entry_price.toFixed(5)}
+                          </div>
                         </div>
                         <div>
                           <div className="text-gray-600">Stop Loss</div>
-                          <div className="font-semibold text-red-600">{signal.stop_loss.toFixed(5)}</div>
+                          <div className="font-semibold text-red-600">
+                            {signal.stop_loss.toFixed(5)}
+                          </div>
                         </div>
                         <div>
                           <div className="text-gray-600">Take Profit</div>
-                          <div className="font-semibold text-green-600">{signal.take_profit_1.toFixed(5)}</div>
+                          <div className="font-semibold text-green-600">
+                            {signal.take_profit_1.toFixed(5)}
+                          </div>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <div className="text-gray-600 text-sm">Status</div>
-                          <div className="font-semibold capitalize">{signal.status}</div>
+                          <div className="font-semibold capitalize">
+                            {signal.status}
+                          </div>
                         </div>
                         <div className="text-right">
                           <div className="text-gray-600 text-sm">P&L</div>
-                          <div className={`font-semibold ${pnl.isProfit ? 'text-green-600' : 'text-red-600'}`}>
-                            {pnl.isProfit ? '+' : ''}{pnl.percentage.toFixed(2)}%
+                          <div
+                            className={`font-semibold ${pnl.isProfit ? "text-green-600" : "text-red-600"}`}
+                          >
+                            {pnl.isProfit ? "+" : ""}
+                            {pnl.percentage.toFixed(2)}%
                           </div>
                         </div>
                       </div>
 
                       <div className="mb-3">
-                        <div className="text-gray-600 text-sm mb-1">Analysis</div>
+                        <div className="text-gray-600 text-sm mb-1">
+                          Analysis
+                        </div>
                         <p className="text-xs text-gray-700 bg-gray-50 p-2 rounded">
                           {signal.analysis}
                         </p>
@@ -331,11 +381,13 @@ export default function ForexSignalsDashboard() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2 text-xs text-gray-500">
                           <Clock className="h-3 w-3" />
-                          <span>{new Date(signal.created_at).toLocaleString()}</span>
+                          <span>
+                            {new Date(signal.created_at).toLocaleString()}
+                          </span>
                         </div>
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
+                        <Button
+                          size="sm"
+                          variant="outline"
                           onClick={() => closeSignal(signal.id)}
                           className="text-xs"
                         >
@@ -371,7 +423,9 @@ export default function ForexSignalsDashboard() {
               </ul>
             </div>
             <div className="space-y-2">
-              <h4 className="font-semibold text-forex-600">Signal Guidelines</h4>
+              <h4 className="font-semibold text-forex-600">
+                Signal Guidelines
+              </h4>
               <ul className="space-y-1 text-gray-600">
                 <li>• Higher confidence signals are more reliable</li>
                 <li>• Consider market conditions before trading</li>

@@ -95,7 +95,7 @@ export default function EnhancedUserDashboard() {
     totalReturns: 0,
     activeInvestments: 0,
     completedInvestments: 0,
-    totalProfit: 0
+    totalProfit: 0,
   });
 
   const currentTab =
@@ -460,7 +460,9 @@ export default function EnhancedUserDashboard() {
 
     try {
       // Load user investments
-      const investmentsResult = await investmentService.getUserInvestments(user.id);
+      const investmentsResult = await investmentService.getUserInvestments(
+        user.id,
+      );
       if (investmentsResult.success) {
         setUserInvestments(investmentsResult.data);
       }
@@ -471,7 +473,7 @@ export default function EnhancedUserDashboard() {
         setInvestmentStats(statsResult.data);
       }
     } catch (error) {
-      console.error('Error loading user investments:', error);
+      console.error("Error loading user investments:", error);
     }
   };
 

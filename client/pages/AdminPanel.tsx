@@ -907,7 +907,12 @@ export default function AdminPanel() {
     }
   };
 
-  const handleCloseSignal = async (signalId: string, result: "win" | "loss" | "breakeven", closePrice: number, pips?: number) => {
+  const handleCloseSignal = async (
+    signalId: string,
+    result: "win" | "loss" | "breakeven",
+    closePrice: number,
+    pips?: number,
+  ) => {
     try {
       const closeResult = await signalsService.closeSignal(signalId, {
         result,
@@ -2296,7 +2301,10 @@ export default function AdminPanel() {
                     <Label htmlFor="signal-type">Signal Type</Label>
                     <Select
                       onValueChange={(value) =>
-                        setSignalForm((prev) => ({ ...prev, signal_type: value as "buy" | "sell" }))
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          signal_type: value as "buy" | "sell",
+                        }))
                       }
                     >
                       <SelectTrigger>
@@ -2474,21 +2482,27 @@ export default function AdminPanel() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <h4 className="font-semibold text-lg">{signal.pair}</h4>
-                            <Badge className={`${
-                              signal.signal_type === 'buy'
-                                ? 'bg-green-500 text-white'
-                                : 'bg-red-500 text-white'
-                            }`}>
+                            <h4 className="font-semibold text-lg">
+                              {signal.pair}
+                            </h4>
+                            <Badge
+                              className={`${
+                                signal.signal_type === "buy"
+                                  ? "bg-green-500 text-white"
+                                  : "bg-red-500 text-white"
+                              }`}
+                            >
                               {signal.signal_type.toUpperCase()}
                             </Badge>
-                            <Badge className={`${
-                              signal.status === 'active'
-                                ? 'bg-blue-500 text-white'
-                                : signal.status === 'closed'
-                                ? 'bg-gray-500 text-white'
-                                : 'bg-orange-500 text-white'
-                            }`}>
+                            <Badge
+                              className={`${
+                                signal.status === "active"
+                                  ? "bg-blue-500 text-white"
+                                  : signal.status === "closed"
+                                    ? "bg-gray-500 text-white"
+                                    : "bg-orange-500 text-white"
+                              }`}
+                            >
                               {signal.status.toUpperCase()}
                             </Badge>
                             <Badge variant="outline">
@@ -2499,60 +2513,86 @@ export default function AdminPanel() {
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                             <div>
                               <span className="text-gray-600">Entry:</span>
-                              <div className="font-medium">{signal.entry_price}</div>
+                              <div className="font-medium">
+                                {signal.entry_price}
+                              </div>
                             </div>
                             <div>
                               <span className="text-gray-600">Stop Loss:</span>
-                              <div className="font-medium">{signal.stop_loss}</div>
+                              <div className="font-medium">
+                                {signal.stop_loss}
+                              </div>
                             </div>
                             <div>
                               <span className="text-gray-600">TP1:</span>
-                              <div className="font-medium">{signal.take_profit_1}</div>
+                              <div className="font-medium">
+                                {signal.take_profit_1}
+                              </div>
                             </div>
                             {signal.take_profit_2 && (
                               <div>
                                 <span className="text-gray-600">TP2:</span>
-                                <div className="font-medium">{signal.take_profit_2}</div>
+                                <div className="font-medium">
+                                  {signal.take_profit_2}
+                                </div>
                               </div>
                             )}
                             {signal.take_profit_3 && (
                               <div>
                                 <span className="text-gray-600">TP3:</span>
-                                <div className="font-medium">{signal.take_profit_3}</div>
+                                <div className="font-medium">
+                                  {signal.take_profit_3}
+                                </div>
                               </div>
                             )}
                           </div>
 
                           <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                            <div className="text-sm text-gray-600 mb-1">Analysis:</div>
+                            <div className="text-sm text-gray-600 mb-1">
+                              Analysis:
+                            </div>
                             <p className="text-sm">{signal.analysis}</p>
                           </div>
 
                           <div className="flex items-center space-x-4 text-xs text-gray-500 mt-3">
-                            <span>Created: {new Date(signal.created_at).toLocaleString()}</span>
+                            <span>
+                              Created:{" "}
+                              {new Date(signal.created_at).toLocaleString()}
+                            </span>
                             {signal.result && (
-                              <span className={`font-medium ${
-                                signal.result === 'win' ? 'text-green-600' :
-                                signal.result === 'loss' ? 'text-red-600' : 'text-yellow-600'
-                              }`}>
+                              <span
+                                className={`font-medium ${
+                                  signal.result === "win"
+                                    ? "text-green-600"
+                                    : signal.result === "loss"
+                                      ? "text-red-600"
+                                      : "text-yellow-600"
+                                }`}
+                              >
                                 Result: {signal.result.toUpperCase()}
-                                {signal.pips_gained && ` (${signal.pips_gained > 0 ? '+' : ''}${signal.pips_gained} pips)`}
+                                {signal.pips_gained &&
+                                  ` (${signal.pips_gained > 0 ? "+" : ""}${signal.pips_gained} pips)`}
                               </span>
                             )}
                           </div>
                         </div>
 
-                        {signal.status === 'active' && (
+                        {signal.status === "active" && (
                           <div className="flex space-x-2">
                             <Button
                               size="sm"
                               variant="outline"
                               className="text-green-600 hover:text-green-700"
                               onClick={() => {
-                                const closePrice = prompt('Enter close price:');
-                                const pips = prompt('Enter pips gained:');
+                                const closePrice = prompt("Enter close price:");
+                                const pips = prompt("Enter pips gained:");
                                 if (closePrice) {
-                                  handleCloseSignal(signal.id, 'win', parseFloat(closePrice), pips ? parseFloat(pips) : undefined);
+                                  handleCloseSignal(
+                                    signal.id,
+                                    "win",
+                                    parseFloat(closePrice),
+                                    pips ? parseFloat(pips) : undefined,
+                                  );
                                 }
                               }}
                             >
@@ -2564,10 +2604,15 @@ export default function AdminPanel() {
                               variant="outline"
                               className="text-red-600 hover:text-red-700"
                               onClick={() => {
-                                const closePrice = prompt('Enter close price:');
-                                const pips = prompt('Enter pips lost:');
+                                const closePrice = prompt("Enter close price:");
+                                const pips = prompt("Enter pips lost:");
                                 if (closePrice) {
-                                  handleCloseSignal(signal.id, 'loss', parseFloat(closePrice), pips ? parseFloat(pips) : undefined);
+                                  handleCloseSignal(
+                                    signal.id,
+                                    "loss",
+                                    parseFloat(closePrice),
+                                    pips ? parseFloat(pips) : undefined,
+                                  );
                                 }
                               }}
                             >

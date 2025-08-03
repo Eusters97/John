@@ -425,17 +425,17 @@ class EnhancedAuthService {
     try {
       const demoCredentials = [
         {
-          username: 'admin',
-          email: 'admin@forextraderssignals.com',
-          password: 'Demo@2024!',
-          full_name: 'Demo Administrator',
+          username: import.meta.env.VITE_ADMIN_USERNAME || 'admin',
+          email: import.meta.env.VITE_ADMIN_EMAIL || 'admin@forextraderssignals.com',
+          password: import.meta.env.VITE_ADMIN_PASSWORD || 'Demo@2024!',
+          full_name: import.meta.env.VITE_ADMIN_FULL_NAME || 'Demo Administrator',
           role: 'admin' as const
         },
         {
-          username: 'demo',
-          email: 'demo@forextraderssignals.com',
-          password: 'Demo@2024!',
-          full_name: 'Demo User',
+          username: import.meta.env.VITE_DEMO_USERNAME || 'demo',
+          email: import.meta.env.VITE_DEMO_EMAIL || 'demo@forextraderssignals.com',
+          password: import.meta.env.VITE_DEMO_PASSWORD || 'Demo@2024!',
+          full_name: import.meta.env.VITE_DEMO_FULL_NAME || 'Demo User',
           role: 'admin' as const
         }
       ];

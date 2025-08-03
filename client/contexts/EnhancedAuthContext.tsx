@@ -20,7 +20,7 @@ interface AuthContextType {
   loading: boolean
   isAdmin: boolean
   sessionData: SessionData | null
-  signUp: (email: string, password: string, options?: { provider?: 'google' | 'telegram' }) => Promise<{ user: User | null; error: AuthError | null }>
+  signUp: (email: string, password: string, userData?: EnhancedUserData) => Promise<{ user: User | null; error: AuthError | null }>
   signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ user: User | null; error: AuthError | null }>
   signInWithGoogle: () => Promise<{ user: User | null; error: AuthError | null }>
   signInWithTelegram: () => Promise<{ user: User | null; error: AuthError | null }>

@@ -44,7 +44,12 @@ export default function DatabaseInitializer() {
       
       return !error;
     } catch (error) {
-      console.error('Supabase connection test failed:', error);
+      console.error('Supabase connection test failed:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        code: (error as any)?.code,
+        details: (error as any)?.details,
+        hint: (error as any)?.hint
+      });
       return false;
     }
   };

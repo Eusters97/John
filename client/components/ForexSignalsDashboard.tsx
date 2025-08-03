@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { alphaVantageService } from "@/lib/alphavantage";
 import { supabase } from "@/lib/supabase";
+import { signalsService, type ForexSignal } from "@/lib/signals-service";
 import { 
   TrendingUp, 
   TrendingDown, 

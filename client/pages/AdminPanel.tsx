@@ -1958,6 +1958,183 @@ export default function AdminPanel() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="analytics" className="space-y-6">
+          {/* Analytics Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Visitors</CardTitle>
+                <Globe className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">
+                  {analyticsStats.totalVisitors.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">Last 7 days</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Unique Visitors</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">
+                  {analyticsStats.uniqueVisitors.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">Unique IP addresses</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Page Views</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-purple-600">
+                  {pageViews.length.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">Total page views</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Avg Session</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-orange-600">
+                  {Math.round(visitorAnalytics.reduce((sum, v) => sum + v.session_duration, 0) / visitorAnalytics.length / 60) || 0}m
+                </div>
+                <p className="text-xs text-muted-foreground">Average duration</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Top Countries */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <MapPin className="h-5 w-5" />
+                  <span>Top Countries</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {analyticsStats.topCountries.map((country, index) => (
+                    <div key={country.country} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                          {index + 1}
+                        </div>
+                        <span className="font-medium">{country.country}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-500 h-2 rounded-full"
+                            style={{ width: `${(country.count / analyticsStats.totalVisitors) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-medium w-8">{country.count}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Top Pages */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <FileText className="h-5 w-5" />
+                  <span>Most Visited Pages</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {analyticsStats.topPages.map((page, index) => (
+                    <div key={page.page} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                          {index + 1}
+                        </div>
+                        <span className="font-medium">{page.page}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-green-500 h-2 rounded-full"
+                            style={{ width: `${(page.count / pageViews.length) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-medium w-8">{page.count}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Device Breakdown */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="h-5 w-5" />
+                <span>Device Breakdown</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                {analyticsStats.deviceBreakdown.map((device) => (
+                  <div key={device.device} className="text-center p-4 border rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">{device.count}</div>
+                    <div className="text-sm text-gray-600">{device.device}</div>
+                    <div className="text-xs text-gray-500">
+                      {Math.round((device.count / analyticsStats.totalVisitors) * 100)}%
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recent Visitors */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Globe className="h-5 w-5" />
+                <span>Recent Visitors</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {visitorAnalytics.slice(0, 20).map((visitor) => (
+                  <div key={visitor.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div>
+                        <div className="font-medium">{visitor.country}, {visitor.city}</div>
+                        <div className="text-sm text-gray-600">{visitor.page_visited}</div>
+                      </div>
+                    </div>
+                    <div className="text-right text-sm text-gray-500">
+                      <div>{visitor.device_type} • {visitor.browser}</div>
+                      <div>{new Date(visitor.visited_at).toLocaleTimeString()}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="settings" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Website Settings */}

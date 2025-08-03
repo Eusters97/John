@@ -38,7 +38,7 @@ const countries = [
   { code: "+244", name: "Angola", flag: "🇦🇴" },
   { code: "+54", name: "Argentina", flag: "🇦🇷" },
   { code: "+374", name: "Armenia", flag: "🇦🇲" },
-  { code: "+61", name: "Australia", flag: "🇦����" },
+  { code: "+61", name: "Australia", flag: "🇦🇺" },
   { code: "+43", name: "Austria", flag: "🇦🇹" },
   { code: "+994", name: "Azerbaijan", flag: "🇦🇿" },
   { code: "+973", name: "Bahrain", flag: "🇧🇭" },
@@ -328,6 +328,7 @@ export default function Signup() {
       // Use enhanced authentication for registration
       const result = await enhancedAuth.enhancedSignUp(formData.email, formData.password, {
         fullName: formData.fullName,
+        username: formData.username,
         phoneNumber: formData.phoneNumber,
         country: formData.country,
         countryCode: formData.countryCode,

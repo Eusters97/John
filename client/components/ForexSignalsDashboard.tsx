@@ -59,9 +59,14 @@ export default function ForexSignalsDashboard() {
   const loadActiveSignals = async () => {
     try {
       setLoading(true);
-      const activeSignals = await alphaVantageService.getActiveSignals();
-      setSignals(activeSignals);
-      setLastUpdate(new Date());
+      const result = await signalsService.getActiveSignals();
+
+      if (result.success) {
+        setSignals(result.data);
+        setLastUpdate(new Date());
+      } else {
+        throw new Error('Failed to load signals');
+      }
     } catch (error) {
       console.error('Error loading signals:', {
         message: error instanceof Error ? error.message : 'Unknown error',

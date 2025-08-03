@@ -147,19 +147,21 @@ export default function EnhancedUserDashboard() {
               details: createError.details,
               hint: createError.hint,
               user_id: user.id,
-              user_email: user.email
+              user_email: user.email,
             });
           } else {
             console.log("User profile created successfully");
           }
         } else if (profileError.code === "42P01") {
-          console.warn("user_profiles table does not exist. Please run database migrations.");
+          console.warn(
+            "user_profiles table does not exist. Please run database migrations.",
+          );
         } else {
           console.error("Error checking user profile:", {
             message: profileError.message,
             code: profileError.code,
             details: profileError.details,
-            hint: profileError.hint
+            hint: profileError.hint,
           });
         }
       }
@@ -180,7 +182,7 @@ export default function EnhancedUserDashboard() {
             .insert({
               user_id: user.id,
               balance: 0.0, // Starting balance
-              currency: "USD"
+              currency: "USD",
             });
 
           if (createBalanceError) {
@@ -189,19 +191,21 @@ export default function EnhancedUserDashboard() {
               code: createBalanceError.code,
               details: createBalanceError.details,
               hint: createBalanceError.hint,
-              user_id: user.id
+              user_id: user.id,
             });
           } else {
             console.log("User balance created successfully");
           }
         } else if (balanceError.code === "42P01") {
-          console.warn("user_balances table does not exist. Please run database migrations.");
+          console.warn(
+            "user_balances table does not exist. Please run database migrations.",
+          );
         } else {
           console.error("Error checking user balance:", {
             message: balanceError.message,
             code: balanceError.code,
             details: balanceError.details,
-            hint: balanceError.hint
+            hint: balanceError.hint,
           });
         }
       }
@@ -210,7 +214,7 @@ export default function EnhancedUserDashboard() {
         error: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
         user_id: user.id,
-        user_email: user.email
+        user_email: user.email,
       });
     }
   };
@@ -356,13 +360,11 @@ export default function EnhancedUserDashboard() {
     if (!user?.id) return false;
 
     try {
-      const { error } = await supabase
-        .from("user_profiles")
-        .upsert({
-          id: user.id,
-          email: user.email || "",
-          full_name: user.user_metadata?.full_name || user.email || "User",
-        });
+      const { error } = await supabase.from("user_profiles").upsert({
+        id: user.id,
+        email: user.email || "",
+        full_name: user.user_metadata?.full_name || user.email || "User",
+      });
 
       if (error) {
         console.error("Error creating profile:", {
@@ -370,7 +372,7 @@ export default function EnhancedUserDashboard() {
           code: error.code,
           details: error.details,
           hint: error.hint,
-          user_id: user.id
+          user_id: user.id,
         });
         return false;
       }
@@ -380,7 +382,7 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       console.error("Unexpected error creating profile:", {
         error: error instanceof Error ? error.message : "Unknown error",
-        user_id: user.id
+        user_id: user.id,
       });
       return false;
     }
@@ -390,13 +392,11 @@ export default function EnhancedUserDashboard() {
     if (!user?.id) return false;
 
     try {
-      const { error } = await supabase
-        .from("user_balances")
-        .upsert({
-          user_id: user.id,
-          balance: 0.0,
-          currency: "USD"
-        });
+      const { error } = await supabase.from("user_balances").upsert({
+        user_id: user.id,
+        balance: 0.0,
+        currency: "USD",
+      });
 
       if (error) {
         console.error("Error creating balance:", {
@@ -404,7 +404,7 @@ export default function EnhancedUserDashboard() {
           code: error.code,
           details: error.details,
           hint: error.hint,
-          user_id: user.id
+          user_id: user.id,
         });
         return false;
       }
@@ -414,7 +414,7 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       console.error("Unexpected error creating balance:", {
         error: error instanceof Error ? error.message : "Unknown error",
-        user_id: user.id
+        user_id: user.id,
       });
       return false;
     }
@@ -681,15 +681,18 @@ export default function EnhancedUserDashboard() {
         return (
           <div className="space-y-6">
             {/* Database Status Alert */}
-            {(userStats.balance === 0 && userStats.totalInvested === 0) && (
+            {userStats.balance === 0 && userStats.totalInvested === 0 && (
               <Card className="border-yellow-200 bg-yellow-50">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-2 mb-3">
                     <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    <h3 className="font-semibold text-yellow-800">Database Setup Check</h3>
+                    <h3 className="font-semibold text-yellow-800">
+                      Database Setup Check
+                    </h3>
                   </div>
                   <p className="text-yellow-700 text-sm mb-4">
-                    Your profile data appears to be empty. This can happen if database tables are missing or if this is your first login.
+                    Your profile data appears to be empty. This can happen if
+                    database tables are missing or if this is your first login.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <Button
@@ -698,10 +701,19 @@ export default function EnhancedUserDashboard() {
                         const profileCreated = await createMissingProfile();
                         const balanceCreated = await createMissingBalance();
                         if (profileCreated && balanceCreated) {
-                          toast({ title: "Success", description: "Profile and balance initialized successfully" });
+                          toast({
+                            title: "Success",
+                            description:
+                              "Profile and balance initialized successfully",
+                          });
                           loadUserStats();
                         } else {
-                          toast({ title: "Error", description: "Failed to initialize data - check console for details", variant: "destructive" });
+                          toast({
+                            title: "Error",
+                            description:
+                              "Failed to initialize data - check console for details",
+                            variant: "destructive",
+                          });
                         }
                       }}
                       className="bg-yellow-600 hover:bg-yellow-700 text-white"
@@ -711,7 +723,7 @@ export default function EnhancedUserDashboard() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => navigate('/db-diagnostic')}
+                      onClick={() => navigate("/db-diagnostic")}
                     >
                       Run Database Diagnostic
                     </Button>

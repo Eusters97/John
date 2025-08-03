@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/EnhancedAuthContext";
 import { supabase } from "@/lib/supabase";
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
   Database,
   RefreshCw,
-  User
+  User,
 } from "lucide-react";
 
 interface DiagnosticResult {
@@ -31,81 +31,84 @@ export default function DatabaseDiagnostic() {
 
     // Test 1: Basic Supabase connection
     try {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
+      const { data: authData, error: authError } =
+        await supabase.auth.getUser();
       diagnosticResults.push({
         test: "Supabase Authentication",
         status: authError ? "error" : "success",
-        message: authError ? `Auth error: ${authError.message}` : "Authentication working",
-        details: authError || { user: !!authData.user }
+        message: authError
+          ? `Auth error: ${authError.message}`
+          : "Authentication working",
+        details: authError || { user: !!authData.user },
       });
     } catch (error) {
       diagnosticResults.push({
         test: "Supabase Authentication",
         status: "error",
-        message: `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        details: error
+        message: `Connection failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        details: error,
       });
     }
 
     // Test 2: Check if user_profiles table exists
     try {
       const { data, error } = await supabase
-        .from('user_profiles')
-        .select('count(*)')
+        .from("user_profiles")
+        .select("count(*)")
         .limit(1);
-      
+
       if (error) {
         diagnosticResults.push({
           test: "user_profiles table",
           status: "error",
           message: `Table access error: ${error.message}`,
-          details: error
+          details: error,
         });
       } else {
         diagnosticResults.push({
           test: "user_profiles table",
           status: "success",
           message: "Table exists and accessible",
-          details: data
+          details: data,
         });
       }
     } catch (error) {
       diagnosticResults.push({
         test: "user_profiles table",
         status: "error",
-        message: `Table test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        details: error
+        message: `Table test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        details: error,
       });
     }
 
     // Test 3: Check if user_balances table exists
     try {
       const { data, error } = await supabase
-        .from('user_balances')
-        .select('count(*)')
+        .from("user_balances")
+        .select("count(*)")
         .limit(1);
-      
+
       if (error) {
         diagnosticResults.push({
           test: "user_balances table",
           status: "error",
           message: `Table access error: ${error.message}`,
-          details: error
+          details: error,
         });
       } else {
         diagnosticResults.push({
           test: "user_balances table",
           status: "success",
           message: "Table exists and accessible",
-          details: data
+          details: data,
         });
       }
     } catch (error) {
       diagnosticResults.push({
         test: "user_balances table",
         status: "error",
-        message: `Table test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        details: error
+        message: `Table test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        details: error,
       });
     }
 
@@ -113,78 +116,78 @@ export default function DatabaseDiagnostic() {
     if (user?.id) {
       try {
         const { data, error } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('id', user.id)
+          .from("user_profiles")
+          .select("*")
+          .eq("id", user.id)
           .single();
-        
-        if (error && error.code === 'PGRST116') {
+
+        if (error && error.code === "PGRST116") {
           diagnosticResults.push({
             test: "Current user profile",
             status: "warning",
             message: "User profile does not exist",
-            details: { user_id: user.id, error }
+            details: { user_id: user.id, error },
           });
         } else if (error) {
           diagnosticResults.push({
             test: "Current user profile",
             status: "error",
             message: `Profile check error: ${error.message}`,
-            details: error
+            details: error,
           });
         } else {
           diagnosticResults.push({
             test: "Current user profile",
             status: "success",
             message: "User profile exists",
-            details: data
+            details: data,
           });
         }
       } catch (error) {
         diagnosticResults.push({
           test: "Current user profile",
           status: "error",
-          message: `Profile test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          details: error
+          message: `Profile test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          details: error,
         });
       }
 
       // Test 5: Current user balance check
       try {
         const { data, error } = await supabase
-          .from('user_balances')
-          .select('*')
-          .eq('user_id', user.id)
+          .from("user_balances")
+          .select("*")
+          .eq("user_id", user.id)
           .single();
-        
-        if (error && error.code === 'PGRST116') {
+
+        if (error && error.code === "PGRST116") {
           diagnosticResults.push({
             test: "Current user balance",
             status: "warning",
             message: "User balance does not exist",
-            details: { user_id: user.id, error }
+            details: { user_id: user.id, error },
           });
         } else if (error) {
           diagnosticResults.push({
             test: "Current user balance",
             status: "error",
             message: `Balance check error: ${error.message}`,
-            details: error
+            details: error,
           });
         } else {
           diagnosticResults.push({
             test: "Current user balance",
             status: "success",
             message: "User balance exists",
-            details: data
+            details: data,
           });
         }
       } catch (error) {
         diagnosticResults.push({
           test: "Current user balance",
           status: "error",
-          message: `Balance test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          details: error
+          message: `Balance test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          details: error,
         });
       }
     }
@@ -193,43 +196,44 @@ export default function DatabaseDiagnostic() {
     if (user?.id) {
       try {
         const { data, error } = await supabase
-          .from('user_profiles')
+          .from("user_profiles")
           .insert({
             id: user.id,
-            email: user.email || '',
-            full_name: user.user_metadata?.full_name || user.email || 'Test User'
+            email: user.email || "",
+            full_name:
+              user.user_metadata?.full_name || user.email || "Test User",
           })
           .select()
           .single();
-        
-        if (error && error.code === '23505') {
+
+        if (error && error.code === "23505") {
           diagnosticResults.push({
             test: "User profile creation test",
             status: "warning",
             message: "Profile already exists (duplicate key)",
-            details: error
+            details: error,
           });
         } else if (error) {
           diagnosticResults.push({
             test: "User profile creation test",
             status: "error",
             message: `Creation failed: ${error.message}`,
-            details: error
+            details: error,
           });
         } else {
           diagnosticResults.push({
             test: "User profile creation test",
             status: "success",
             message: "Profile created successfully",
-            details: data
+            details: data,
           });
         }
       } catch (error) {
         diagnosticResults.push({
           test: "User profile creation test",
           status: "error",
-          message: `Creation test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          details: error
+          message: `Creation test failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          details: error,
         });
       }
     }
@@ -240,19 +244,27 @@ export default function DatabaseDiagnostic() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "success": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "error": return <XCircle className="h-5 w-5 text-red-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      default: return <AlertTriangle className="h-5 w-5 text-gray-500" />;
+      case "success":
+        return <CheckCircle className="h-5 w-5 text-green-500" />;
+      case "error":
+        return <XCircle className="h-5 w-5 text-red-500" />;
+      case "warning":
+        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      default:
+        return <AlertTriangle className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "success": return "bg-green-50 text-green-700 border-green-200";
-      case "error": return "bg-red-50 text-red-700 border-red-200";
-      case "warning": return "bg-yellow-50 text-yellow-700 border-yellow-200";
-      default: return "bg-gray-50 text-gray-700 border-gray-200";
+      case "success":
+        return "bg-green-50 text-green-700 border-green-200";
+      case "error":
+        return "bg-red-50 text-red-700 border-red-200";
+      case "warning":
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
+      default:
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
   };
 
@@ -277,15 +289,22 @@ export default function DatabaseDiagnostic() {
                 Current User
               </h3>
               <div className="text-sm space-y-1">
-                <div><strong>ID:</strong> {user?.id || 'Not logged in'}</div>
-                <div><strong>Email:</strong> {user?.email || 'N/A'}</div>
-                <div><strong>Metadata:</strong> {JSON.stringify(user?.user_metadata || {})}</div>
+                <div>
+                  <strong>ID:</strong> {user?.id || "Not logged in"}
+                </div>
+                <div>
+                  <strong>Email:</strong> {user?.email || "N/A"}
+                </div>
+                <div>
+                  <strong>Metadata:</strong>{" "}
+                  {JSON.stringify(user?.user_metadata || {})}
+                </div>
               </div>
             </div>
 
             {/* Run Diagnostics Button */}
-            <Button 
-              onClick={runDiagnostics} 
+            <Button
+              onClick={runDiagnostics}
               disabled={running}
               className="w-full bg-blue-600 hover:bg-blue-700"
             >
@@ -307,14 +326,23 @@ export default function DatabaseDiagnostic() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Diagnostic Results</h3>
                 {results.map((result, index) => (
-                  <Card key={index} className={`border-l-4 ${getStatusColor(result.status)}`}>
+                  <Card
+                    key={index}
+                    className={`border-l-4 ${getStatusColor(result.status)}`}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-start space-x-3">
                         {getStatusIcon(result.status)}
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <h4 className="font-medium">{result.test}</h4>
-                            <Badge variant={result.status === "success" ? "default" : "destructive"}>
+                            <Badge
+                              variant={
+                                result.status === "success"
+                                  ? "default"
+                                  : "destructive"
+                              }
+                            >
                               {result.status}
                             </Badge>
                           </div>

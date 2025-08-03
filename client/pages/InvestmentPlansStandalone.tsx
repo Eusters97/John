@@ -52,7 +52,8 @@ export default function InvestmentPlansStandalone() {
       max_amount: 999,
       roi_percentage: 2500,
       duration_hours: 24,
-      description: "Perfect for beginners looking to start their forex investment journey",
+      description:
+        "Perfect for beginners looking to start their forex investment journey",
       popular: false,
       color: "blue",
       features: [
@@ -132,13 +133,13 @@ export default function InvestmentPlansStandalone() {
   const fetchInvestmentPlans = async () => {
     try {
       const { data, error } = await supabase
-        .from('investment_plans')
-        .select('*')
-        .eq('is_active', true)
-        .order('min_amount', { ascending: true });
+        .from("investment_plans")
+        .select("*")
+        .eq("is_active", true)
+        .order("min_amount", { ascending: true });
 
       if (error) {
-        console.warn('Using default plans:', error.message);
+        console.warn("Using default plans:", error.message);
         setPlans(defaultPlans);
       } else if (data && data.length > 0) {
         setPlans(data);
@@ -146,7 +147,7 @@ export default function InvestmentPlansStandalone() {
         setPlans(defaultPlans);
       }
     } catch (error) {
-      console.warn('Using default plans due to fetch error');
+      console.warn("Using default plans due to fetch error");
       setPlans(defaultPlans);
     } finally {
       setLoading(false);
@@ -168,8 +169,8 @@ export default function InvestmentPlansStandalone() {
     navigate("/dashboard?tab=plans", {
       state: {
         selectedPlan: plan,
-        action: "invest"
-      }
+        action: "invest",
+      },
     });
   };
 
@@ -182,7 +183,7 @@ export default function InvestmentPlansStandalone() {
   const getColorClasses = (color: string) => {
     const colors = {
       blue: "from-blue-500 to-blue-600",
-      green: "from-green-500 to-green-600", 
+      green: "from-green-500 to-green-600",
       purple: "from-purple-500 to-purple-600",
       gold: "from-yellow-500 to-yellow-600",
     };
@@ -201,24 +202,35 @@ export default function InvestmentPlansStandalone() {
                   <TrendingUp className="h-6 w-6 md:h-8 md:w-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-4xl font-bold">Investment Plans</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold">
+                    Investment Plans
+                  </h1>
                   <p className="text-sm md:text-lg text-forex-100 mt-2">
                     Choose your path to financial success
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {[
-                  { label: "Minimum Investment", value: "$100", icon: DollarSign },
+                  {
+                    label: "Minimum Investment",
+                    value: "$100",
+                    icon: DollarSign,
+                  },
                   { label: "Maximum ROI", value: "2,500%", icon: TrendingUp },
                   { label: "Fastest Return", value: "24 Hours", icon: Clock },
                 ].map((stat, index) => (
-                  <div key={index} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                  <div
+                    key={index}
+                    className="bg-white/10 p-4 rounded-lg backdrop-blur-sm"
+                  >
                     <div className="flex items-center justify-center mb-2">
                       <stat.icon className="h-5 w-5" />
                     </div>
-                    <div className="text-xl md:text-2xl font-bold">{stat.value}</div>
+                    <div className="text-xl md:text-2xl font-bold">
+                      {stat.value}
+                    </div>
                     <div className="text-sm text-forex-100">{stat.label}</div>
                   </div>
                 ))}
@@ -235,7 +247,9 @@ export default function InvestmentPlansStandalone() {
                 💎 Choose Your Investment Plan
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Select the perfect plan that matches your investment goals and risk appetite. All plans include professional signals and risk management.
+                Select the perfect plan that matches your investment goals and
+                risk appetite. All plans include professional signals and risk
+                management.
               </p>
             </div>
 
@@ -255,10 +269,12 @@ export default function InvestmentPlansStandalone() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {plans.map((plan) => (
-                  <Card 
-                    key={plan.id} 
+                  <Card
+                    key={plan.id}
                     className={`relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                      plan.popular ? 'ring-2 ring-forex-500 shadow-lg' : 'border-2 border-gray-100 hover:border-forex-200'
+                      plan.popular
+                        ? "ring-2 ring-forex-500 shadow-lg"
+                        : "border-2 border-gray-100 hover:border-forex-200"
                     }`}
                   >
                     {plan.popular && (
@@ -268,34 +284,52 @@ export default function InvestmentPlansStandalone() {
                     )}
 
                     <CardHeader className="text-center pb-2">
-                      <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${getColorClasses(plan.color || 'blue')} flex items-center justify-center`}>
-                        {plan.id === 'starter' && <Zap className="h-8 w-8 text-white" />}
-                        {plan.id === 'standard' && <Target className="h-8 w-8 text-white" />}
-                        {plan.id === 'premium' && <Award className="h-8 w-8 text-white" />}
-                        {plan.id === 'vip' && <Crown className="h-8 w-8 text-white" />}
-                        {!['starter', 'standard', 'premium', 'vip'].includes(plan.id) && <TrendingUp className="h-8 w-8 text-white" />}
+                      <div
+                        className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${getColorClasses(plan.color || "blue")} flex items-center justify-center`}
+                      >
+                        {plan.id === "starter" && (
+                          <Zap className="h-8 w-8 text-white" />
+                        )}
+                        {plan.id === "standard" && (
+                          <Target className="h-8 w-8 text-white" />
+                        )}
+                        {plan.id === "premium" && (
+                          <Award className="h-8 w-8 text-white" />
+                        )}
+                        {plan.id === "vip" && (
+                          <Crown className="h-8 w-8 text-white" />
+                        )}
+                        {!["starter", "standard", "premium", "vip"].includes(
+                          plan.id,
+                        ) && <TrendingUp className="h-8 w-8 text-white" />}
                       </div>
-                      
+
                       <CardTitle className="text-xl font-bold text-gray-900 mb-2">
                         {plan.name}
                       </CardTitle>
-                      
+
                       <div className="text-center mb-4">
                         <div className="text-3xl font-bold text-gray-900 mb-1">
                           {plan.roi_percentage.toLocaleString()}%
                         </div>
-                        <div className="text-sm text-gray-600">ROI Guaranteed</div>
+                        <div className="text-sm text-gray-600">
+                          ROI Guaranteed
+                        </div>
                       </div>
 
                       <div className="bg-gray-50 p-3 rounded-lg">
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
                             <span className="text-gray-500">Min Amount:</span>
-                            <div className="font-bold">${plan.min_amount.toLocaleString()}</div>
+                            <div className="font-bold">
+                              ${plan.min_amount.toLocaleString()}
+                            </div>
                           </div>
                           <div>
                             <span className="text-gray-500">Duration:</span>
-                            <div className="font-bold">{formatDuration(plan.duration_hours)}</div>
+                            <div className="font-bold">
+                              {formatDuration(plan.duration_hours)}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -309,9 +343,14 @@ export default function InvestmentPlansStandalone() {
                       {plan.features && (
                         <div className="space-y-2">
                           {plan.features.slice(0, 4).map((feature, index) => (
-                            <div key={index} className="flex items-start space-x-2">
+                            <div
+                              key={index}
+                              className="flex items-start space-x-2"
+                            >
                               <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">{feature}</span>
+                              <span className="text-sm text-gray-700">
+                                {feature}
+                              </span>
                             </div>
                           ))}
                           {plan.features.length > 4 && (
@@ -322,9 +361,9 @@ export default function InvestmentPlansStandalone() {
                         </div>
                       )}
 
-                      <Button 
+                      <Button
                         onClick={() => handleInvestment(plan)}
-                        className={`w-full bg-gradient-to-r ${getColorClasses(plan.color || 'blue')} hover:opacity-90 transition-all duration-200 text-white font-semibold py-3 min-h-[44px]`}
+                        className={`w-full bg-gradient-to-r ${getColorClasses(plan.color || "blue")} hover:opacity-90 transition-all duration-200 text-white font-semibold py-3 min-h-[44px]`}
                       >
                         <ArrowRight className="h-4 w-4 mr-2" />
                         Start Investing
@@ -332,7 +371,11 @@ export default function InvestmentPlansStandalone() {
 
                       <div className="text-center">
                         <div className="text-xs text-gray-500">
-                          Expected return: ${((plan.min_amount * plan.roi_percentage) / 100).toLocaleString()}
+                          Expected return: $
+                          {(
+                            (plan.min_amount * plan.roi_percentage) /
+                            100
+                          ).toLocaleString()}
                         </div>
                       </div>
                     </CardContent>
@@ -348,7 +391,8 @@ export default function InvestmentPlansStandalone() {
                   🛡️ Why Choose Our Investment Plans?
                 </h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  All our plans come with professional-grade features and guarantees to ensure your investment success.
+                  All our plans come with professional-grade features and
+                  guarantees to ensure your investment success.
                 </p>
               </div>
 
@@ -357,26 +401,36 @@ export default function InvestmentPlansStandalone() {
                   {
                     icon: Shield,
                     title: "Guaranteed Returns",
-                    description: "Every investment plan comes with guaranteed ROI backed by our professional trading expertise."
+                    description:
+                      "Every investment plan comes with guaranteed ROI backed by our professional trading expertise.",
                   },
                   {
                     icon: Clock,
                     title: "Fixed Duration",
-                    description: "Clear investment periods with automatic payouts. No hidden terms or extended lock-in periods."
+                    description:
+                      "Clear investment periods with automatic payouts. No hidden terms or extended lock-in periods.",
                   },
                   {
                     icon: Award,
                     title: "Professional Management",
-                    description: "Your investments are managed by expert traders with proven track records and risk management."
-                  }
+                    description:
+                      "Your investments are managed by expert traders with proven track records and risk management.",
+                  },
                 ].map((feature, index) => (
-                  <Card key={index} className="text-center border-2 border-gray-100 hover:border-forex-200 transition-all duration-200">
+                  <Card
+                    key={index}
+                    className="text-center border-2 border-gray-100 hover:border-forex-200 transition-all duration-200"
+                  >
                     <CardContent className="p-6">
                       <div className="w-12 h-12 bg-gradient-to-r from-forex-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <feature.icon className="h-6 w-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h4>
-                      <p className="text-gray-600 text-sm">{feature.description}</p>
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">
+                        {feature.title}
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        {feature.description}
+                      </p>
                     </CardContent>
                   </Card>
                 ))}
@@ -391,7 +445,9 @@ export default function InvestmentPlansStandalone() {
                     Ready to Start Your Investment Journey?
                   </h3>
                   <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Join thousands of successful investors who trust our platform. Start with any plan and watch your money grow with guaranteed returns.
+                    Join thousands of successful investors who trust our
+                    platform. Start with any plan and watch your money grow with
+                    guaranteed returns.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     {!user ? (

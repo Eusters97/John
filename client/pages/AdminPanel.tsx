@@ -118,8 +118,8 @@ interface SupportTicket {
   subject: string;
   message: string;
   category: string;
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: "open" | "in_progress" | "resolved" | "closed";
+  priority: "low" | "medium" | "high" | "urgent";
   admin_response?: string;
   responded_at?: string;
   responded_by?: string;
@@ -171,14 +171,16 @@ export default function AdminPanel() {
   const [users, setUsers] = useState<User[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
-  const [visitorAnalytics, setVisitorAnalytics] = useState<VisitorAnalytics[]>([]);
+  const [visitorAnalytics, setVisitorAnalytics] = useState<VisitorAnalytics[]>(
+    [],
+  );
   const [pageViews, setPageViews] = useState<PageView[]>([]);
   const [analyticsStats, setAnalyticsStats] = useState({
     totalVisitors: 0,
     uniqueVisitors: 0,
-    topCountries: [] as {country: string, count: number}[],
-    topPages: [] as {page: string, count: number}[],
-    deviceBreakdown: [] as {device: string, count: number}[]
+    topCountries: [] as { country: string; count: number }[],
+    topPages: [] as { page: string; count: number }[],
+    deviceBreakdown: [] as { device: string; count: number }[],
   });
 
   // Form states
@@ -201,7 +203,9 @@ export default function AdminPanel() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [ticketResponse, setTicketResponse] = useState<{[key: string]: string}>({});
+  const [ticketResponse, setTicketResponse] = useState<{
+    [key: string]: string;
+  }>({});
   const [respondingTo, setRespondingTo] = useState<string | null>(null);
 
   useEffect(() => {
@@ -519,7 +523,7 @@ export default function AdminPanel() {
         .from("support_tickets")
         .update({
           status,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", ticketId);
 
@@ -549,8 +553,8 @@ export default function AdminPanel() {
           admin_response: response,
           responded_at: new Date().toISOString(),
           responded_by: user?.id,
-          status: 'in_progress',
-          updated_at: new Date().toISOString()
+          status: "in_progress",
+          updated_at: new Date().toISOString(),
         })
         .eq("id", ticketId);
 
@@ -561,7 +565,7 @@ export default function AdminPanel() {
         description: "Response sent successfully",
       });
 
-      setTicketResponse(prev => ({ ...prev, [ticketId]: '' }));
+      setTicketResponse((prev) => ({ ...prev, [ticketId]: "" }));
       setRespondingTo(null);
       loadSupportTickets();
     } catch (error) {
@@ -577,21 +581,31 @@ export default function AdminPanel() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-500 text-white';
-      case 'high': return 'bg-orange-500 text-white';
-      case 'medium': return 'bg-yellow-500 text-black';
-      case 'low': return 'bg-gray-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case "urgent":
+        return "bg-red-500 text-white";
+      case "high":
+        return "bg-orange-500 text-white";
+      case "medium":
+        return "bg-yellow-500 text-black";
+      case "low":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'bg-blue-500 text-white';
-      case 'in_progress': return 'bg-orange-500 text-white';
-      case 'resolved': return 'bg-green-500 text-white';
-      case 'closed': return 'bg-gray-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case "open":
+        return "bg-blue-500 text-white";
+      case "in_progress":
+        return "bg-orange-500 text-white";
+      case "resolved":
+        return "bg-green-500 text-white";
+      case "closed":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
     }
   };
 
@@ -601,13 +615,13 @@ export default function AdminPanel() {
 
       // Load visitor analytics
       const { data: visitors, error: visitorsError } = await supabase
-        .from('visitor_analytics')
-        .select('*')
-        .order('visited_at', { ascending: false })
+        .from("visitor_analytics")
+        .select("*")
+        .order("visited_at", { ascending: false })
         .limit(1000);
 
       if (visitorsError) {
-        console.warn('Visitor analytics table not found, using mock data');
+        console.warn("Visitor analytics table not found, using mock data");
         setVisitorAnalytics(generateMockVisitorData());
       } else {
         setVisitorAnalytics(visitors || []);
@@ -615,23 +629,25 @@ export default function AdminPanel() {
 
       // Load page views
       const { data: pages, error: pagesError } = await supabase
-        .from('page_views')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("page_views")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(1000);
 
       if (pagesError) {
-        console.warn('Page views table not found, using mock data');
+        console.warn("Page views table not found, using mock data");
         setPageViews(generateMockPageViewData());
       } else {
         setPageViews(pages || []);
       }
 
       // Calculate analytics stats
-      calculateAnalyticsStats(visitors || generateMockVisitorData(), pages || generateMockPageViewData());
-
+      calculateAnalyticsStats(
+        visitors || generateMockVisitorData(),
+        pages || generateMockPageViewData(),
+      );
     } catch (error) {
-      console.warn('Analytics loading failed, using mock data:', error);
+      console.warn("Analytics loading failed, using mock data:", error);
       const mockVisitors = generateMockVisitorData();
       const mockPages = generateMockPageViewData();
       setVisitorAnalytics(mockVisitors);
@@ -643,11 +659,42 @@ export default function AdminPanel() {
   };
 
   const generateMockVisitorData = (): VisitorAnalytics[] => {
-    const countries = ['United States', 'United Kingdom', 'Germany', 'France', 'Canada', 'Australia', 'Nigeria', 'South Africa', 'Brazil', 'India'];
-    const cities = ['New York', 'London', 'Berlin', 'Paris', 'Toronto', 'Sydney', 'Lagos', 'Cape Town', 'São Paulo', 'Mumbai'];
-    const devices = ['Desktop', 'Mobile', 'Tablet'];
-    const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge'];
-    const pages = ['/', '/login', '/signup', '/blog', '/news', '/investment-plans', '/live-signals', '/testimonials'];
+    const countries = [
+      "United States",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Canada",
+      "Australia",
+      "Nigeria",
+      "South Africa",
+      "Brazil",
+      "India",
+    ];
+    const cities = [
+      "New York",
+      "London",
+      "Berlin",
+      "Paris",
+      "Toronto",
+      "Sydney",
+      "Lagos",
+      "Cape Town",
+      "São Paulo",
+      "Mumbai",
+    ];
+    const devices = ["Desktop", "Mobile", "Tablet"];
+    const browsers = ["Chrome", "Firefox", "Safari", "Edge"];
+    const pages = [
+      "/",
+      "/login",
+      "/signup",
+      "/blog",
+      "/news",
+      "/investment-plans",
+      "/live-signals",
+      "/testimonials",
+    ];
 
     return Array.from({ length: 150 }, (_, i) => ({
       id: `visitor_${i}`,
@@ -656,32 +703,50 @@ export default function AdminPanel() {
       city: cities[Math.floor(Math.random() * cities.length)],
       device_type: devices[Math.floor(Math.random() * devices.length)],
       browser: browsers[Math.floor(Math.random() * browsers.length)],
-      operating_system: Math.random() > 0.5 ? 'Windows' : Math.random() > 0.5 ? 'macOS' : 'Android',
+      operating_system:
+        Math.random() > 0.5
+          ? "Windows"
+          : Math.random() > 0.5
+            ? "macOS"
+            : "Android",
       page_visited: pages[Math.floor(Math.random() * pages.length)],
-      referrer: Math.random() > 0.3 ? 'https://google.com' : Math.random() > 0.5 ? 'https://facebook.com' : 'direct',
+      referrer:
+        Math.random() > 0.3
+          ? "https://google.com"
+          : Math.random() > 0.5
+            ? "https://facebook.com"
+            : "direct",
       session_duration: Math.floor(Math.random() * 1800) + 30, // 30 seconds to 30 minutes
       is_mobile: Math.random() > 0.6,
-      user_agent: 'Mozilla/5.0 (compatible)',
-      visited_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+      user_agent: "Mozilla/5.0 (compatible)",
+      visited_at: new Date(
+        Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     }));
   };
 
   const generateMockPageViewData = (): PageView[] => {
     const pages = [
-      { path: '/', title: 'Home Page' },
-      { path: '/login', title: 'Login' },
-      { path: '/signup', title: 'Sign Up' },
-      { path: '/blog', title: 'Blog' },
-      { path: '/news', title: 'News' },
-      { path: '/investment-plans', title: 'Investment Plans' },
-      { path: '/live-signals', title: 'Live Signals' },
-      { path: '/testimonials', title: 'Testimonials' },
-      { path: '/dashboard', title: 'Dashboard' }
+      { path: "/", title: "Home Page" },
+      { path: "/login", title: "Login" },
+      { path: "/signup", title: "Sign Up" },
+      { path: "/blog", title: "Blog" },
+      { path: "/news", title: "News" },
+      { path: "/investment-plans", title: "Investment Plans" },
+      { path: "/live-signals", title: "Live Signals" },
+      { path: "/testimonials", title: "Testimonials" },
+      { path: "/dashboard", title: "Dashboard" },
     ];
-    const countries = ['United States', 'United Kingdom', 'Germany', 'France', 'Canada'];
-    const cities = ['New York', 'London', 'Berlin', 'Paris', 'Toronto'];
-    const devices = ['Desktop', 'Mobile', 'Tablet'];
-    const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge'];
+    const countries = [
+      "United States",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Canada",
+    ];
+    const cities = ["New York", "London", "Berlin", "Paris", "Toronto"];
+    const devices = ["Desktop", "Mobile", "Tablet"];
+    const browsers = ["Chrome", "Firefox", "Safari", "Edge"];
 
     return Array.from({ length: 300 }, (_, i) => {
       const page = pages[Math.floor(Math.random() * pages.length)];
@@ -694,47 +759,63 @@ export default function AdminPanel() {
         city: cities[Math.floor(Math.random() * cities.length)],
         device_type: devices[Math.floor(Math.random() * devices.length)],
         browser: browsers[Math.floor(Math.random() * browsers.length)],
-        referrer: Math.random() > 0.3 ? 'https://google.com' : 'direct',
+        referrer: Math.random() > 0.3 ? "https://google.com" : "direct",
         view_duration: Math.floor(Math.random() * 600) + 10, // 10 seconds to 10 minutes
-        created_at: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+        created_at: new Date(
+          Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       };
     });
   };
 
-  const calculateAnalyticsStats = (visitors: VisitorAnalytics[], pages: PageView[]) => {
-    const uniqueIps = new Set(visitors.map(v => v.ip_address));
+  const calculateAnalyticsStats = (
+    visitors: VisitorAnalytics[],
+    pages: PageView[],
+  ) => {
+    const uniqueIps = new Set(visitors.map((v) => v.ip_address));
 
     // Count by country
-    const countryCount = visitors.reduce((acc, visitor) => {
-      acc[visitor.country] = (acc[visitor.country] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const countryCount = visitors.reduce(
+      (acc, visitor) => {
+        acc[visitor.country] = (acc[visitor.country] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     // Count by page
-    const pageCount = pages.reduce((acc, page) => {
-      acc[page.page_path] = (acc[page.page_path] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const pageCount = pages.reduce(
+      (acc, page) => {
+        acc[page.page_path] = (acc[page.page_path] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     // Count by device
-    const deviceCount = visitors.reduce((acc, visitor) => {
-      acc[visitor.device_type] = (acc[visitor.device_type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const deviceCount = visitors.reduce(
+      (acc, visitor) => {
+        acc[visitor.device_type] = (acc[visitor.device_type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     setAnalyticsStats({
       totalVisitors: visitors.length,
       uniqueVisitors: uniqueIps.size,
       topCountries: Object.entries(countryCount)
-        .sort(([,a], [,b]) => b - a)
+        .sort(([, a], [, b]) => b - a)
         .slice(0, 5)
         .map(([country, count]) => ({ country, count })),
       topPages: Object.entries(pageCount)
-        .sort(([,a], [,b]) => b - a)
+        .sort(([, a], [, b]) => b - a)
         .slice(0, 5)
         .map(([page, count]) => ({ page, count })),
-      deviceBreakdown: Object.entries(deviceCount)
-        .map(([device, count]) => ({ device, count }))
+      deviceBreakdown: Object.entries(deviceCount).map(([device, count]) => ({
+        device,
+        count,
+      })),
     });
   };
 
@@ -759,23 +840,38 @@ export default function AdminPanel() {
       >
         <div className="flex flex-wrap gap-2 mb-6">
           <TabsList className="grid w-full grid-cols-4 md:grid-cols-9 lg:grid-cols-11">
-            <TabsTrigger value="overview" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="overview"
+              className="flex items-center space-x-1 text-xs"
+            >
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Overview</span>
             </TabsTrigger>
-            <TabsTrigger value="errors" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="errors"
+              className="flex items-center space-x-1 text-xs"
+            >
               <AlertTriangle className="h-4 w-4" />
               <span className="hidden sm:inline">Errors</span>
             </TabsTrigger>
-            <TabsTrigger value="ebooks" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="ebooks"
+              className="flex items-center space-x-1 text-xs"
+            >
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Ebooks</span>
             </TabsTrigger>
-            <TabsTrigger value="blog" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="blog"
+              className="flex items-center space-x-1 text-xs"
+            >
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Blog</span>
             </TabsTrigger>
-            <TabsTrigger value="promos" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="promos"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Star className="h-4 w-4" />
               <span className="hidden sm:inline">Promos</span>
             </TabsTrigger>
@@ -786,23 +882,38 @@ export default function AdminPanel() {
               <MessageSquare className="h-4 w-4" />
               <span className="hidden sm:inline">Reviews</span>
             </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="users"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Users className="h-4 w-4" />
               <span className="hidden sm:inline">Users</span>
             </TabsTrigger>
-            <TabsTrigger value="payments" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="payments"
+              className="flex items-center space-x-1 text-xs"
+            >
               <DollarSign className="h-4 w-4" />
               <span className="hidden sm:inline">Payments</span>
             </TabsTrigger>
-            <TabsTrigger value="support" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="support"
+              className="flex items-center space-x-1 text-xs"
+            >
               <HelpCircle className="h-4 w-4" />
               <span className="hidden sm:inline">Support</span>
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="analytics"
+              className="flex items-center space-x-1 text-xs"
+            >
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Analytics</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center space-x-1 text-xs">
+            <TabsTrigger
+              value="settings"
+              className="flex items-center space-x-1 text-xs"
+            >
               <Settings className="h-4 w-4" />
               <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
@@ -880,7 +991,9 @@ export default function AdminPanel() {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-bold">Error Monitoring</h2>
-              <p className="text-gray-600">Monitor and track application errors</p>
+              <p className="text-gray-600">
+                Monitor and track application errors
+              </p>
             </div>
             <Link to="/error-monitoring">
               <Button className="bg-red-600 hover:bg-red-700">
@@ -900,10 +1013,14 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-red-600">3</div>
-                <p className="text-sm text-gray-600">Unresolved critical errors</p>
+                <p className="text-sm text-gray-600">
+                  Unresolved critical errors
+                </p>
                 <div className="mt-4 space-y-2">
                   <div className="text-sm">
-                    <div className="font-medium">Database Connection Failed</div>
+                    <div className="font-medium">
+                      Database Connection Failed
+                    </div>
                     <div className="text-gray-500">2 hours ago</div>
                   </div>
                   <div className="text-sm">
@@ -974,11 +1091,15 @@ export default function AdminPanel() {
                 <div className="flex items-start space-x-4 p-4 border rounded-lg">
                   <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
                   <div className="flex-1">
-                    <div className="font-medium">Database connection timeout</div>
+                    <div className="font-medium">
+                      Database connection timeout
+                    </div>
                     <div className="text-sm text-gray-600">
                       Connection to user_profiles table failed after 30s timeout
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">2024-01-15 14:30:22</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      2024-01-15 14:30:22
+                    </div>
                   </div>
                   <Badge variant="destructive">Critical</Badge>
                 </div>
@@ -986,13 +1107,22 @@ export default function AdminPanel() {
                 <div className="flex items-start space-x-4 p-4 border rounded-lg">
                   <AlertTriangle className="h-5 w-5 text-yellow-500 mt-0.5" />
                   <div className="flex-1">
-                    <div className="font-medium">Failed login attempts spike</div>
+                    <div className="font-medium">
+                      Failed login attempts spike
+                    </div>
                     <div className="text-sm text-gray-600">
                       15 failed login attempts detected from IP 192.168.1.100
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">2024-01-15 13:45:10</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      2024-01-15 13:45:10
+                    </div>
                   </div>
-                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Warning</Badge>
+                  <Badge
+                    variant="secondary"
+                    className="bg-yellow-100 text-yellow-800"
+                  >
+                    Warning
+                  </Badge>
                 </div>
 
                 <div className="flex items-start space-x-4 p-4 border rounded-lg">
@@ -1002,7 +1132,9 @@ export default function AdminPanel() {
                     <div className="text-sm text-gray-600">
                       NowPayments API returned 500 error for transaction #TX123
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">2024-01-15 12:15:33</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      2024-01-15 12:15:33
+                    </div>
                   </div>
                   <Badge variant="destructive">Critical</Badge>
                 </div>
@@ -1752,25 +1884,34 @@ export default function AdminPanel() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Open Tickets</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Open Tickets
+                </CardTitle>
                 <HelpCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-blue-600">
-                  {supportTickets.filter(t => t.status === 'open').length}
+                  {supportTickets.filter((t) => t.status === "open").length}
                 </div>
-                <p className="text-xs text-muted-foreground">Awaiting response</p>
+                <p className="text-xs text-muted-foreground">
+                  Awaiting response
+                </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  In Progress
+                </CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-orange-600">
-                  {supportTickets.filter(t => t.status === 'in_progress').length}
+                  {
+                    supportTickets.filter((t) => t.status === "in_progress")
+                      .length
+                  }
                 </div>
                 <p className="text-xs text-muted-foreground">Being handled</p>
               </CardContent>
@@ -1783,7 +1924,7 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  {supportTickets.filter(t => t.status === 'resolved').length}
+                  {supportTickets.filter((t) => t.status === "resolved").length}
                 </div>
                 <p className="text-xs text-muted-foreground">This week</p>
               </CardContent>
@@ -1796,7 +1937,7 @@ export default function AdminPanel() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-red-600">
-                  {supportTickets.filter(t => t.priority === 'urgent').length}
+                  {supportTickets.filter((t) => t.priority === "urgent").length}
                 </div>
                 <p className="text-xs text-muted-foreground">High priority</p>
               </CardContent>
@@ -1831,12 +1972,16 @@ export default function AdminPanel() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <h4 className="font-semibold text-lg">{ticket.subject}</h4>
-                            <Badge className={getPriorityColor(ticket.priority)}>
+                            <h4 className="font-semibold text-lg">
+                              {ticket.subject}
+                            </h4>
+                            <Badge
+                              className={getPriorityColor(ticket.priority)}
+                            >
                               {ticket.priority.toUpperCase()}
                             </Badge>
                             <Badge className={getStatusColor(ticket.status)}>
-                              {ticket.status.replace('_', ' ').toUpperCase()}
+                              {ticket.status.replace("_", " ").toUpperCase()}
                             </Badge>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
@@ -1846,12 +1991,16 @@ export default function AdminPanel() {
                             <span>•</span>
                             <span>{ticket.category}</span>
                             <span>•</span>
-                            <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+                            <span>
+                              {new Date(ticket.created_at).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
                         <div className="flex space-x-2">
                           <Select
-                            onValueChange={(value) => updateTicketStatus(ticket.id, value)}
+                            onValueChange={(value) =>
+                              updateTicketStatus(ticket.id, value)
+                            }
                             defaultValue={ticket.status}
                           >
                             <SelectTrigger className="w-32">
@@ -1859,7 +2008,9 @@ export default function AdminPanel() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="open">Open</SelectItem>
-                              <SelectItem value="in_progress">In Progress</SelectItem>
+                              <SelectItem value="in_progress">
+                                In Progress
+                              </SelectItem>
                               <SelectItem value="resolved">Resolved</SelectItem>
                               <SelectItem value="closed">Closed</SelectItem>
                             </SelectContent>
@@ -1875,12 +2026,17 @@ export default function AdminPanel() {
                         <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3">
                           <div className="flex items-center space-x-2 mb-2">
                             <Mail className="h-4 w-4 text-blue-500" />
-                            <span className="text-sm font-medium text-blue-700">Admin Response</span>
+                            <span className="text-sm font-medium text-blue-700">
+                              Admin Response
+                            </span>
                             <span className="text-xs text-gray-500">
-                              {ticket.responded_at && new Date(ticket.responded_at).toLocaleString()}
+                              {ticket.responded_at &&
+                                new Date(ticket.responded_at).toLocaleString()}
                             </span>
                           </div>
-                          <p className="text-blue-800">{ticket.admin_response}</p>
+                          <p className="text-blue-800">
+                            {ticket.admin_response}
+                          </p>
                         </div>
                       )}
 
@@ -1889,18 +2045,27 @@ export default function AdminPanel() {
                           <div className="flex-1 space-y-2">
                             <Textarea
                               placeholder="Type your response..."
-                              value={ticketResponse[ticket.id] || ''}
-                              onChange={(e) => setTicketResponse(prev => ({
-                                ...prev,
-                                [ticket.id]: e.target.value
-                              }))}
+                              value={ticketResponse[ticket.id] || ""}
+                              onChange={(e) =>
+                                setTicketResponse((prev) => ({
+                                  ...prev,
+                                  [ticket.id]: e.target.value,
+                                }))
+                              }
                               rows={3}
                             />
                             <div className="flex space-x-2">
                               <Button
                                 size="sm"
-                                onClick={() => respondToTicket(ticket.id, ticketResponse[ticket.id] || '')}
-                                disabled={!ticketResponse[ticket.id]?.trim() || loading}
+                                onClick={() =>
+                                  respondToTicket(
+                                    ticket.id,
+                                    ticketResponse[ticket.id] || "",
+                                  )
+                                }
+                                disabled={
+                                  !ticketResponse[ticket.id]?.trim() || loading
+                                }
                               >
                                 <Send className="h-4 w-4 mr-1" />
                                 Send Response
@@ -1910,7 +2075,10 @@ export default function AdminPanel() {
                                 variant="outline"
                                 onClick={() => {
                                   setRespondingTo(null);
-                                  setTicketResponse(prev => ({ ...prev, [ticket.id]: '' }));
+                                  setTicketResponse((prev) => ({
+                                    ...prev,
+                                    [ticket.id]: "",
+                                  }));
                                 }}
                               >
                                 Cancel
@@ -1927,12 +2095,14 @@ export default function AdminPanel() {
                               <Mail className="h-4 w-4 mr-1" />
                               Respond
                             </Button>
-                            {ticket.status !== 'resolved' && (
+                            {ticket.status !== "resolved" && (
                               <Button
                                 size="sm"
                                 variant="outline"
                                 className="text-green-600 hover:text-green-700"
-                                onClick={() => updateTicketStatus(ticket.id, 'resolved')}
+                                onClick={() =>
+                                  updateTicketStatus(ticket.id, "resolved")
+                                }
                               >
                                 <CheckCircle2 className="h-4 w-4 mr-1" />
                                 Mark Resolved
@@ -1942,7 +2112,9 @@ export default function AdminPanel() {
                               size="sm"
                               variant="outline"
                               className="text-gray-600 hover:text-gray-700"
-                              onClick={() => updateTicketStatus(ticket.id, 'closed')}
+                              onClick={() =>
+                                updateTicketStatus(ticket.id, "closed")
+                              }
                             >
                               <Archive className="h-4 w-4 mr-1" />
                               Archive
@@ -1963,7 +2135,9 @@ export default function AdminPanel() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Visitors</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Visitors
+                </CardTitle>
                 <Globe className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -1976,40 +2150,60 @@ export default function AdminPanel() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Unique Visitors</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Unique Visitors
+                </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
                   {analyticsStats.uniqueVisitors.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground">Unique IP addresses</p>
+                <p className="text-xs text-muted-foreground">
+                  Unique IP addresses
+                </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Page Views</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Page Views
+                </CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-purple-600">
                   {pageViews.length.toLocaleString()}
                 </div>
-                <p className="text-xs text-muted-foreground">Total page views</p>
+                <p className="text-xs text-muted-foreground">
+                  Total page views
+                </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg Session</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Avg Session
+                </CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-orange-600">
-                  {Math.round(visitorAnalytics.reduce((sum, v) => sum + v.session_duration, 0) / visitorAnalytics.length / 60) || 0}m
+                  {Math.round(
+                    visitorAnalytics.reduce(
+                      (sum, v) => sum + v.session_duration,
+                      0,
+                    ) /
+                      visitorAnalytics.length /
+                      60,
+                  ) || 0}
+                  m
                 </div>
-                <p className="text-xs text-muted-foreground">Average duration</p>
+                <p className="text-xs text-muted-foreground">
+                  Average duration
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -2026,7 +2220,10 @@ export default function AdminPanel() {
               <CardContent>
                 <div className="space-y-4">
                   {analyticsStats.topCountries.map((country, index) => (
-                    <div key={country.country} className="flex items-center justify-between">
+                    <div
+                      key={country.country}
+                      className="flex items-center justify-between"
+                    >
                       <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
                           {index + 1}
@@ -2037,10 +2234,14 @@ export default function AdminPanel() {
                         <div className="w-20 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${(country.count / analyticsStats.totalVisitors) * 100}%` }}
+                            style={{
+                              width: `${(country.count / analyticsStats.totalVisitors) * 100}%`,
+                            }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium w-8">{country.count}</span>
+                        <span className="text-sm font-medium w-8">
+                          {country.count}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -2059,7 +2260,10 @@ export default function AdminPanel() {
               <CardContent>
                 <div className="space-y-4">
                   {analyticsStats.topPages.map((page, index) => (
-                    <div key={page.page} className="flex items-center justify-between">
+                    <div
+                      key={page.page}
+                      className="flex items-center justify-between"
+                    >
                       <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
                           {index + 1}
@@ -2070,10 +2274,14 @@ export default function AdminPanel() {
                         <div className="w-20 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-green-500 h-2 rounded-full"
-                            style={{ width: `${(page.count / pageViews.length) * 100}%` }}
+                            style={{
+                              width: `${(page.count / pageViews.length) * 100}%`,
+                            }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium w-8">{page.count}</span>
+                        <span className="text-sm font-medium w-8">
+                          {page.count}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -2093,11 +2301,19 @@ export default function AdminPanel() {
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
                 {analyticsStats.deviceBreakdown.map((device) => (
-                  <div key={device.device} className="text-center p-4 border rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">{device.count}</div>
+                  <div
+                    key={device.device}
+                    className="text-center p-4 border rounded-lg"
+                  >
+                    <div className="text-2xl font-bold text-blue-600">
+                      {device.count}
+                    </div>
                     <div className="text-sm text-gray-600">{device.device}</div>
                     <div className="text-xs text-gray-500">
-                      {Math.round((device.count / analyticsStats.totalVisitors) * 100)}%
+                      {Math.round(
+                        (device.count / analyticsStats.totalVisitors) * 100,
+                      )}
+                      %
                     </div>
                   </div>
                 ))}
@@ -2116,17 +2332,28 @@ export default function AdminPanel() {
             <CardContent>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {visitorAnalytics.slice(0, 20).map((visitor) => (
-                  <div key={visitor.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                  <div
+                    key={visitor.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <div>
-                        <div className="font-medium">{visitor.country}, {visitor.city}</div>
-                        <div className="text-sm text-gray-600">{visitor.page_visited}</div>
+                        <div className="font-medium">
+                          {visitor.country}, {visitor.city}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {visitor.page_visited}
+                        </div>
                       </div>
                     </div>
                     <div className="text-right text-sm text-gray-500">
-                      <div>{visitor.device_type} • {visitor.browser}</div>
-                      <div>{new Date(visitor.visited_at).toLocaleTimeString()}</div>
+                      <div>
+                        {visitor.device_type} • {visitor.browser}
+                      </div>
+                      <div>
+                        {new Date(visitor.visited_at).toLocaleTimeString()}
+                      </div>
                     </div>
                   </div>
                 ))}

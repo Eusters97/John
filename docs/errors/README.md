@@ -30,11 +30,14 @@ This folder contains documentation for common errors and their solutions.
 **Component**: Frontend/Backend/Database/Deployment
 
 #### Description
+
 Detailed description of the error
 
 #### Error Message
 ```
+
 Exact error message or log output
+
 ```
 
 #### Root Cause

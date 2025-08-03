@@ -43,7 +43,7 @@ interface Testimonial {
 export default function TestimonialsStandalone() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'featured' | 'recent'>('all');
+  const [filter, setFilter] = useState<"all" | "featured" | "recent">("all");
 
   const defaultTestimonials: Testimonial[] = [
     {
@@ -59,7 +59,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "8 days",
       rating: 5,
-      content: "Incredible forex investment returns! I started with just $500 and earned $12,500 in 8 days. These forex signals are absolutely amazing and have changed my financial life completely.",
+      content:
+        "Incredible forex investment returns! I started with just $500 and earned $12,500 in 8 days. These forex signals are absolutely amazing and have changed my financial life completely.",
       is_verified: true,
       is_featured: true,
       created_at: "2024-01-15",
@@ -77,7 +78,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "10 days",
       rating: 5,
-      content: "Outstanding forex trading results! My investment of $1,000 grew to $25,000 in just 10 days. The forex signals accuracy is phenomenal and the investment returns exceeded all my expectations.",
+      content:
+        "Outstanding forex trading results! My investment of $1,000 grew to $25,000 in just 10 days. The forex signals accuracy is phenomenal and the investment returns exceeded all my expectations.",
       is_verified: true,
       is_featured: true,
       created_at: "2024-01-12",
@@ -95,7 +97,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "9 days",
       rating: 5,
-      content: "Exceptional forex investment platform! Turned my $2,000 into $50,000 in 9 days with their premium forex signals. The trading accuracy and investment returns are unmatched.",
+      content:
+        "Exceptional forex investment platform! Turned my $2,000 into $50,000 in 9 days with their premium forex signals. The trading accuracy and investment returns are unmatched.",
       is_verified: true,
       is_featured: true,
       created_at: "2024-01-10",
@@ -113,7 +116,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "7 days",
       rating: 5,
-      content: "Amazing forex trading results! My $1,500 investment generated $37,500 profit in just 7 days. The forex signals are highly accurate and the investment returns are extraordinary.",
+      content:
+        "Amazing forex trading results! My $1,500 investment generated $37,500 profit in just 7 days. The forex signals are highly accurate and the investment returns are extraordinary.",
       is_verified: true,
       is_featured: false,
       created_at: "2024-01-08",
@@ -131,7 +135,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "11 days",
       rating: 5,
-      content: "Phenomenal forex investment platform! My $3,000 investment became $75,000 in 11 days. Professional service with transparent trading process and exceptional customer support.",
+      content:
+        "Phenomenal forex investment platform! My $3,000 investment became $75,000 in 11 days. Professional service with transparent trading process and exceptional customer support.",
       is_verified: true,
       is_featured: false,
       created_at: "2024-01-05",
@@ -149,7 +154,8 @@ export default function TestimonialsStandalone() {
       roi: "2,400%",
       duration: "6 days",
       rating: 5,
-      content: "Extraordinary forex trading experience! Invested $800 and received $20,000 in just 6 days. The signals are incredibly accurate and the platform is very professional.",
+      content:
+        "Extraordinary forex trading experience! Invested $800 and received $20,000 in just 6 days. The signals are incredibly accurate and the platform is very professional.",
       is_verified: true,
       is_featured: false,
       created_at: "2024-01-03",
@@ -163,13 +169,13 @@ export default function TestimonialsStandalone() {
   const fetchTestimonials = async () => {
     try {
       const { data, error } = await supabase
-        .from('testimonials')
-        .select('*')
-        .eq('status', 'approved')
-        .order('created_at', { ascending: false });
+        .from("testimonials")
+        .select("*")
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
 
       if (error) {
-        console.warn('Using default testimonials:', error.message);
+        console.warn("Using default testimonials:", error.message);
         setTestimonials(defaultTestimonials);
       } else if (data && data.length > 0) {
         setTestimonials(data);
@@ -177,24 +183,36 @@ export default function TestimonialsStandalone() {
         setTestimonials(defaultTestimonials);
       }
     } catch (error) {
-      console.warn('Using default testimonials due to fetch error');
+      console.warn("Using default testimonials due to fetch error");
       setTestimonials(defaultTestimonials);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredTestimonials = testimonials.filter(testimonial => {
-    if (filter === 'featured') return testimonial.is_featured;
-    if (filter === 'recent') return new Date(testimonial.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const filteredTestimonials = testimonials.filter((testimonial) => {
+    if (filter === "featured") return testimonial.is_featured;
+    if (filter === "recent")
+      return (
+        new Date(testimonial.created_at) >
+        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      );
     return true;
   });
 
   const stats = {
     totalTestimonials: testimonials.length,
-    averageRating: testimonials.length > 0 ? (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(1) : "5.0",
-    verifiedCount: testimonials.filter(t => t.is_verified).length,
-    countries: [...new Set(testimonials.map(t => t.country).filter(Boolean))].length || 25,
+    averageRating:
+      testimonials.length > 0
+        ? (
+            testimonials.reduce((sum, t) => sum + t.rating, 0) /
+            testimonials.length
+          ).toFixed(1)
+        : "5.0",
+    verifiedCount: testimonials.filter((t) => t.is_verified).length,
+    countries:
+      [...new Set(testimonials.map((t) => t.country).filter(Boolean))].length ||
+      25,
   };
 
   return (
@@ -209,26 +227,51 @@ export default function TestimonialsStandalone() {
                   <Quote className="h-6 w-6 md:h-8 md:w-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-4xl font-bold">Success Stories</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold">
+                    Success Stories
+                  </h1>
                   <p className="text-sm md:text-lg text-forex-100 mt-2">
                     Real testimonials from our successful traders
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                 {[
-                  { label: "Happy Traders", value: stats.totalTestimonials.toLocaleString(), icon: Users },
-                  { label: "Average Rating", value: `${stats.averageRating}★`, icon: Star },
-                  { label: "Verified Reviews", value: stats.verifiedCount.toString(), icon: CheckCircle },
-                  { label: "Countries", value: `${stats.countries}+`, icon: Globe },
+                  {
+                    label: "Happy Traders",
+                    value: stats.totalTestimonials.toLocaleString(),
+                    icon: Users,
+                  },
+                  {
+                    label: "Average Rating",
+                    value: `${stats.averageRating}★`,
+                    icon: Star,
+                  },
+                  {
+                    label: "Verified Reviews",
+                    value: stats.verifiedCount.toString(),
+                    icon: CheckCircle,
+                  },
+                  {
+                    label: "Countries",
+                    value: `${stats.countries}+`,
+                    icon: Globe,
+                  },
                 ].map((stat, index) => (
-                  <div key={index} className="bg-white/10 p-3 md:p-4 rounded-lg backdrop-blur-sm">
+                  <div
+                    key={index}
+                    className="bg-white/10 p-3 md:p-4 rounded-lg backdrop-blur-sm"
+                  >
                     <div className="flex items-center justify-center mb-2">
                       <stat.icon className="h-4 w-4 md:h-5 md:w-5" />
                     </div>
-                    <div className="text-lg md:text-2xl font-bold">{stat.value}</div>
-                    <div className="text-xs md:text-sm text-forex-100">{stat.label}</div>
+                    <div className="text-lg md:text-2xl font-bold">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs md:text-sm text-forex-100">
+                      {stat.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -239,7 +282,11 @@ export default function TestimonialsStandalone() {
         {/* Testimonials Section */}
         <section className="py-8 md:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
+            <Tabs
+              value={filter}
+              onValueChange={(value) => setFilter(value as any)}
+              className="w-full"
+            >
               <TabsList className="grid w-full grid-cols-3 mb-8">
                 <TabsTrigger value="all">All Reviews</TabsTrigger>
                 <TabsTrigger value="featured">Featured</TabsTrigger>
@@ -262,16 +309,24 @@ export default function TestimonialsStandalone() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredTestimonials.map((testimonial) => (
-                      <Card key={testimonial.id} className="border-2 border-gray-100 hover:border-forex-200 transition-all duration-200 hover:shadow-lg">
+                      <Card
+                        key={testimonial.id}
+                        className="border-2 border-gray-100 hover:border-forex-200 transition-all duration-200 hover:shadow-lg"
+                      >
                         <CardHeader className="pb-4">
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="w-12 h-12 bg-gradient-to-r from-forex-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                                {testimonial.name.split(' ').map(n => n[0]).join('')}
+                                {testimonial.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
                               </div>
                               <div>
                                 <div className="flex items-center space-x-2">
-                                  <span className="font-semibold text-gray-900">{testimonial.name}</span>
+                                  <span className="font-semibold text-gray-900">
+                                    {testimonial.name}
+                                  </span>
                                   {testimonial.is_verified && (
                                     <Badge className="bg-success-500 text-white text-xs">
                                       <CheckCircle className="h-3 w-3 mr-1" />
@@ -280,13 +335,18 @@ export default function TestimonialsStandalone() {
                                   )}
                                 </div>
                                 <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                  {testimonial.flag && <span>{testimonial.flag}</span>}
+                                  {testimonial.flag && (
+                                    <span>{testimonial.flag}</span>
+                                  )}
                                   <span>{testimonial.role}</span>
                                 </div>
                               </div>
                             </div>
                             {testimonial.is_featured && (
-                              <Badge variant="outline" className="text-gold-600 border-gold-600">
+                              <Badge
+                                variant="outline"
+                                className="text-gold-600 border-gold-600"
+                              >
                                 <Star className="h-3 w-3 mr-1" />
                                 Featured
                               </Badge>
@@ -295,7 +355,10 @@ export default function TestimonialsStandalone() {
 
                           <div className="flex items-center mb-3">
                             {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="h-4 w-4 text-gold-500 fill-current" />
+                              <Star
+                                key={i}
+                                className="h-4 w-4 text-gold-500 fill-current"
+                              />
                             ))}
                           </div>
                         </CardHeader>
@@ -310,26 +373,40 @@ export default function TestimonialsStandalone() {
                               <div className="grid grid-cols-2 gap-4 text-sm">
                                 {testimonial.investment && (
                                   <div>
-                                    <span className="text-gray-600">Investment:</span>
-                                    <div className="font-bold text-gray-900">{testimonial.investment}</div>
+                                    <span className="text-gray-600">
+                                      Investment:
+                                    </span>
+                                    <div className="font-bold text-gray-900">
+                                      {testimonial.investment}
+                                    </div>
                                   </div>
                                 )}
                                 {testimonial.profit && (
                                   <div>
-                                    <span className="text-gray-600">Profit:</span>
-                                    <div className="font-bold text-success-600">{testimonial.profit}</div>
+                                    <span className="text-gray-600">
+                                      Profit:
+                                    </span>
+                                    <div className="font-bold text-success-600">
+                                      {testimonial.profit}
+                                    </div>
                                   </div>
                                 )}
                                 {testimonial.roi && (
                                   <div>
                                     <span className="text-gray-600">ROI:</span>
-                                    <div className="font-bold text-success-600">{testimonial.roi}</div>
+                                    <div className="font-bold text-success-600">
+                                      {testimonial.roi}
+                                    </div>
                                   </div>
                                 )}
                                 {testimonial.duration && (
                                   <div>
-                                    <span className="text-gray-600">Duration:</span>
-                                    <div className="font-bold text-gray-900">{testimonial.duration}</div>
+                                    <span className="text-gray-600">
+                                      Duration:
+                                    </span>
+                                    <div className="font-bold text-gray-900">
+                                      {testimonial.duration}
+                                    </div>
                                   </div>
                                 )}
                               </div>
@@ -358,7 +435,8 @@ export default function TestimonialsStandalone() {
                     Join Our Success Stories
                   </h3>
                   <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Start your own success story today. Join thousands of traders who trust our signals for consistent profits.
+                    Start your own success story today. Join thousands of
+                    traders who trust our signals for consistent profits.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <a

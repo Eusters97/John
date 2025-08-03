@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Search, Filter, Eye, ExternalLink } from 'lucide-react';
-import FrontPageLayout from '../components/FrontPageLayout';
-import { supabase } from '../lib/supabase';
+import React, { useState, useEffect } from "react";
+import { Calendar, Search, Filter, Eye, ExternalLink } from "lucide-react";
+import FrontPageLayout from "../components/FrontPageLayout";
+import { supabase } from "../lib/supabase";
 
 interface NewsArticle {
   id: number;
@@ -14,100 +14,118 @@ interface NewsArticle {
   author: string;
   views: number;
   featured: boolean;
-  status: 'published' | 'draft';
+  status: "published" | "draft";
 }
 
 const News: React.FC = () => {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 6;
 
-  const categories = ['All', 'Market Analysis', 'Economic News', 'Trading Tips', 'Platform Updates', 'Regulation'];
+  const categories = [
+    "All",
+    "Market Analysis",
+    "Economic News",
+    "Trading Tips",
+    "Platform Updates",
+    "Regulation",
+  ];
 
   // Default news articles as fallback
   const defaultArticles: NewsArticle[] = [
     {
       id: 1,
       title: "Fed Interest Rate Decision Impacts Forex Markets",
-      summary: "The Federal Reserve's latest interest rate decision has created significant movements in major currency pairs, affecting global forex trading strategies.",
-      content: "The Federal Reserve's decision to maintain interest rates has sent ripples through the forex market...",
+      summary:
+        "The Federal Reserve's latest interest rate decision has created significant movements in major currency pairs, affecting global forex trading strategies.",
+      content:
+        "The Federal Reserve's decision to maintain interest rates has sent ripples through the forex market...",
       category: "Economic News",
       published_at: new Date().toISOString(),
       author: "Market Analysis Team",
       views: 1247,
       featured: true,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
     },
     {
       id: 2,
       title: "EUR/USD Technical Analysis: Key Support Levels",
-      summary: "Professional analysis of EUR/USD pair showing critical support and resistance levels for the coming week.",
-      content: "The EUR/USD pair has been showing strong consolidation patterns...",
+      summary:
+        "Professional analysis of EUR/USD pair showing critical support and resistance levels for the coming week.",
+      content:
+        "The EUR/USD pair has been showing strong consolidation patterns...",
       category: "Market Analysis",
       published_at: new Date(Date.now() - 86400000).toISOString(),
       author: "Technical Analysis Team",
       views: 892,
       featured: true,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
     },
     {
       id: 3,
       title: "New Trading Platform Features Released",
-      summary: "Enhanced charting tools and improved order execution speed now available to all users.",
-      content: "We're excited to announce the release of several new features...",
+      summary:
+        "Enhanced charting tools and improved order execution speed now available to all users.",
+      content:
+        "We're excited to announce the release of several new features...",
       category: "Platform Updates",
       published_at: new Date(Date.now() - 172800000).toISOString(),
       author: "Development Team",
       views: 654,
       featured: false,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
     },
     {
       id: 4,
       title: "Risk Management in Volatile Markets",
-      summary: "Essential strategies for protecting your capital during periods of high market volatility.",
+      summary:
+        "Essential strategies for protecting your capital during periods of high market volatility.",
       content: "Risk management is crucial for long-term trading success...",
       category: "Trading Tips",
       published_at: new Date(Date.now() - 259200000).toISOString(),
       author: "Education Team",
       views: 1105,
       featured: false,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
     },
     {
       id: 5,
       title: "Global Economic Calendar This Week",
-      summary: "Key economic events and data releases that could impact forex markets in the upcoming week.",
-      content: "This week's economic calendar is packed with important events...",
+      summary:
+        "Key economic events and data releases that could impact forex markets in the upcoming week.",
+      content:
+        "This week's economic calendar is packed with important events...",
       category: "Economic News",
       published_at: new Date(Date.now() - 345600000).toISOString(),
       author: "Research Team",
       views: 743,
       featured: false,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
     },
     {
       id: 6,
       title: "Cryptocurrency Integration in Forex Trading",
-      summary: "How digital currencies are changing the landscape of traditional forex trading and new opportunities for traders.",
-      content: "The integration of cryptocurrency markets with traditional forex...",
+      summary:
+        "How digital currencies are changing the landscape of traditional forex trading and new opportunities for traders.",
+      content:
+        "The integration of cryptocurrency markets with traditional forex...",
       category: "Market Analysis",
       published_at: new Date(Date.now() - 432000000).toISOString(),
       author: "Crypto Analysis Team",
       views: 567,
       featured: false,
-      status: 'published' as const,
-      image_url: "/api/placeholder/400/250"
-    }
+      status: "published" as const,
+      image_url: "/api/placeholder/400/250",
+    },
   ];
 
   useEffect(() => {
@@ -122,13 +140,16 @@ const News: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('news_articles')
-        .select('*')
-        .eq('status', 'published')
-        .order('published_at', { ascending: false });
+        .from("news_articles")
+        .select("*")
+        .eq("status", "published")
+        .order("published_at", { ascending: false });
 
       if (error) {
-        console.warn('Failed to fetch news from database, using default articles:', error);
+        console.warn(
+          "Failed to fetch news from database, using default articles:",
+          error,
+        );
         setArticles(defaultArticles);
       } else if (data && data.length > 0) {
         setArticles(data);
@@ -136,7 +157,10 @@ const News: React.FC = () => {
         setArticles(defaultArticles);
       }
     } catch (error) {
-      console.warn('Error connecting to database, using default articles:', error);
+      console.warn(
+        "Error connecting to database, using default articles:",
+        error,
+      );
       setArticles(defaultArticles);
     } finally {
       setLoading(false);
@@ -147,15 +171,18 @@ const News: React.FC = () => {
     let filtered = articles;
 
     if (searchTerm) {
-      filtered = filtered.filter(article =>
-        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.content.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (article) =>
+          article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          article.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          article.content.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(article => article.category === selectedCategory);
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter(
+        (article) => article.category === selectedCategory,
+      );
     }
 
     setFilteredArticles(filtered);
@@ -163,10 +190,10 @@ const News: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -180,7 +207,10 @@ const News: React.FC = () => {
   // Pagination
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const currentArticles = filteredArticles.slice(
+    indexOfFirstArticle,
+    indexOfLastArticle,
+  );
   const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -200,8 +230,12 @@ const News: React.FC = () => {
     );
   }
 
-  const featuredArticles = filteredArticles.filter(article => article.featured).slice(0, 2);
-  const regularArticles = currentArticles.filter(article => !article.featured);
+  const featuredArticles = filteredArticles
+    .filter((article) => article.featured)
+    .slice(0, 2);
+  const regularArticles = currentArticles.filter(
+    (article) => !article.featured,
+  );
 
   return (
     <FrontPageLayout>
@@ -213,7 +247,8 @@ const News: React.FC = () => {
               Latest <span className="text-blue-400">Forex News</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Stay informed with the latest market developments, economic insights, and trading opportunities.
+              Stay informed with the latest market developments, economic
+              insights, and trading opportunities.
             </p>
           </div>
 
@@ -239,8 +274,8 @@ const News: React.FC = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg transition-all duration-200 ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-800/50 text-gray-300 hover:bg-slate-700'
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-800/50 text-gray-300 hover:bg-slate-700"
                   }`}
                 >
                   {category}
@@ -293,7 +328,9 @@ const News: React.FC = () => {
                         {article.summary}
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">By {article.author}</span>
+                        <span className="text-sm text-gray-400">
+                          By {article.author}
+                        </span>
                         <button className="flex items-center text-blue-400 hover:text-blue-300 transition-colors">
                           Read More
                           <ExternalLink className="h-4 w-4 ml-1" />
@@ -308,7 +345,9 @@ const News: React.FC = () => {
 
           {/* Regular Articles Grid */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Latest Articles</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">
+              Latest Articles
+            </h2>
             {regularArticles.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {regularArticles.map((article) => (
@@ -343,7 +382,9 @@ const News: React.FC = () => {
                         {article.summary}
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400">By {article.author}</span>
+                        <span className="text-xs text-gray-400">
+                          By {article.author}
+                        </span>
                         <button className="text-blue-400 hover:text-blue-300 transition-colors text-sm">
                           Read More
                         </button>
@@ -354,11 +395,13 @@ const News: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-400 text-lg">No articles found matching your criteria.</p>
+                <p className="text-gray-400 text-lg">
+                  No articles found matching your criteria.
+                </p>
                 <button
                   onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('All');
+                    setSearchTerm("");
+                    setSelectedCategory("All");
                   }}
                   className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
@@ -378,21 +421,21 @@ const News: React.FC = () => {
               >
                 Previous
               </button>
-              
+
               {Array.from({ length: totalPages }, (_, i) => (
                 <button
                   key={i + 1}
                   onClick={() => paginate(i + 1)}
                   className={`px-3 py-2 rounded-lg transition-colors ${
                     currentPage === i + 1
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-800 text-gray-300 hover:bg-slate-700"
                   }`}
                 >
                   {i + 1}
                 </button>
               ))}
-              
+
               <button
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}

@@ -115,7 +115,7 @@ export default function EnhancedUserDashboard() {
           console.error("Error in user initialization chain:", {
             message: error instanceof Error ? error.message : "Unknown error",
             stack: error instanceof Error ? error.stack : undefined,
-            user_id: user?.id
+            user_id: user?.id,
           });
         });
     }
@@ -162,7 +162,9 @@ export default function EnhancedUserDashboard() {
           );
         } else {
           // Log error for admin monitoring without exposing details to user
-          console.warn("User profile check failed - contact support if issues persist");
+          console.warn(
+            "User profile check failed - contact support if issues persist",
+          );
         }
       }
 
@@ -188,19 +190,21 @@ export default function EnhancedUserDashboard() {
           if (createBalanceError) {
             // Enhanced error logging with fallback for undefined properties
             const errorInfo = {
-              message: createBalanceError.message || 'Unknown error',
-              code: createBalanceError.code || 'NO_CODE',
-              details: createBalanceError.details || 'No details available',
-              hint: createBalanceError.hint || 'No hint available',
+              message: createBalanceError.message || "Unknown error",
+              code: createBalanceError.code || "NO_CODE",
+              details: createBalanceError.details || "No details available",
+              hint: createBalanceError.hint || "No hint available",
               user_id: user.id,
               error_type: typeof createBalanceError,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             };
 
             console.error("Failed to create user balance:", errorInfo);
 
             // Log to system for admin monitoring
-            console.warn("User balance creation failed - initializing with default values");
+            console.warn(
+              "User balance creation failed - initializing with default values",
+            );
           } else {
             console.log("User balance created successfully for user:", user.id);
           }
@@ -211,15 +215,17 @@ export default function EnhancedUserDashboard() {
         } else {
           // Enhanced error logging for balance check failures
           const errorInfo = {
-            message: balanceError.message || 'Unknown balance error',
-            code: balanceError.code || 'NO_CODE',
-            details: balanceError.details || 'No details available',
+            message: balanceError.message || "Unknown balance error",
+            code: balanceError.code || "NO_CODE",
+            details: balanceError.details || "No details available",
             user_id: user.id,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           };
 
           console.error("User balance check failed:", errorInfo);
-          console.warn("Balance check failed - will use default balance values");
+          console.warn(
+            "Balance check failed - will use default balance values",
+          );
         }
       }
     } catch (error) {
@@ -252,7 +258,7 @@ export default function EnhancedUserDashboard() {
           message: testError.message,
           code: testError.code,
           details: testError.details,
-          hint: testError.hint
+          hint: testError.hint,
         });
         throw new Error(`Connection failed: ${testError.message}`);
       }

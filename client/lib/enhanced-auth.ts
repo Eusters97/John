@@ -1,7 +1,7 @@
-import { supabase } from './supabase';
-import { dualDb } from './dual-database';
-import { sql } from './neon';
-import bcrypt from 'bcryptjs';
+import { supabase } from "./supabase";
+import { dualDb } from "./dual-database";
+import { sql } from "./neon";
+import bcrypt from "bcryptjs";
 
 export interface EnhancedUserData {
   fullName?: string;
@@ -22,7 +22,7 @@ export interface AdminCredentials {
   email: string;
   password: string;
   full_name?: string;
-  role?: 'admin' | 'super_admin' | 'moderator';
+  role?: "admin" | "super_admin" | "moderator";
 }
 
 interface TelegramAuthData {
@@ -39,11 +39,13 @@ class EnhancedAuthService {
   private useNeon: boolean = false;
 
   constructor() {
-    const shouldUseNeon = import.meta.env.VITE_USE_NEON === 'true';
+    const shouldUseNeon = import.meta.env.VITE_USE_NEON === "true";
     const neonAvailable = sql !== null;
 
     if (shouldUseNeon && !neonAvailable) {
-      console.warn('Neon authentication requested but not available, falling back to Supabase');
+      console.warn(
+        "Neon authentication requested but not available, falling back to Supabase",
+      );
       this.useNeon = false;
     } else {
       this.useNeon = shouldUseNeon && neonAvailable;
@@ -52,7 +54,7 @@ class EnhancedAuthService {
 
   setUseNeon(useNeon: boolean) {
     if (useNeon && !sql) {
-      console.warn('Cannot switch to Neon: database not configured');
+      console.warn("Cannot switch to Neon: database not configured");
       return false;
     }
     this.useNeon = useNeon;
@@ -60,21 +62,25 @@ class EnhancedAuthService {
   }
 
   getActiveDatabase() {
-    return this.useNeon ? 'Neon' : 'Supabase';
+    return this.useNeon ? "Neon" : "Supabase";
   }
 
   // =====================================================
   // ENHANCED USER REGISTRATION
   // =====================================================
 
-  async enhancedSignUp(email: string, password: string, userData: EnhancedUserData) {
+  async enhancedSignUp(
+    email: string,
+    password: string,
+    userData: EnhancedUserData,
+  ) {
     try {
       let authResult;
       let userId: string;
 
       if (this.useNeon) {
         if (!sql) {
-          throw new Error('Neon database not configured');
+          throw new Error("Neon database not configured");
         }
 
         // Create user in Neon's auth_users table
@@ -87,7 +93,7 @@ class EnhancedAuthService {
         `;
 
         if (!result[0]) {
-          throw new Error('Failed to create user in Neon database');
+          throw new Error("Failed to create user in Neon database");
         }
 
         authResult = { user: result[0], error: null };
@@ -98,14 +104,14 @@ class EnhancedAuthService {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`
-          }
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+          },
         });
-        
+
         if (authResult.error || !authResult.data.user) {
           return authResult;
         }
-        
+
         userId = authResult.data.user.id;
       }
 
@@ -124,39 +130,43 @@ class EnhancedAuthService {
         postal_code: userData.postalCode,
         occupation: userData.occupation,
         experience_level: userData.experienceLevel,
-        is_verified: false
+        is_verified: false,
       };
 
       const profile = await dualDb.createUserProfile(profileData);
-      
+
       if (!profile) {
-        console.warn('Failed to create user profile, but auth user was created');
+        console.warn(
+          "Failed to create user profile, but auth user was created",
+        );
       }
 
       // Create initial balance
       await dualDb.createUserBalance({
         user_id: userId,
         balance: 0,
-        currency: 'USD'
+        currency: "USD",
       });
 
       return {
         user: authResult.user || authResult.data?.user,
         error: authResult.error,
-        profile
+        profile,
       };
-
     } catch (error) {
-      console.error('Enhanced signup error:', {
+      console.error("Enhanced signup error:", {
         database: this.getActiveDatabase(),
-        message: error instanceof Error ? error.message : 'Unknown error',
-        email
+        message: error instanceof Error ? error.message : "Unknown error",
+        email,
       });
-      
+
       return {
         user: null,
-        error: { message: error instanceof Error ? error.message : 'Registration failed' },
-        profile: null
+        error: {
+          message:
+            error instanceof Error ? error.message : "Registration failed",
+        },
+        profile: null,
       };
     }
   }
@@ -169,7 +179,7 @@ class EnhancedAuthService {
     try {
       if (this.useNeon) {
         if (!sql) {
-          throw new Error('Neon database not configured');
+          throw new Error("Neon database not configured");
         }
 
         // Authenticate against Neon
@@ -178,21 +188,21 @@ class EnhancedAuthService {
           FROM auth_users
           WHERE email = ${email} AND deleted_at IS NULL
         `;
-        
+
         if (!result[0]) {
           return {
             user: null,
-            error: { message: 'Invalid email or password' }
+            error: { message: "Invalid email or password" },
           };
         }
-        
+
         const user = result[0];
         const isValid = await bcrypt.compare(password, user.encrypted_password);
-        
+
         if (!isValid) {
           return {
             user: null,
-            error: { message: 'Invalid email or password' }
+            error: { message: "Invalid email or password" },
           };
         }
 
@@ -205,27 +215,29 @@ class EnhancedAuthService {
 
         return {
           user: { id: user.id, email: user.email },
-          error: null
+          error: null,
         };
       } else {
         // Use Supabase auth
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
-          password
+          password,
         });
 
         return { user: data.user, error };
       }
     } catch (error) {
-      console.error('Enhanced signin error:', {
+      console.error("Enhanced signin error:", {
         database: this.getActiveDatabase(),
-        message: error instanceof Error ? error.message : 'Unknown error',
-        email
+        message: error instanceof Error ? error.message : "Unknown error",
+        email,
       });
-      
+
       return {
         user: null,
-        error: { message: error instanceof Error ? error.message : 'Sign in failed' }
+        error: {
+          message: error instanceof Error ? error.message : "Sign in failed",
+        },
       };
     }
   }
@@ -237,7 +249,7 @@ class EnhancedAuthService {
   async createAdminUser(credentials: AdminCredentials) {
     try {
       const hashedPassword = await bcrypt.hash(credentials.password, 10);
-      
+
       if (this.useNeon) {
         // Create admin in Neon
         const authResult = await sql`
@@ -250,7 +262,7 @@ class EnhancedAuthService {
         `;
 
         if (!authResult[0]) {
-          throw new Error('Failed to create auth user');
+          throw new Error("Failed to create auth user");
         }
 
         // Create admin profile
@@ -261,12 +273,12 @@ class EnhancedAuthService {
             ${credentials.email}, 
             ${hashedPassword}, 
             ${credentials.full_name || credentials.username}, 
-            ${credentials.role || 'admin'}
+            ${credentials.role || "admin"}
           )
           ON CONFLICT (email) DO UPDATE SET 
             password_hash = ${hashedPassword},
             full_name = ${credentials.full_name || credentials.username},
-            role = ${credentials.role || 'admin'},
+            role = ${credentials.role || "admin"},
             updated_at = NOW()
           RETURNING *
         `;
@@ -277,30 +289,33 @@ class EnhancedAuthService {
           email: credentials.email,
           full_name: credentials.full_name || credentials.username,
           username: credentials.username,
-          is_verified: true
+          is_verified: true,
         });
-
       } else {
         // Create in Supabase (just create profile, auth might be manual)
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email: credentials.email,
-          password: credentials.password
-        });
+        const { data: authData, error: authError } = await supabase.auth.signUp(
+          {
+            email: credentials.email,
+            password: credentials.password,
+          },
+        );
 
         if (authError && !authData.user) {
           // Try to get existing user
-          const { data: existingUser } = await supabase.auth.signInWithPassword({
-            email: credentials.email,
-            password: credentials.password
-          });
-          
+          const { data: existingUser } = await supabase.auth.signInWithPassword(
+            {
+              email: credentials.email,
+              password: credentials.password,
+            },
+          );
+
           if (existingUser.user) {
             await dualDb.createUserProfile({
               id: existingUser.user.id,
               email: credentials.email,
               full_name: credentials.full_name || credentials.username,
               username: credentials.username,
-              is_verified: true
+              is_verified: true,
             });
           }
         } else if (authData.user) {
@@ -309,22 +324,27 @@ class EnhancedAuthService {
             email: credentials.email,
             full_name: credentials.full_name || credentials.username,
             username: credentials.username,
-            is_verified: true
+            is_verified: true,
           });
         }
       }
 
       return { success: true, error: null };
     } catch (error) {
-      console.error('Error creating admin user:', {
+      console.error("Error creating admin user:", {
         database: this.getActiveDatabase(),
-        message: error instanceof Error ? error.message : 'Unknown error',
-        email: credentials.email
+        message: error instanceof Error ? error.message : "Unknown error",
+        email: credentials.email,
       });
-      
+
       return {
         success: false,
-        error: { message: error instanceof Error ? error.message : 'Failed to create admin user' }
+        error: {
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to create admin user",
+        },
       };
     }
   }
@@ -339,21 +359,24 @@ class EnhancedAuthService {
           JOIN admin_users adu ON au.email = adu.email
           WHERE au.email = ${email} AND adu.is_active = true AND au.deleted_at IS NULL
         `;
-        
+
         if (!result[0]) {
           return {
             user: null,
-            error: { message: 'Invalid admin credentials' }
+            error: { message: "Invalid admin credentials" },
           };
         }
-        
+
         const admin = result[0];
-        const isValid = await bcrypt.compare(password, admin.encrypted_password);
-        
+        const isValid = await bcrypt.compare(
+          password,
+          admin.encrypted_password,
+        );
+
         if (!isValid) {
           return {
             user: null,
-            error: { message: 'Invalid admin credentials' }
+            error: { message: "Invalid admin credentials" },
           };
         }
 
@@ -370,49 +393,57 @@ class EnhancedAuthService {
             email: admin.email,
             username: admin.username,
             full_name: admin.full_name,
-            role: admin.role
+            role: admin.role,
           },
-          error: null
+          error: null,
         };
       } else {
         // Use Supabase and check if user is admin
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
-          password
+          password,
         });
 
         if (error || !data.user) {
-          return { user: null, error: error || { message: 'Invalid credentials' } };
+          return {
+            user: null,
+            error: error || { message: "Invalid credentials" },
+          };
         }
 
         // Check if user has admin privileges (you can customize this logic)
         const adminEmails = [
-          'admin@forextraderssignals.com',
-          'demo@forextraderssignals.com',
-          'admin@forexsignals.com',
-          'reno@forexsignals.com'
+          "admin@forextraderssignals.com",
+          "demo@forextraderssignals.com",
+          "admin@forexsignals.com",
+          "reno@forexsignals.com",
         ];
 
-        if (!adminEmails.includes(data.user.email || '')) {
+        if (!adminEmails.includes(data.user.email || "")) {
           await supabase.auth.signOut();
           return {
             user: null,
-            error: { message: 'Access denied. Admin credentials required.' }
+            error: { message: "Access denied. Admin credentials required." },
           };
         }
 
         return { user: data.user, error: null };
       }
     } catch (error) {
-      console.error('Admin verification error:', {
+      console.error("Admin verification error:", {
         database: this.getActiveDatabase(),
-        message: error instanceof Error ? error.message : 'Unknown error',
-        email
+        message: error instanceof Error ? error.message : "Unknown error",
+        email,
       });
-      
+
       return {
         user: null,
-        error: { message: error instanceof Error ? error.message : 'Admin verification failed' }
+        error: {
+          message:
+            error instanceof Error
+              ? error.message
+              : "Admin verification failed",
+        },
       };
     }
   }
@@ -425,19 +456,22 @@ class EnhancedAuthService {
     try {
       const demoCredentials = [
         {
-          username: import.meta.env.VITE_ADMIN_USERNAME || 'admin',
-          email: import.meta.env.VITE_ADMIN_EMAIL || 'admin@forextraderssignals.com',
-          password: import.meta.env.VITE_ADMIN_PASSWORD || 'Demo@2024!',
-          full_name: import.meta.env.VITE_ADMIN_FULL_NAME || 'Demo Administrator',
-          role: 'admin' as const
+          username: import.meta.env.VITE_ADMIN_USERNAME || "admin",
+          email:
+            import.meta.env.VITE_ADMIN_EMAIL || "admin@forextraderssignals.com",
+          password: import.meta.env.VITE_ADMIN_PASSWORD || "Demo@2024!",
+          full_name:
+            import.meta.env.VITE_ADMIN_FULL_NAME || "Demo Administrator",
+          role: "admin" as const,
         },
         {
-          username: import.meta.env.VITE_DEMO_USERNAME || 'demo',
-          email: import.meta.env.VITE_DEMO_EMAIL || 'demo@forextraderssignals.com',
-          password: import.meta.env.VITE_DEMO_PASSWORD || 'Demo@2024!',
-          full_name: import.meta.env.VITE_DEMO_FULL_NAME || 'Demo User',
-          role: 'admin' as const
-        }
+          username: import.meta.env.VITE_DEMO_USERNAME || "demo",
+          email:
+            import.meta.env.VITE_DEMO_EMAIL || "demo@forextraderssignals.com",
+          password: import.meta.env.VITE_DEMO_PASSWORD || "Demo@2024!",
+          full_name: import.meta.env.VITE_DEMO_FULL_NAME || "Demo User",
+          role: "admin" as const,
+        },
       ];
 
       const results = [];
@@ -446,22 +480,27 @@ class EnhancedAuthService {
         results.push(result);
       }
 
-      const allSuccessful = results.every(r => r.success);
+      const allSuccessful = results.every((r) => r.success);
       return {
         success: allSuccessful,
         results,
-        message: allSuccessful ? 'Demo credentials set up successfully' : 'Some demo credentials failed to set up'
+        message: allSuccessful
+          ? "Demo credentials set up successfully"
+          : "Some demo credentials failed to set up",
       };
     } catch (error) {
-      console.error('Error setting up demo credentials:', {
+      console.error("Error setting up demo credentials:", {
         database: this.getActiveDatabase(),
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : "Unknown error",
       });
-      
+
       return {
         success: false,
         results: [],
-        message: error instanceof Error ? error.message : 'Failed to set up demo credentials'
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to set up demo credentials",
       };
     }
   }
@@ -470,25 +509,28 @@ class EnhancedAuthService {
   // USERNAME VALIDATION
   // =====================================================
 
-  async validateUsername(username: string, excludeUserId?: string): Promise<boolean> {
+  async validateUsername(
+    username: string,
+    excludeUserId?: string,
+  ): Promise<boolean> {
     try {
       const existingUser = await dualDb.getUserByUsername(username);
-      
+
       if (!existingUser) {
         return true; // Username is available
       }
-      
+
       // If we're excluding a user ID (for updates), check if it's the same user
       if (excludeUserId && existingUser.id === excludeUserId) {
         return true;
       }
-      
+
       return false; // Username is taken
     } catch (error) {
-      console.error('Error validating username:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+      console.error("Error validating username:", {
+        message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
-        username: username.substring(0, 10) + '...'
+        username: username.substring(0, 10) + "...",
       });
       return false; // Assume taken on error
     }
@@ -497,22 +539,22 @@ class EnhancedAuthService {
   async validateEmail(email: string, excludeUserId?: string): Promise<boolean> {
     try {
       const existingUser = await dualDb.getUserByEmail(email);
-      
+
       if (!existingUser) {
         return true; // Email is available
       }
-      
+
       // If we're excluding a user ID (for updates), check if it's the same user
       if (excludeUserId && existingUser.id === excludeUserId) {
         return true;
       }
-      
+
       return false; // Email is taken
     } catch (error) {
-      console.error('Error validating email:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+      console.error("Error validating email:", {
+        message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
-        email
+        email,
       });
       return false; // Assume taken on error
     }
@@ -522,48 +564,60 @@ class EnhancedAuthService {
   // TELEGRAM AUTHENTICATION
   // =====================================================
 
-  async authenticateWithTelegram(authData: TelegramAuthData, action: 'login' | 'register' = 'login') {
+  async authenticateWithTelegram(
+    authData: TelegramAuthData,
+    action: "login" | "register" = "login",
+  ) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-auth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-auth`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({ authData, action }),
         },
-        body: JSON.stringify({ authData, action }),
-      });
+      );
 
       const result = await response.json();
 
       if (!response.ok) {
         return {
           user: null,
-          error: { message: result.error || 'Telegram authentication failed' },
+          error: { message: result.error || "Telegram authentication failed" },
           requiresRegistration: result.requiresRegistration,
-          telegramData: result.telegramData
+          telegramData: result.telegramData,
         };
       }
 
       return {
         user: result.user,
         error: null,
-        action: result.action
+        action: result.action,
       };
     } catch (error) {
-      console.error('Telegram authentication error:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+      console.error("Telegram authentication error:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
 
       return {
         user: null,
-        error: { message: error instanceof Error ? error.message : 'Telegram authentication failed' }
+        error: {
+          message:
+            error instanceof Error
+              ? error.message
+              : "Telegram authentication failed",
+        },
       };
     }
   }
 
   async initiateTelegramAuth(): Promise<string> {
-    const botUsername = import.meta.env.VITE_TELEGRAM_BOT_USERNAME || 'Blakehunterfxbot';
+    const botUsername =
+      import.meta.env.VITE_TELEGRAM_BOT_USERNAME || "Blakehunterfxbot";
     const domain = window.location.hostname;
     const telegramUrl = `https://t.me/${botUsername}?start=auth_${domain}`;
 
@@ -574,7 +628,7 @@ class EnhancedAuthService {
     try {
       if (this.useNeon) {
         if (!sql) {
-          throw new Error('Neon database not configured');
+          throw new Error("Neon database not configured");
         }
 
         await sql`
@@ -600,16 +654,21 @@ class EnhancedAuthService {
 
       return { success: true, error: null };
     } catch (error) {
-      console.error('Error linking Telegram account:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+      console.error("Error linking Telegram account:", {
+        message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
         userId,
-        telegramId: telegramData.id
+        telegramId: telegramData.id,
       });
 
       return {
         success: false,
-        error: { message: error instanceof Error ? error.message : 'Failed to link Telegram account' }
+        error: {
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to link Telegram account",
+        },
       };
     }
   }

@@ -56,10 +56,13 @@ export default function Blog() {
         <li>Expert risk management included</li>
         <li>24/7 customer support</li>
         </ul>`,
-      excerpt: "Learn how to start your forex trading journey with our expert signals and achieve consistent profits.",
+      excerpt:
+        "Learn how to start your forex trading journey with our expert signals and achieve consistent profits.",
       status: "published",
       tags: ["forex", "trading", "beginners", "signals"],
-      published_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      published_at: new Date(
+        Date.now() - 7 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       author_name: "Trading Expert",
     },
@@ -69,10 +72,13 @@ export default function Blog() {
       slug: "risk-management-forex",
       content: `<h2>The Importance of Risk Management</h2>
         <p>Risk management is crucial for successful forex trading. Our signals always include stop loss and take profit levels to protect your capital.</p>`,
-      excerpt: "Master the art of risk management in forex trading with our comprehensive guide and expert signals.",
+      excerpt:
+        "Master the art of risk management in forex trading with our comprehensive guide and expert signals.",
       status: "published",
       tags: ["risk management", "forex", "trading tips"],
-      published_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      published_at: new Date(
+        Date.now() - 5 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
       author_name: "Risk Management Specialist",
     },
@@ -82,10 +88,13 @@ export default function Blog() {
       slug: "top-currency-pairs-beginners",
       content: `<h2>Best Currency Pairs for New Traders</h2>
         <p>Starting with the right currency pairs can make a significant difference in your trading success. Here are our top recommendations for beginners.</p>`,
-      excerpt: "Discover the best currency pairs for beginners and start trading with confidence using our expert signals.",
+      excerpt:
+        "Discover the best currency pairs for beginners and start trading with confidence using our expert signals.",
       status: "published",
       tags: ["currency pairs", "beginners", "forex basics"],
-      published_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      published_at: new Date(
+        Date.now() - 3 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
       author_name: "Currency Analyst",
     },
@@ -98,55 +107,59 @@ export default function Blog() {
   const fetchBlogPosts = async () => {
     try {
       const { data, error } = await supabase
-        .from('blog_posts')
-        .select(`
+        .from("blog_posts")
+        .select(
+          `
           *,
           user_profiles!blog_posts_author_id_fkey(full_name)
-        `)
-        .eq('status', 'published')
-        .order('published_at', { ascending: false });
+        `,
+        )
+        .eq("status", "published")
+        .order("published_at", { ascending: false });
 
       if (error) {
-        console.warn('Using default blog posts:', error.message);
+        console.warn("Using default blog posts:", error.message);
         setPosts(defaultPosts);
       } else if (data && data.length > 0) {
-        const formattedPosts = data.map(post => ({
+        const formattedPosts = data.map((post) => ({
           ...post,
-          author_name: post.user_profiles?.full_name || 'Anonymous Author',
-          tags: Array.isArray(post.tags) ? post.tags : []
+          author_name: post.user_profiles?.full_name || "Anonymous Author",
+          tags: Array.isArray(post.tags) ? post.tags : [],
         }));
         setPosts(formattedPosts);
       } else {
         setPosts(defaultPosts);
       }
     } catch (error) {
-      console.warn('Using default blog posts due to fetch error');
+      console.warn("Using default blog posts due to fetch error");
       setPosts(defaultPosts);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTag = !selectedTag || (post.tags && post.tags.includes(selectedTag));
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesTag =
+      !selectedTag || (post.tags && post.tags.includes(selectedTag));
     return matchesSearch && matchesTag;
   });
 
-  const allTags = [...new Set(posts.flatMap(post => post.tags || []))];
+  const allTags = [...new Set(posts.flatMap((post) => post.tags || []))];
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const estimateReadTime = (content: string) => {
     const wordsPerMinute = 200;
-    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+    const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).length;
     return Math.ceil(wordCount / wordsPerMinute);
   };
 
@@ -162,24 +175,35 @@ export default function Blog() {
                   <BookOpen className="h-6 w-6 md:h-8 md:w-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-4xl font-bold">Trading Blog</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold">
+                    Trading Blog
+                  </h1>
                   <p className="text-sm md:text-lg text-forex-100 mt-2">
                     Expert insights, trading strategies, and market analysis
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {[
-                  { label: "Expert Articles", value: posts.length.toString(), icon: BookOpen },
+                  {
+                    label: "Expert Articles",
+                    value: posts.length.toString(),
+                    icon: BookOpen,
+                  },
                   { label: "Trading Guides", value: "20+", icon: TrendingUp },
                   { label: "Weekly Updates", value: "3-5", icon: Clock },
                 ].map((stat, index) => (
-                  <div key={index} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                  <div
+                    key={index}
+                    className="bg-white/10 p-4 rounded-lg backdrop-blur-sm"
+                  >
                     <div className="flex items-center justify-center mb-2">
                       <stat.icon className="h-5 w-5" />
                     </div>
-                    <div className="text-xl md:text-2xl font-bold">{stat.value}</div>
+                    <div className="text-xl md:text-2xl font-bold">
+                      {stat.value}
+                    </div>
                     <div className="text-sm text-forex-100">{stat.label}</div>
                   </div>
                 ))}
@@ -201,7 +225,7 @@ export default function Blog() {
                   className="pl-10"
                 />
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 <Button
                   variant={selectedTag === null ? "default" : "outline"}
@@ -257,7 +281,10 @@ export default function Blog() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredPosts.map((post) => (
-                  <Card key={post.id} className="overflow-hidden border-2 border-gray-100 hover:border-forex-200 transition-all duration-200 hover:shadow-lg">
+                  <Card
+                    key={post.id}
+                    className="overflow-hidden border-2 border-gray-100 hover:border-forex-200 transition-all duration-200 hover:shadow-lg"
+                  >
                     {post.featured_image ? (
                       <div className="h-48 bg-gradient-to-r from-forex-500 to-blue-500 relative">
                         <img
@@ -271,7 +298,7 @@ export default function Blog() {
                         <BookOpen className="h-12 w-12 text-white" />
                       </div>
                     )}
-                    
+
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
                         <div className="flex items-center">
@@ -283,31 +310,35 @@ export default function Blog() {
                           {estimateReadTime(post.content)} min read
                         </div>
                       </div>
-                      
+
                       <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                         {post.title}
                       </h3>
-                      
+
                       <p className="text-gray-600 mb-4 line-clamp-3">
                         {post.excerpt}
                       </p>
-                      
+
                       {post.tags && post.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
                           {post.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               {tag}
                             </Badge>
                           ))}
                         </div>
                       )}
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center text-sm text-gray-500">
                           <User className="h-4 w-4 mr-1" />
                           {post.author_name}
                         </div>
-                        
+
                         <Button
                           size="sm"
                           variant="ghost"
@@ -332,7 +363,8 @@ export default function Blog() {
                     Join Our Trading Community
                   </h3>
                   <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Get exclusive trading insights, market analysis, and free forex signals delivered directly to your Telegram.
+                    Get exclusive trading insights, market analysis, and free
+                    forex signals delivered directly to your Telegram.
                   </p>
                   <a
                     href="https://t.me/forex_traders_signalss"

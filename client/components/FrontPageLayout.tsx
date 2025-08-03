@@ -48,14 +48,14 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
 
   const navigationItems = [
     { icon: Home, label: "Home", path: "/", key: "home" },
+    { icon: Calculator, label: "Investment Plans", path: "/investment-plans", key: "investment-plans" },
+    { icon: BarChart3, label: "Live Signals", path: "/live-signals", key: "live-signals" },
     { icon: Gift, label: "Special Offers", path: "/offers", key: "offers" },
-    { icon: Calculator, label: "Investment Plans", path: "/#investment-plans", key: "plans" },
-    { icon: Target, label: "Live Signals", path: "/#live-signals", key: "signals" },
+    { icon: Star, label: "Testimonials", path: "/testimonials", key: "testimonials" },
+    { icon: MessageCircle, label: "Reviews", path: "/reviews", key: "reviews" },
     { icon: BookOpen, label: "Education", path: "/education", key: "education" },
     { icon: FileText, label: "Blog", path: "/blog", key: "blog" },
-    { icon: Star, label: "Testimonials", path: "/#testimonials", key: "testimonials" },
     { icon: Newspaper, label: "News", path: "/news", key: "news" },
-    { icon: BarChart3, label: "Reviews", path: "/#reviews", key: "reviews" },
   ];
 
   const authItems = [

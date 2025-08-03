@@ -199,7 +199,10 @@ class NOWPaymentsService {
 
       return { payment, dbPayment };
     } catch (error) {
-      console.error('Error creating investment payment:', error);
+      console.error('Error creating investment payment:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

@@ -399,14 +399,23 @@ export default function EnhancedUserDashboard() {
         });
 
       if (error) {
-        console.error("Error creating balance:", error);
+        console.error("Error creating balance:", {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+          user_id: user.id
+        });
         return false;
       }
 
       console.log("Balance created/updated successfully");
       return true;
     } catch (error) {
-      console.error("Unexpected error creating balance:", error);
+      console.error("Unexpected error creating balance:", {
+        error: error instanceof Error ? error.message : "Unknown error",
+        user_id: user.id
+      });
       return false;
     }
   };

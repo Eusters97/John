@@ -349,6 +349,56 @@ export default function EnhancedUserDashboard() {
     }
   };
 
+  const createMissingProfile = async () => {
+    if (!user?.id) return false;
+
+    try {
+      const { error } = await supabase
+        .from("user_profiles")
+        .upsert({
+          id: user.id,
+          email: user.email || "",
+          full_name: user.user_metadata?.full_name || user.email || "User",
+        });
+
+      if (error) {
+        console.error("Error creating profile:", error);
+        return false;
+      }
+
+      console.log("Profile created/updated successfully");
+      return true;
+    } catch (error) {
+      console.error("Unexpected error creating profile:", error);
+      return false;
+    }
+  };
+
+  const createMissingBalance = async () => {
+    if (!user?.id) return false;
+
+    try {
+      const { error } = await supabase
+        .from("user_balances")
+        .upsert({
+          user_id: user.id,
+          balance: 0.0,
+          currency: "USD"
+        });
+
+      if (error) {
+        console.error("Error creating balance:", error);
+        return false;
+      }
+
+      console.log("Balance created/updated successfully");
+      return true;
+    } catch (error) {
+      console.error("Unexpected error creating balance:", error);
+      return false;
+    }
+  };
+
   const handleDeposit = async () => {
     if (!user?.id) {
       toast({

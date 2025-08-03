@@ -22,6 +22,10 @@ export async function executeNeonQuery<T = any>(
   query: string,
   params: any[] = []
 ): Promise<T[]> {
+  if (!sql) {
+    throw new Error('Neon database not configured. Please set VITE_NEON_DATABASE_URL.');
+  }
+
   try {
     const result = await sql(query, params);
     return result as T[];
@@ -37,6 +41,11 @@ export async function executeNeonQuery<T = any>(
 
 // Test Neon connection
 export async function testNeonConnection(): Promise<boolean> {
+  if (!sql) {
+    console.warn('Neon connection test skipped: database not configured');
+    return false;
+  }
+
   try {
     const result = await sql`SELECT NOW() as timestamp`;
     console.log('Neon connection successful:', result[0]);

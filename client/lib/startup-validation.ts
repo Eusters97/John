@@ -147,6 +147,9 @@ if (import.meta.env.DEV) {
       );
     }
   }).catch(error => {
-    console.error('Failed to run startup validation:', error);
+    console.error('Failed to run startup validation:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
   });
 }

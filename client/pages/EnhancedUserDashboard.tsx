@@ -659,6 +659,46 @@ export default function EnhancedUserDashboard() {
       case "overview":
         return (
           <div className="space-y-6">
+            {/* Database Status Alert */}
+            {(userStats.balance === 0 && userStats.totalInvested === 0) && (
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                    <h3 className="font-semibold text-yellow-800">Database Setup Check</h3>
+                  </div>
+                  <p className="text-yellow-700 text-sm mb-4">
+                    Your profile data appears to be empty. This can happen if database tables are missing or if this is your first login.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        const profileCreated = await createMissingProfile();
+                        const balanceCreated = await createMissingBalance();
+                        if (profileCreated && balanceCreated) {
+                          toast({ title: "Success", description: "Profile and balance initialized successfully" });
+                          loadUserStats();
+                        } else {
+                          toast({ title: "Error", description: "Failed to initialize data - check console for details", variant: "destructive" });
+                        }
+                      }}
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                    >
+                      Initialize Profile & Balance
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate('/db-diagnostic')}
+                    >
+                      Run Database Diagnostic
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card>

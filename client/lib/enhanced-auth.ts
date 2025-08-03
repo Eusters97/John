@@ -499,7 +499,11 @@ class EnhancedAuthService {
       
       return false; // Email is taken
     } catch (error) {
-      console.error('Error validating email:', error);
+      console.error('Error validating email:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        email
+      });
       return false; // Assume taken on error
     }
   }

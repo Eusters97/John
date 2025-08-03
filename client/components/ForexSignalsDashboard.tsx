@@ -268,19 +268,19 @@ export default function ForexSignalsDashboard() {
                         <div className="flex items-center space-x-2">
                           <SignalIcon className={`h-5 w-5 ${getSignalColor(signal.signal_type)}`} />
                           <div>
-                            <div className="font-semibold">{signal.currency_pair}</div>
-                            <Badge 
-                              variant={signal.signal_type === 'BUY' ? 'default' : 'destructive'}
+                            <div className="font-semibold">{signal.pair}</div>
+                            <Badge
+                              variant={signal.signal_type === 'buy' ? 'default' : 'destructive'}
                               className="text-xs"
                             >
-                              {signal.signal_type}
+                              {signal.signal_type.toUpperCase()}
                             </Badge>
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="text-sm text-gray-600">Confidence</div>
-                          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getConfidenceColor(signal.confidence_level)}`}>
-                            {signal.confidence_level}%
+                          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getConfidenceColor(signal.confidence)}`}>
+                            {signal.confidence}%
                           </div>
                         </div>
                       </div>

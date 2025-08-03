@@ -102,7 +102,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/investment-plans"
+                path="/dashboard/investment-plans"
                 element={
                   <ProtectedRoute>
                     <InvestmentPlans />
@@ -110,7 +110,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/live-signals"
+                path="/dashboard/live-signals"
                 element={
                   <ProtectedRoute>
                     <LiveSignals />
@@ -118,7 +118,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/testimonials"
+                path="/dashboard/testimonials"
                 element={
                   <ProtectedRoute>
                     <Testimonials />

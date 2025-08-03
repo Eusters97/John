@@ -51,10 +51,20 @@ export function validateEnvironment() {
 
 // Get current database info
 export function getDatabaseInfo() {
+  const isValidNeonUrl = ENV.NEON_DATABASE_URL &&
+    ENV.NEON_DATABASE_URL !== 'your_neon_database_connection_string' &&
+    ENV.NEON_DATABASE_URL.startsWith('postgresql://');
+
+  const neonConfigured = !!isValidNeonUrl;
+  const supabaseConfigured = !!(ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY);
+
+  // Use Neon only if properly configured and requested
+  const actuallyUseNeon = ENV.USE_NEON && neonConfigured;
+
   return {
-    active: ENV.USE_NEON ? 'Neon' : 'Supabase',
+    active: actuallyUseNeon ? 'Neon' : 'Supabase',
     dualEnabled: ENV.ENABLE_DUAL_DATABASE,
-    supabaseConfigured: !!(ENV.SUPABASE_URL && ENV.SUPABASE_ANON_KEY),
-    neonConfigured: !!ENV.NEON_DATABASE_URL,
+    supabaseConfigured,
+    neonConfigured,
   };
 }

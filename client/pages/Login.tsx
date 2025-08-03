@@ -89,20 +89,7 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to sign in with Google",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const handleTelegramSignIn = async () => {
     await signInWithTelegram();

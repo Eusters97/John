@@ -72,6 +72,7 @@ const App = () => (
                 }
               />
               <Route path="/eustersmain" element={<AdminLogin />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
               <Route
                 path="/admin-panel"
                 element={

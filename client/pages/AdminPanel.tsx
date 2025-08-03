@@ -232,6 +232,7 @@ export default function AdminPanel() {
     if (activeTab === "payments") loadPayments();
     if (activeTab === "support") loadSupportTickets();
     if (activeTab === "analytics") loadAnalytics();
+    if (activeTab === "signals") loadSignals();
   }, [activeTab]);
 
   const loadEbooks = async () => {

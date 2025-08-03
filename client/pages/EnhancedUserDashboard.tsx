@@ -455,6 +455,26 @@ export default function EnhancedUserDashboard() {
     }
   };
 
+  const loadUserInvestments = async () => {
+    if (!user?.id) return;
+
+    try {
+      // Load user investments
+      const investmentsResult = await investmentService.getUserInvestments(user.id);
+      if (investmentsResult.success) {
+        setUserInvestments(investmentsResult.data);
+      }
+
+      // Load investment stats
+      const statsResult = await investmentService.getInvestmentStats(user.id);
+      if (statsResult.success) {
+        setInvestmentStats(statsResult.data);
+      }
+    } catch (error) {
+      console.error('Error loading user investments:', error);
+    }
+  };
+
   const handleDeposit = async () => {
     if (!user?.id) {
       toast({

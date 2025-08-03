@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import DatabaseInitializer from "@/components/DatabaseInitializer";
 import {
   Shield,
   Lock,
@@ -15,6 +17,7 @@ import {
   Mail,
   ArrowLeft,
   TrendingUp,
+  Settings,
 } from "lucide-react";
 
 export default function AdminLogin() {

@@ -117,7 +117,10 @@ export default function ForexSignalsDashboard() {
       
       loadActiveSignals();
     } catch (error) {
-      console.error('Error generating signals:', error);
+      console.error('Error generating signals:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Failed to generate new signals",

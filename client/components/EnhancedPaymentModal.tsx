@@ -103,22 +103,23 @@ export default function EnhancedPaymentModal() {
       setLoading(true);
       setSelectedCrypto(cryptoSymbol);
 
-      // Create investment record first
-      const { data: investment, error: investmentError } = await supabase
-        .from('user_investments')
-        .insert({
-          user_id: user.id,
-          plan_id: currentOffer.id,
-          amount: currentOffer.amount,
-          status: 'pending',
-          expected_return: currentOffer.expectedReturn
-        })
-        .select()
-        .single();
+      // Create investment record using investment service
+      const investmentResult = await investmentService.createInvestment({
+        user_id: user.id,
+        plan_name: currentOffer.plan,
+        amount: currentOffer.amount,
+        expected_return: currentOffer.expectedReturn,
+        roi_percentage: parseFloat(currentOffer.roi.replace('%', '').replace(',', '')),
+        duration_days: currentOffer.duration === "24 hours" ? 1 :
+                      currentOffer.duration === "3 days" ? 3 : 7,
+        payment_method: cryptoSymbol
+      });
 
-      if (investmentError) {
-        throw new Error(`Failed to create investment: ${investmentError.message}`);
+      if (!investmentResult.success) {
+        throw new Error(`Failed to create investment: ${investmentResult.error?.message}`);
       }
+
+      const investment = investmentResult.data;
 
       // Create payment with NOWPayments
       const { payment, dbPayment } = await nowPaymentsService.createInvestmentPayment(

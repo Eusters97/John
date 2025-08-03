@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Search, Filter, Eye, ExternalLink } from 'lucide-react';
-import { FrontPageLayout } from '../components/FrontPageLayout';
+import FrontPageLayout from '../components/FrontPageLayout';
 import { supabase } from '../lib/supabase';
 
 interface NewsArticle {

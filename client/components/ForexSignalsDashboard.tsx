@@ -296,7 +296,7 @@ export default function ForexSignalsDashboard() {
                         </div>
                         <div>
                           <div className="text-gray-600">Take Profit</div>
-                          <div className="font-semibold text-green-600">{signal.take_profit.toFixed(5)}</div>
+                          <div className="font-semibold text-green-600">{signal.take_profit_1.toFixed(5)}</div>
                         </div>
                       </div>
 

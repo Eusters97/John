@@ -32,8 +32,13 @@ export function validateEnvironment() {
     errors.push('VITE_SUPABASE_ANON_KEY is required');
   }
   
-  if (ENV.USE_NEON && !ENV.NEON_DATABASE_URL) {
-    errors.push('VITE_NEON_DATABASE_URL is required when USE_NEON is true');
+  // Check for valid Neon URL (not placeholder)
+  const isValidNeonUrl = ENV.NEON_DATABASE_URL &&
+    ENV.NEON_DATABASE_URL !== 'your_neon_database_connection_string' &&
+    ENV.NEON_DATABASE_URL.startsWith('postgresql://');
+
+  if (ENV.USE_NEON && !isValidNeonUrl) {
+    errors.push('VITE_NEON_DATABASE_URL must be a valid PostgreSQL connection string when USE_NEON is true');
   }
   
   if (errors.length > 0) {

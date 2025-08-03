@@ -37,6 +37,7 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  AlertTriangle,
   PieChart,
   BarChart3,
   CreditCard,

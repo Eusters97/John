@@ -209,8 +209,17 @@ export default function EnhancedUserDashboard() {
             "user_balances table does not exist. Please run database migrations.",
           );
         } else {
-          // Log error for admin monitoring without exposing details to user
-          console.warn("User balance check failed - contact support if issues persist");
+          // Enhanced error logging for balance check failures
+          const errorInfo = {
+            message: balanceError.message || 'Unknown balance error',
+            code: balanceError.code || 'NO_CODE',
+            details: balanceError.details || 'No details available',
+            user_id: user.id,
+            timestamp: new Date().toISOString()
+          };
+
+          console.error("User balance check failed:", errorInfo);
+          console.warn("Balance check failed - will use default balance values");
         }
       }
     } catch (error) {
@@ -1104,7 +1113,7 @@ export default function EnhancedUserDashboard() {
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
                   <p className="text-blue-800 text-sm">
                     <strong>Available Balance:</strong> $
-                    {userStats.balance.toFixed(2)} • All investments are
+                    {userStats.balance.toFixed(2)} �� All investments are
                     processed from your account balance
                   </p>
                 </div>

@@ -1023,6 +1023,13 @@ export default function AdminPanel() {
               <span className="hidden sm:inline">Support</span>
             </TabsTrigger>
             <TabsTrigger
+              value="signals"
+              className="flex items-center space-x-1 text-xs"
+            >
+              <TrendingUp className="h-4 w-4" />
+              <span className="hidden sm:inline">Signals</span>
+            </TabsTrigger>
+            <TabsTrigger
               value="analytics"
               className="flex items-center space-x-1 text-xs"
             >

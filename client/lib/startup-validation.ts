@@ -52,7 +52,7 @@ export async function validateStartup(): Promise<ValidationResult> {
     }
 
     if (dbInfo.active === 'Neon' && !dbInfo.neonConfigured) {
-      result.errors.push('Neon is selected as primary database but not configured');
+      result.errors.push('Neon is selected as primary database but not properly configured (check connection string)');
       result.success = false;
     }
 

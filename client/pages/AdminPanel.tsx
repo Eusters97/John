@@ -2256,6 +2256,336 @@ export default function AdminPanel() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="signals" className="space-y-6">
+          {/* Signal Creation Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Plus className="h-5 w-5" />
+                <span>Create New Forex Signal</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSignalCreate} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signal-pair">Currency Pair</Label>
+                    <Select
+                      onValueChange={(value) =>
+                        setSignalForm((prev) => ({ ...prev, pair: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select currency pair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="EUR/USD">EUR/USD</SelectItem>
+                        <SelectItem value="GBP/USD">GBP/USD</SelectItem>
+                        <SelectItem value="USD/JPY">USD/JPY</SelectItem>
+                        <SelectItem value="USD/CHF">USD/CHF</SelectItem>
+                        <SelectItem value="AUD/USD">AUD/USD</SelectItem>
+                        <SelectItem value="USD/CAD">USD/CAD</SelectItem>
+                        <SelectItem value="NZD/USD">NZD/USD</SelectItem>
+                        <SelectItem value="EUR/GBP">EUR/GBP</SelectItem>
+                        <SelectItem value="EUR/JPY">EUR/JPY</SelectItem>
+                        <SelectItem value="GBP/JPY">GBP/JPY</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signal-type">Signal Type</Label>
+                    <Select
+                      onValueChange={(value) =>
+                        setSignalForm((prev) => ({ ...prev, signal_type: value as "buy" | "sell" }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select signal type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="buy">BUY</SelectItem>
+                        <SelectItem value="sell">SELL</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="entry-price">Entry Price</Label>
+                    <Input
+                      id="entry-price"
+                      type="number"
+                      step="0.00001"
+                      value={signalForm.entry_price}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          entry_price: Number(e.target.value),
+                        }))
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="stop-loss">Stop Loss</Label>
+                    <Input
+                      id="stop-loss"
+                      type="number"
+                      step="0.00001"
+                      value={signalForm.stop_loss}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          stop_loss: Number(e.target.value),
+                        }))
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confidence">Confidence (%)</Label>
+                    <Input
+                      id="confidence"
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={signalForm.confidence}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          confidence: Number(e.target.value),
+                        }))
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="tp1">Take Profit 1</Label>
+                    <Input
+                      id="tp1"
+                      type="number"
+                      step="0.00001"
+                      value={signalForm.take_profit_1}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          take_profit_1: Number(e.target.value),
+                        }))
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tp2">Take Profit 2 (Optional)</Label>
+                    <Input
+                      id="tp2"
+                      type="number"
+                      step="0.00001"
+                      value={signalForm.take_profit_2}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          take_profit_2: Number(e.target.value),
+                        }))
+                      }
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tp3">Take Profit 3 (Optional)</Label>
+                    <Input
+                      id="tp3"
+                      type="number"
+                      step="0.00001"
+                      value={signalForm.take_profit_3}
+                      onChange={(e) =>
+                        setSignalForm((prev) => ({
+                          ...prev,
+                          take_profit_3: Number(e.target.value),
+                        }))
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="analysis">Market Analysis</Label>
+                  <Textarea
+                    id="analysis"
+                    value={signalForm.analysis}
+                    onChange={(e) =>
+                      setSignalForm((prev) => ({
+                        ...prev,
+                        analysis: e.target.value,
+                      }))
+                    }
+                    rows={4}
+                    placeholder="Provide detailed market analysis and reasoning for this signal..."
+                    required
+                  />
+                </div>
+
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating Signal...
+                    </>
+                  ) : (
+                    <>
+                      <TrendingUp className="mr-2 h-4 w-4" />
+                      Create Forex Signal
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Active Signals List */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Forex Signals</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </div>
+              ) : forexSignals.length === 0 ? (
+                <div className="text-center py-8">
+                  <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">No forex signals found</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {forexSignals.map((signal) => (
+                    <div
+                      key={signal.id}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="font-semibold text-lg">{signal.pair}</h4>
+                            <Badge className={`${
+                              signal.signal_type === 'buy'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-red-500 text-white'
+                            }`}>
+                              {signal.signal_type.toUpperCase()}
+                            </Badge>
+                            <Badge className={`${
+                              signal.status === 'active'
+                                ? 'bg-blue-500 text-white'
+                                : signal.status === 'closed'
+                                ? 'bg-gray-500 text-white'
+                                : 'bg-orange-500 text-white'
+                            }`}>
+                              {signal.status.toUpperCase()}
+                            </Badge>
+                            <Badge variant="outline">
+                              {signal.confidence}% Confidence
+                            </Badge>
+                          </div>
+
+                          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-600">Entry:</span>
+                              <div className="font-medium">{signal.entry_price}</div>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Stop Loss:</span>
+                              <div className="font-medium">{signal.stop_loss}</div>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">TP1:</span>
+                              <div className="font-medium">{signal.take_profit_1}</div>
+                            </div>
+                            {signal.take_profit_2 && (
+                              <div>
+                                <span className="text-gray-600">TP2:</span>
+                                <div className="font-medium">{signal.take_profit_2}</div>
+                              </div>
+                            )}
+                            {signal.take_profit_3 && (
+                              <div>
+                                <span className="text-gray-600">TP3:</span>
+                                <div className="font-medium">{signal.take_profit_3}</div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                            <div className="text-sm text-gray-600 mb-1">Analysis:</div>
+                            <p className="text-sm">{signal.analysis}</p>
+                          </div>
+
+                          <div className="flex items-center space-x-4 text-xs text-gray-500 mt-3">
+                            <span>Created: {new Date(signal.created_at).toLocaleString()}</span>
+                            {signal.result && (
+                              <span className={`font-medium ${
+                                signal.result === 'win' ? 'text-green-600' :
+                                signal.result === 'loss' ? 'text-red-600' : 'text-yellow-600'
+                              }`}>
+                                Result: {signal.result.toUpperCase()}
+                                {signal.pips_gained && ` (${signal.pips_gained > 0 ? '+' : ''}${signal.pips_gained} pips)`}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {signal.status === 'active' && (
+                          <div className="flex space-x-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-green-600 hover:text-green-700"
+                              onClick={() => {
+                                const closePrice = prompt('Enter close price:');
+                                const pips = prompt('Enter pips gained:');
+                                if (closePrice) {
+                                  handleCloseSignal(signal.id, 'win', parseFloat(closePrice), pips ? parseFloat(pips) : undefined);
+                                }
+                              }}
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              Win
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-red-600 hover:text-red-700"
+                              onClick={() => {
+                                const closePrice = prompt('Enter close price:');
+                                const pips = prompt('Enter pips lost:');
+                                if (closePrice) {
+                                  handleCloseSignal(signal.id, 'loss', parseFloat(closePrice), pips ? parseFloat(pips) : undefined);
+                                }
+                              }}
+                            >
+                              <XCircle className="h-4 w-4 mr-1" />
+                              Loss
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="analytics" className="space-y-6">
           {/* Analytics Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">

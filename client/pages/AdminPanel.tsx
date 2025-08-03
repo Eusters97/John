@@ -173,6 +173,7 @@ export default function AdminPanel() {
   const [users, setUsers] = useState<User[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
+  const [forexSignals, setForexSignals] = useState<ForexSignal[]>([]);
   const [visitorAnalytics, setVisitorAnalytics] = useState<VisitorAnalytics[]>(
     [],
   );

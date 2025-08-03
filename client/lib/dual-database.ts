@@ -59,8 +59,16 @@ class DualDatabaseService {
   private useNeon: boolean = false;
 
   constructor() {
-    // Check if Neon should be used (can be controlled via environment variable)
-    this.useNeon = import.meta.env.VITE_USE_NEON === 'true' || false;
+    // Check if Neon should be used and is available
+    const shouldUseNeon = import.meta.env.VITE_USE_NEON === 'true';
+    const neonAvailable = sql !== null;
+
+    if (shouldUseNeon && !neonAvailable) {
+      console.warn('Neon database requested but not available, falling back to Supabase');
+      this.useNeon = false;
+    } else {
+      this.useNeon = shouldUseNeon && neonAvailable;
+    }
   }
 
   // Toggle between databases

@@ -8,20 +8,39 @@ const isPlaceholderUrl = !supabaseUrl || supabaseUrl === 'your_supabase_project_
 const isPlaceholderKey = !supabaseAnonKey || supabaseAnonKey === 'your_supabase_anon_key' || supabaseAnonKey.includes('your_');
 
 if (isPlaceholderUrl || isPlaceholderKey) {
-  console.error('Supabase configuration issue:', {
-    VITE_SUPABASE_URL: supabaseUrl || 'Missing',
-    VITE_SUPABASE_ANON_KEY: supabaseAnonKey ? (supabaseAnonKey.length > 20 ? 'Set' : 'Invalid') : 'Missing',
-    isPlaceholderUrl,
-    isPlaceholderKey
-  });
+  console.warn('⚠️ Supabase configuration is incomplete. Using placeholder values.');
+  console.group('Configuration Status:');
+  console.log('VITE_SUPABASE_URL:', supabaseUrl || 'Missing');
+  console.log('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? (supabaseAnonKey.length > 20 ? 'Set' : 'Invalid') : 'Missing');
+  console.log('isPlaceholderUrl:', isPlaceholderUrl);
+  console.log('isPlaceholderKey:', isPlaceholderKey);
+  console.groupEnd();
+  
+  console.warn('To fix this:');
+  console.warn('1. Create a Supabase project at https://supabase.com');
+  console.warn('2. Update your .env file with the correct values');
+  console.warn('3. Restart the development server');
 
-  const errorMessage = isPlaceholderUrl && isPlaceholderKey
-    ? 'Supabase URL and API key are not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.'
-    : isPlaceholderUrl
-    ? 'Supabase URL is not configured. Please set VITE_SUPABASE_URL environment variable.'
-    : 'Supabase API key is not configured. Please set VITE_SUPABASE_ANON_KEY environment variable.';
+  // Create a dummy client that will fail gracefully instead of throwing immediately
+  const dummyClient = {
+    auth: {
+      signUp: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
+      signInWithPassword: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
+      signOut: () => Promise.resolve({ error: null }),
+      getUser: () => Promise.resolve({ data: { user: null }, error: { message: 'Supabase not configured' } }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+    },
+    from: () => ({
+      select: () => ({ eq: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }),
+      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }),
+      update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }) }),
+      upsert: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }),
+      delete: () => ({ eq: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) })
+    })
+  };
 
-  throw new Error(errorMessage);
+  // @ts-ignore - Supabase not configured, using dummy client
+  export const supabase = dummyClient;
+} else {
+  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)

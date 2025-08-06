@@ -704,6 +704,8 @@ export default function EnhancedUserDashboard() {
       });
 
       setSupportTicket({ subject: "", category: "", description: "" });
+      setShowTicketsList(true);
+      loadSupportTickets();
     } catch (error) {
       toast({
         title: "Error",

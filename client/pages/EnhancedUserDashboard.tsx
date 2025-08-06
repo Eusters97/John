@@ -123,6 +123,7 @@ export default function EnhancedUserDashboard() {
       initializeUserData()
         .then(() => {
           loadUserStats();
+          loadSupportTickets();
           checkTelegramConnection();
         })
         .catch((error) => {

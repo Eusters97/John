@@ -373,7 +373,11 @@ class AlphaVantageService {
         // Add delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 12000));
       } catch (error) {
-        console.error(`Error fetching quote for ${pair.from}/${pair.to}:`, error);
+        console.error(`Error fetching quote for ${pair.from}/${pair.to}:`, {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined,
+          pair: `${pair.from}/${pair.to}`
+        });
       }
     }
 

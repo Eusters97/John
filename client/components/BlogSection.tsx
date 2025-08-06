@@ -71,7 +71,10 @@ export default function BlogSection({ limit = 6, showHeader = true, featured = f
       if (error) throw error;
       setPosts(data || []);
     } catch (error) {
-      console.error('Error loading blog posts:', error);
+      console.error('Error loading blog posts:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Failed to load blog posts",

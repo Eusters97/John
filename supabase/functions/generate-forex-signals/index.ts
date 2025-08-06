@@ -156,7 +156,10 @@ serve(async (req) => {
         }
 
       } catch (error) {
-        console.error(`Error processing ${pair.from}/${pair.to}:`, error)
+        console.error(`Error processing ${pair.from}/${pair.to}:`, {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          pair: `${pair.from}/${pair.to}`
+        })
       }
     }
 
@@ -205,7 +208,10 @@ serve(async (req) => {
     })
 
   } catch (error) {
-    console.error('Signal generation error:', error)
+    console.error('Signal generation error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
@@ -296,7 +302,9 @@ function generateSignal(quote: ForexQuote, indicators: TechnicalIndicator): Fore
       status: 'active',
     }
   } catch (error) {
-    console.error('Error generating signal:', error)
+    console.error('Error generating signal:', {
+      message: error instanceof Error ? error.message : 'Unknown error'
+    })
     return null
   }
 }

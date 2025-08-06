@@ -344,7 +344,10 @@ class AlphaVantageService {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching active signals:', error);
+      console.error('Error fetching active signals:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

@@ -864,9 +864,9 @@ export default function EnhancedUserDashboard() {
     setInvestmentModalOpen(true);
   };
 
-  const calculateExpectedProfit = (plan: any, amount: number) => {
-    const profit = (amount * plan.roi_percentage) / 100;
-    setExpectedProfit(profit);
+  const calculateExpectedProfit = (plan: InvestmentPlan, amount: number) => {
+    const calculation = investmentPlansService.calculateExpectedReturn(plan, amount);
+    setExpectedProfit(calculation.profit);
   };
 
   const processInvestment = async () => {

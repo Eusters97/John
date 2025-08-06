@@ -113,7 +113,10 @@ class InvestmentService {
 
       return { success: true, data };
     } catch (error) {
-      logger.error("Payment update error", { error });
+      logger.error("Payment update error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

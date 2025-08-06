@@ -35,7 +35,10 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
           const locationData = await getLocationData();
           Object.assign(visitorData, locationData);
         } catch (error) {
-          console.warn("Could not get location data:", error);
+          console.warn("Could not get location data:", {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+          });
           Object.assign(visitorData, {
             country: "Unknown",
             city: "Unknown",

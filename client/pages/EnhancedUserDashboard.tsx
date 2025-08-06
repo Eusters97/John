@@ -873,31 +873,106 @@ export default function EnhancedUserDashboard() {
   };
 
   const handleInvestment = (plan: any) => {
-    if (!investmentAmount || parseFloat(investmentAmount) < plan.minAmount) {
+    setSelectedInvestmentPlan(plan);
+    setCustomAmount(plan.min_amount.toString());
+    calculateExpectedProfit(plan, plan.min_amount);
+    setInvestmentModalOpen(true);
+  };
+
+  const calculateExpectedProfit = (plan: any, amount: number) => {
+    const profit = (amount * plan.roi_percentage) / 100;
+    setExpectedProfit(profit);
+  };
+
+  const processInvestment = async () => {
+    if (!user?.id || !selectedInvestmentPlan) return;
+
+    const amount = parseFloat(customAmount);
+
+    if (amount < selectedInvestmentPlan.min_amount || amount > selectedInvestmentPlan.max_amount) {
       toast({
         title: "Invalid Amount",
-        description: `Minimum amount for ${plan.name} is $${plan.minAmount}`,
+        description: `Amount must be between $${selectedInvestmentPlan.min_amount} and $${selectedInvestmentPlan.max_amount}`,
         variant: "destructive",
       });
       return;
     }
 
-    if (parseFloat(investmentAmount) > userStats.balance) {
+    try {
+      setLoading(true);
+
+      if (paymentMethod === 'balance') {
+        // Check if user has sufficient balance
+        if (amount > userStats.balance) {
+          toast({
+            title: "Insufficient Balance",
+            description: `You need $${amount - userStats.balance} more in your account`,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        // Create investment using balance
+        const result = await investmentService.createInvestment({
+          user_id: user.id,
+          plan_name: selectedInvestmentPlan.name,
+          amount: amount,
+          expected_return: amount + expectedProfit,
+          roi_percentage: selectedInvestmentPlan.roi_percentage,
+          duration_days: selectedInvestmentPlan.duration_days,
+          payment_method: 'account_balance'
+        });
+
+        if (result.success) {
+          // Deduct from balance
+          const { error: balanceError } = await supabase
+            .from("user_balances")
+            .update({
+              balance: userStats.balance - amount,
+              updated_at: new Date().toISOString()
+            })
+            .eq("user_id", user.id);
+
+          if (!balanceError) {
+            toast({
+              title: "Investment Successful",
+              description: `You've successfully invested $${amount} in ${selectedInvestmentPlan.name}`,
+            });
+            setInvestmentModalOpen(false);
+            loadUserStats();
+            loadUserInvestments();
+          }
+        }
+      } else {
+        // Process with NOWPayments
+        const paymentData = await nowPaymentsService.createInvestmentPayment(
+          user.id,
+          "",
+          amount,
+          "btc", // Default crypto, user can change in checkout
+          `Investment in ${selectedInvestmentPlan.name}`
+        );
+
+        if (paymentData.payment?.payment_url) {
+          // Redirect to NOWPayments checkout
+          window.open(paymentData.payment.payment_url, '_blank');
+          setInvestmentModalOpen(false);
+
+          toast({
+            title: "Redirecting to Payment",
+            description: "You'll be redirected to complete your payment with cryptocurrency",
+          });
+        }
+      }
+    } catch (error) {
       toast({
-        title: "Insufficient Balance",
-        description: "Please deposit funds to your account first",
+        title: "Investment Error",
+        description: "Failed to process investment. Please try again.",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    // Process investment from account balance
-    toast({
-      title: "Investment Processing",
-      description: "Your investment is being processed...",
-    });
-
-    // In a real app, this would create the investment record
   };
 
   const offerPlans = [

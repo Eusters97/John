@@ -473,7 +473,11 @@ export default function EnhancedUserDashboard() {
         setInvestmentStats(statsResult.data);
       }
     } catch (error) {
-      console.error("Error loading user investments:", error);
+      console.error("Error loading user investments:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        user_id: user?.id
+      });
     }
   };
 

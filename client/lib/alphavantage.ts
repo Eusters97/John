@@ -301,7 +301,10 @@ class AlphaVantageService {
 
       console.log(`Successfully saved ${signals.length} forex signals`);
     } catch (error) {
-      console.error('Error saving signals to database:', error);
+      console.error('Error saving signals to database:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

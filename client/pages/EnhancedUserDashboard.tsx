@@ -573,58 +573,14 @@ export default function EnhancedUserDashboard() {
 
   const loadInvestmentPlans = async () => {
     try {
-      const { data, error } = await supabase
-        .from("investment_plans")
-        .select("*")
-        .eq("is_active", true)
-        .order("min_amount", { ascending: true });
-
-      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
-
-      // Fallback to default plans if database is not configured
-      const defaultPlans = [
-        {
-          id: "starter",
-          name: "Starter Plan",
-          min_amount: 100,
-          max_amount: 999,
-          roi_percentage: 15,
-          duration_days: 7,
-          description: "Perfect for beginners",
-          is_active: true,
-          is_featured: false
-        },
-        {
-          id: "professional",
-          name: "Professional Plan",
-          min_amount: 1000,
-          max_amount: 4999,
-          roi_percentage: 25,
-          duration_days: 14,
-          description: "For serious investors",
-          is_active: true,
-          is_featured: true
-        },
-        {
-          id: "premium",
-          name: "Premium Plan",
-          min_amount: 5000,
-          max_amount: 50000,
-          roi_percentage: 35,
-          duration_days: 30,
-          description: "Maximum returns",
-          is_active: true,
-          is_featured: false
-        }
-      ];
-
-      setInvestmentPlans(data && data.length > 0 ? data : defaultPlans);
+      const result = await investmentPlansService.getActivePlans();
+      if (result.success) {
+        setInvestmentPlans(result.data);
+      }
     } catch (error) {
       console.error("Error loading investment plans:", {
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-      // Set default plans on error
-      setInvestmentPlans([]);
     }
   };
 

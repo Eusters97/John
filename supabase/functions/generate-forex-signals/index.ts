@@ -76,7 +76,10 @@ serve(async (req) => {
         const quoteData = await quoteResponse.json()
         
         if (quoteData['Error Message'] || quoteData['Note']) {
-          console.error(`Alpha Vantage error for ${pair.from}/${pair.to}:`, quoteData)
+          console.error(`Alpha Vantage error for ${pair.from}/${pair.to}:`, {
+            error: quoteData['Error Message'] || quoteData['Note'],
+            pair: `${pair.from}/${pair.to}`
+          })
           continue
         }
 
@@ -103,7 +106,10 @@ serve(async (req) => {
         const rsiData = await rsiResponse.json()
         
         if (rsiData['Error Message'] || rsiData['Note']) {
-          console.error(`RSI error for ${pair.from}/${pair.to}:`, rsiData)
+          console.error(`RSI error for ${pair.from}/${pair.to}:`, {
+            error: rsiData['Error Message'] || rsiData['Note'],
+            pair: `${pair.from}/${pair.to}`
+          })
           continue
         }
 
@@ -131,7 +137,10 @@ serve(async (req) => {
         const macdData = await macdResponse.json()
         
         if (macdData['Error Message'] || macdData['Note']) {
-          console.error(`MACD error for ${pair.from}/${pair.to}:`, macdData)
+          console.error(`MACD error for ${pair.from}/${pair.to}:`, {
+            error: macdData['Error Message'] || macdData['Note'],
+            pair: `${pair.from}/${pair.to}`
+          })
           continue
         }
 
@@ -170,7 +179,10 @@ serve(async (req) => {
         .insert(signals)
 
       if (insertError) {
-        console.error('Error saving signals:', insertError)
+        console.error('Error saving signals:', {
+          message: insertError instanceof Error ? insertError.message : 'Unknown error',
+          code: insertError && typeof insertError === 'object' && 'code' in insertError ? insertError.code : 'NO_CODE'
+        })
         return new Response('Failed to save signals', { 
           status: 500, 
           headers: corsHeaders 

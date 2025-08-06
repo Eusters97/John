@@ -170,7 +170,10 @@ class InvestmentService {
       logger.info("Payment confirmed successfully", { investmentId });
       return { success: true, data };
     } catch (error) {
-      logger.error("Payment confirmation error", { error });
+      logger.error("Payment confirmation error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

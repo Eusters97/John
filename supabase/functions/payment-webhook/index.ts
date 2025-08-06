@@ -106,7 +106,10 @@ serve(async (req) => {
         })
 
       if (notificationError) {
-        console.error('Error creating notification:', notificationError)
+        console.error('Error creating notification:', {
+          message: notificationError instanceof Error ? notificationError.message : 'Unknown error',
+          code: notificationError && typeof notificationError === 'object' && 'code' in notificationError ? notificationError.code : 'NO_CODE'
+        })
       }
 
       // Update user's total investment count
@@ -135,7 +138,10 @@ serve(async (req) => {
         .eq('id', payment.investment_id)
 
       if (investmentError) {
-        console.error('Error cancelling investment:', investmentError)
+        console.error('Error cancelling investment:', {
+          message: investmentError instanceof Error ? investmentError.message : 'Unknown error',
+          code: investmentError && typeof investmentError === 'object' && 'code' in investmentError ? investmentError.code : 'NO_CODE'
+        })
       }
 
       // Create notification for user
@@ -150,7 +156,10 @@ serve(async (req) => {
         })
 
       if (notificationError) {
-        console.error('Error creating notification:', notificationError)
+        console.error('Error creating notification:', {
+          message: notificationError instanceof Error ? notificationError.message : 'Unknown error',
+          code: notificationError && typeof notificationError === 'object' && 'code' in notificationError ? notificationError.code : 'NO_CODE'
+        })
       }
     }
 

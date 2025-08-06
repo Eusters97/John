@@ -288,7 +288,10 @@ class NOWPaymentsService {
         }
       }
     } catch (error) {
-      console.error('Error activating investment:', error);
+      console.error('Error activating investment:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   }
 

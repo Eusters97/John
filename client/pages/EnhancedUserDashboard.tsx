@@ -203,23 +203,29 @@ export default function EnhancedUserDashboard() {
             });
 
           if (createBalanceError) {
-            // Enhanced error logging with fallback for undefined properties
-            const errorInfo = {
-              message: createBalanceError.message || "Unknown error",
-              code: createBalanceError.code || "NO_CODE",
-              details: createBalanceError.details || "No details available",
-              hint: createBalanceError.hint || "No hint available",
-              user_id: user.id,
-              error_type: typeof createBalanceError,
-              timestamp: new Date().toISOString(),
-            };
+            // Check if this is a configuration error
+            if (createBalanceError.code === 'CONFIGURATION_ERROR') {
+              console.warn("Supabase not configured - user balance creation skipped");
+              console.info("Using default balance values for demo mode");
+            } else {
+              // Enhanced error logging with fallback for undefined properties
+              const errorInfo = {
+                message: createBalanceError.message || "Unknown error",
+                code: createBalanceError.code || "NO_CODE",
+                details: createBalanceError.details || "No details available",
+                hint: createBalanceError.hint || "No hint available",
+                user_id: user.id,
+                error_type: typeof createBalanceError,
+                timestamp: new Date().toISOString(),
+              };
 
-            console.error("Failed to create user balance:", errorInfo);
+              console.error("Failed to create user balance:", errorInfo);
 
-            // Log to system for admin monitoring
-            console.warn(
-              "User balance creation failed - initializing with default values",
-            );
+              // Log to system for admin monitoring
+              console.warn(
+                "User balance creation failed - initializing with default values",
+              );
+            }
           } else {
             console.log("User balance created successfully for user:", user.id);
           }

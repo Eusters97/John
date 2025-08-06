@@ -191,7 +191,11 @@ class AlphaVantageService {
         // Add delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 12000)); // 12 second delay (5 calls per minute limit)
       } catch (error) {
-        console.error(`Error generating signal for ${pair.from}/${pair.to}:`, error);
+        console.error(`Error generating signal for ${pair.from}/${pair.to}:`, {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined,
+          pair: `${pair.from}/${pair.to}`
+        });
       }
     }
 

@@ -771,8 +771,50 @@ export default function EnhancedUserDashboard() {
       case "overview":
         return (
           <div className="space-y-6">
+            {/* Configuration Status Alert */}
+            {import.meta.env.VITE_SUPABASE_URL === 'your_supabase_project_url' && (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <AlertTriangle className="h-5 w-5 text-blue-600" />
+                    <h3 className="font-semibold text-blue-800">
+                      Database Configuration Required
+                    </h3>
+                  </div>
+                  <p className="text-blue-700 text-sm mb-4">
+                    The application is running in demo mode because Supabase is not configured.
+                    To use the full functionality, please set up your database configuration.
+                  </p>
+                  <div className="text-blue-700 text-sm space-y-1 mb-4">
+                    <p><strong>To configure:</strong></p>
+                    <p>1. Create a Supabase project at <a href="https://supabase.com" target="_blank" className="underline">supabase.com</a></p>
+                    <p>2. Update .env file with your project URL and API key</p>
+                    <p>3. Run the database migrations</p>
+                    <p>4. Restart the development server</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => window.open('https://supabase.com', '_blank')}
+                      className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                    >
+                      Open Supabase
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate("/db-diagnostic")}
+                    >
+                      Database Diagnostic
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Database Status Alert */}
-            {userStats.balance === 0 && userStats.totalInvested === 0 && (
+            {userStats.balance === 0 && userStats.totalInvested === 0 && import.meta.env.VITE_SUPABASE_URL !== 'your_supabase_project_url' && (
               <Card className="border-yellow-200 bg-yellow-50">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-2 mb-3">

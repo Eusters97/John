@@ -1620,7 +1620,175 @@ export default function EnhancedUserDashboard() {
         );
 
       case "investment-plans":
-        return renderTabContent("plans");
+        return (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment Plans</CardTitle>
+                <p className="text-gray-600">
+                  Choose your investment plan and payment method
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
+                  <p className="text-blue-800 text-sm">
+                    <strong>Available Balance:</strong> $
+                    {userStats.balance.toFixed(2)} • Choose to pay with balance or cryptocurrency
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {investmentPlans.map((plan) => (
+                <Card key={plan.id} className={`relative ${plan.is_featured ? 'ring-2 ring-blue-500' : ''}`}>
+                  {plan.is_featured && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                        ⭐ Featured
+                      </span>
+                    </div>
+                  )}
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-xl">{plan.name}</CardTitle>
+                    <div className="text-3xl font-bold text-green-600">
+                      {plan.roi_percentage}% ROI
+                    </div>
+                    <p className="text-gray-600">{plan.description}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Min Amount:</span>
+                        <span className="font-semibold">${plan.min_amount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Max Amount:</span>
+                        <span className="font-semibold">${plan.max_amount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Duration:</span>
+                        <span className="font-semibold">{plan.duration_days} days</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Expected Return:</span>
+                        <span className="font-semibold text-green-600">
+                          ${Math.round(plan.min_amount * (1 + plan.roi_percentage / 100))}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => handleInvestment(plan)}
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    >
+                      <DollarSign className="mr-2 h-4 w-4" />
+                      Invest Now
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Investment Modal */}
+            {investmentModalOpen && selectedInvestmentPlan && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <Card className="w-full max-w-md">
+                  <CardHeader>
+                    <CardTitle>Invest in {selectedInvestmentPlan.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label htmlFor="amount">Investment Amount ($)</Label>
+                      <Input
+                        id="amount"
+                        type="number"
+                        value={customAmount}
+                        onChange={(e) => {
+                          setCustomAmount(e.target.value);
+                          calculateExpectedProfit(selectedInvestmentPlan, parseFloat(e.target.value) || 0);
+                        }}
+                        min={selectedInvestmentPlan.min_amount}
+                        max={selectedInvestmentPlan.max_amount}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Min: ${selectedInvestmentPlan.min_amount} - Max: ${selectedInvestmentPlan.max_amount}
+                      </p>
+                    </div>
+
+                    <div className="bg-green-50 p-3 rounded-lg">
+                      <p className="text-sm text-green-700">
+                        <strong>Expected Profit:</strong> ${expectedProfit.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-green-700">
+                        <strong>Total Return:</strong> ${(parseFloat(customAmount || '0') + expectedProfit).toFixed(2)}
+                      </p>
+                      <p className="text-xs text-green-600 mt-1">
+                        Duration: {selectedInvestmentPlan.duration_days} days
+                      </p>
+                    </div>
+
+                    <div>
+                      <Label>Payment Method</Label>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <Button
+                          variant={paymentMethod === 'balance' ? 'default' : 'outline'}
+                          onClick={() => setPaymentMethod('balance')}
+                          className="text-sm"
+                        >
+                          <Wallet className="mr-2 h-4 w-4" />
+                          Account Balance
+                        </Button>
+                        <Button
+                          variant={paymentMethod === 'nowpayments' ? 'default' : 'outline'}
+                          onClick={() => setPaymentMethod('nowpayments')}
+                          className="text-sm"
+                        >
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Crypto Payment
+                        </Button>
+                      </div>
+                      {paymentMethod === 'balance' && (
+                        <p className="text-xs text-gray-600 mt-2">
+                          Available Balance: ${userStats.balance.toFixed(2)}
+                        </p>
+                      )}
+                      {paymentMethod === 'nowpayments' && (
+                        <p className="text-xs text-gray-600 mt-2">
+                          You'll be redirected to select your preferred cryptocurrency
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex space-x-2">
+                      <Button
+                        onClick={processInvestment}
+                        disabled={loading || !customAmount}
+                        className="flex-1"
+                      >
+                        {loading ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        ) : paymentMethod === 'balance' ? (
+                          <Wallet className="mr-2 h-4 w-4" />
+                        ) : (
+                          <CreditCard className="mr-2 h-4 w-4" />
+                        )}
+                        {paymentMethod === 'balance' ? 'Invest Now' : 'Pay with Crypto'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setInvestmentModalOpen(false)}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </div>
+        );
 
       case "reviews":
         return (

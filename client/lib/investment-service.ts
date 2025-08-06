@@ -75,7 +75,10 @@ class InvestmentService {
       logger.info("Investment created successfully", { investmentId: data.id });
       return { success: true, data };
     } catch (error) {
-      logger.error("Investment creation error", { error });
+      logger.error("Investment creation error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

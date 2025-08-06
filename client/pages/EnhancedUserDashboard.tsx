@@ -514,6 +514,27 @@ export default function EnhancedUserDashboard() {
     }
   };
 
+  const loadSupportTickets = async () => {
+    if (!user?.id) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("support_tickets")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setSupportTickets(data || []);
+    } catch (error) {
+      console.error("Error loading support tickets:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        user_id: user?.id
+      });
+    }
+  };
+
   const handleDeposit = async () => {
     if (!user?.id) {
       toast({

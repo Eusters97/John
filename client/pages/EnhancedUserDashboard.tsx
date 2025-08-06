@@ -833,20 +833,48 @@ export default function EnhancedUserDashboard() {
     try {
       setLoading(true);
 
-      const { error } = await supabase.from("support_tickets").insert({
+      // Create ticket with enhanced data for admin panel integration
+      const ticketData = {
         user_id: user.id,
+        user_email: user.email,
+        user_name: user.user_metadata?.full_name || user.email || 'User',
         subject: supportTicket.subject,
         category: supportTicket.category,
         description: supportTicket.description,
         status: "open",
-      });
+        priority: supportTicket.category === 'technical' ? 'high' : 'medium',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      const { data, error } = await supabase
+        .from("support_tickets")
+        .insert(ticketData)
+        .select()
+        .single();
 
       if (error) throw error;
 
+      // Create notification for admin (if notifications table exists)
+      try {
+        await supabase.from("admin_notifications").insert({
+          type: 'support_ticket',
+          title: `New Support Ticket: ${supportTicket.subject}`,
+          message: `${user.email} created a new ${supportTicket.category} ticket`,
+          reference_id: data.id,
+          is_read: false,
+          created_at: new Date().toISOString()
+        });
+      } catch (notifError) {
+        // Notification creation is optional - don't fail the ticket creation
+        console.warn("Could not create admin notification:", {
+          message: notifError instanceof Error ? notifError.message : 'Unknown error'
+        });
+      }
+
       toast({
-        title: "Ticket Created",
-        description:
-          "Your support ticket has been created. We'll respond within 24 hours.",
+        title: "Ticket Created Successfully",
+        description: `Ticket #${data.id.slice(0, 8)} has been created. We'll respond within 24 hours.`,
       });
 
       setSupportTicket({ subject: "", category: "", description: "" });
@@ -855,7 +883,7 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create support ticket",
+        description: "Failed to create support ticket. Please try again.",
         variant: "destructive",
       });
     } finally {

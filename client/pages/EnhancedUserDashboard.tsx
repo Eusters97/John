@@ -265,6 +265,22 @@ export default function EnhancedUserDashboard() {
         .limit(1);
 
       if (testError) {
+        if (testError.code === 'CONFIGURATION_ERROR') {
+          console.warn("Supabase is not configured - using default/demo values");
+          // Set default stats and return early
+          setUserStats({
+            balance: 0.0,
+            totalInvested: 0,
+            totalProfit: 0,
+            totalROI: 0,
+            activeInvestments: 0,
+            completedInvestments: 0,
+            pendingPayouts: 0,
+            referralEarnings: 0.0,
+          });
+          return;
+        }
+
         console.error("Supabase connection test failed:", {
           message: testError.message,
           code: testError.code,

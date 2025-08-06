@@ -247,12 +247,7 @@ class SignalsService {
     try {
       const { data, error } = await supabase
         .from("forex_signals")
-        .select(
-          `
-          *,
-          user_profiles:created_by(full_name)
-        `,
-        )
+        .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
 

@@ -80,7 +80,10 @@ export default function EnhancedPaymentModal() {
       const currencies = nowPaymentsService.getPopularCryptoCurrencies();
       setCryptoCurrencies(currencies);
     } catch (error) {
-      console.error("Error loading currencies:", error);
+      console.error("Error loading currencies:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Failed to load payment methods. Please try again.",

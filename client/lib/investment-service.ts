@@ -196,7 +196,10 @@ class InvestmentService {
 
       return { success: true, data };
     } catch (error) {
-      logger.error("Get investment error", { error });
+      logger.error("Get investment error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

@@ -445,7 +445,10 @@ export function FloatingTestimonial() {
       if (error) throw error;
       setTestimonials(data || []);
     } catch (error) {
-      console.error('Error loading featured testimonials:', error);
+      console.error('Error loading featured testimonials:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 

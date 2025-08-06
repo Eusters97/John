@@ -65,7 +65,10 @@ serve(async (req) => {
       .single()
 
     if (paymentError) {
-      console.error('Error updating payment:', paymentError)
+      console.error('Error updating payment:', {
+        message: paymentError instanceof Error ? paymentError.message : 'Unknown error',
+        code: paymentError && typeof paymentError === 'object' && 'code' in paymentError ? paymentError.code : 'NO_CODE'
+      })
       return new Response('Payment update failed', { 
         status: 500, 
         headers: corsHeaders 
@@ -85,7 +88,10 @@ serve(async (req) => {
         .eq('id', payment.investment_id)
 
       if (investmentError) {
-        console.error('Error activating investment:', investmentError)
+        console.error('Error activating investment:', {
+          message: investmentError instanceof Error ? investmentError.message : 'Unknown error',
+          code: investmentError && typeof investmentError === 'object' && 'code' in investmentError ? investmentError.code : 'NO_CODE'
+        })
       }
 
       // Create notification for user
@@ -110,7 +116,10 @@ serve(async (req) => {
       )
 
       if (profileError) {
-        console.error('Error updating user profile:', profileError)
+        console.error('Error updating user profile:', {
+          message: profileError instanceof Error ? profileError.message : 'Unknown error',
+          code: profileError && typeof profileError === 'object' && 'code' in profileError ? profileError.code : 'NO_CODE'
+        })
       }
     }
 

@@ -371,7 +371,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       return { user: null, error: null };
     } catch (error: any) {
-      console.error('Telegram authentication error:', error);
+      console.error('Telegram authentication error:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return {
         user: null,
         error: { message: error.message || 'Failed to initiate Telegram authentication' }

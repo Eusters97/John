@@ -147,7 +147,10 @@ const getLocationData = async () => {
       };
     }
   } catch (error) {
-    console.warn("Geolocation API failed:", error);
+    console.warn("Geolocation API failed:", {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
   }
 
   // Fallback to default values

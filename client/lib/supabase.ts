@@ -35,7 +35,7 @@ if (isPlaceholderUrl || isPlaceholderKey) {
     },
     from: () => ({
       select: () => ({ eq: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }),
-      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }),
+      insert: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }),
       update: () => ({ eq: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) }) }) }),
       upsert: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }),
       delete: () => ({ eq: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) })

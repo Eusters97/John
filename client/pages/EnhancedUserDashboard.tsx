@@ -347,7 +347,21 @@ export default function EnhancedUserDashboard() {
       setUserStats(stats);
       console.log("User stats loaded successfully:", stats);
     } catch (error) {
-      // Log error for admin monitoring without exposing details to user
+      // Enhanced error logging for debugging
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const isConnectionError = errorMessage.includes('Failed to fetch') || errorMessage.includes('fetch');
+
+      console.error("Error loading user statistics:", {
+        message: errorMessage,
+        isConnectionError,
+        stack: error instanceof Error ? error.stack : undefined,
+        user_id: user?.id
+      });
+
+      if (isConnectionError) {
+        console.warn("Connection error detected - check Supabase configuration and network connectivity");
+      }
+
       console.warn("Failed to load user statistics - using default values");
 
       // Set default stats on error

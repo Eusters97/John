@@ -66,7 +66,11 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
           });
 
         if (visitorError) {
-          console.warn("Failed to track visitor:", visitorError);
+          console.warn("Failed to track visitor:", {
+            message: visitorError?.message || 'Unknown visitor tracking error',
+            code: visitorError?.code || 'NO_CODE',
+            details: visitorError?.details || 'No details available'
+          });
         }
       } catch (error) {
         console.warn("Visitor tracking error:", {

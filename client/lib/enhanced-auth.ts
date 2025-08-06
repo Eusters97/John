@@ -142,11 +142,21 @@ class EnhancedAuthService {
       }
 
       // Create initial balance
-      await dualDb.createUserBalance({
-        user_id: userId,
-        balance: 0,
-        currency: "USD",
-      });
+      try {
+        await dualDb.createUserBalance({
+          user_id: userId,
+          balance: 0,
+          currency: "USD",
+        });
+      } catch (balanceError) {
+        console.error("Failed to create user balance:", {
+          message: balanceError instanceof Error ? balanceError.message : "Unknown error",
+          code: balanceError && typeof balanceError === 'object' && 'code' in balanceError ? balanceError.code : "NO_CODE",
+          details: balanceError && typeof balanceError === 'object' && 'details' in balanceError ? balanceError.details : "No details",
+          user_id: userId,
+        });
+        // Don't throw here - user signup should succeed even if balance creation fails
+      }
 
       return {
         user: authResult.user || authResult.data?.user,

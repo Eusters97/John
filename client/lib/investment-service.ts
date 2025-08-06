@@ -224,7 +224,10 @@ class InvestmentService {
 
       return { success: true, data: data || [] };
     } catch (error) {
-      logger.error("Get user investments error", { error });
+      logger.error("Get user investments error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error, data: [] };
     }
   }
@@ -279,7 +282,10 @@ class InvestmentService {
       });
       return { success: true, data };
     } catch (error) {
-      logger.error("Investment completion error", { error });
+      logger.error("Investment completion error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -310,7 +316,10 @@ class InvestmentService {
 
       return { success: true };
     } catch (error) {
-      logger.error("Transaction creation error", { error });
+      logger.error("Transaction creation error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -347,7 +356,10 @@ class InvestmentService {
 
       return { success: true, newBalance };
     } catch (error) {
-      logger.error("Balance update error", { error });
+      logger.error("Balance update error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -390,7 +402,10 @@ class InvestmentService {
 
       return { success: true, data: stats };
     } catch (error) {
-      logger.error("Investment stats error", { error });
+      logger.error("Investment stats error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

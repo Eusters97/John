@@ -80,7 +80,10 @@ class SignalsService {
       logger.info("Signal created successfully", { signalId: data.id });
       return { success: true, data };
     } catch (error) {
-      logger.error("Signal creation error", { error });
+      logger.error("Signal creation error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -103,7 +106,10 @@ class SignalsService {
 
       return { success: true, data: data || [] };
     } catch (error) {
-      logger.error("Get active signals error", { error });
+      logger.error("Get active signals error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error, data: [] };
     }
   }
@@ -137,7 +143,10 @@ class SignalsService {
         totalPages: Math.ceil((count || 0) / limit),
       };
     } catch (error) {
-      logger.error("Get signals error", { error });
+      logger.error("Get signals error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error, data: [], count: 0, totalPages: 0 };
     }
   }
@@ -181,7 +190,10 @@ class SignalsService {
       logger.info("Signal closed successfully", { signalId });
       return { success: true, data };
     } catch (error) {
-      logger.error("Signal close error", { error });
+      logger.error("Signal close error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -235,7 +247,10 @@ class SignalsService {
 
       return { success: true, data: analytics };
     } catch (error) {
-      logger.error("Signals analytics error", { error });
+      logger.error("Signals analytics error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -258,7 +273,10 @@ class SignalsService {
 
       return { success: true, data: data || [] };
     } catch (error) {
-      logger.error("Get recent signals error", { error });
+      logger.error("Get recent signals error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error, data: [] };
     }
   }
@@ -287,7 +305,10 @@ class SignalsService {
 
       return { success: true, data };
     } catch (error) {
-      logger.error("Signal update error", { error });
+      logger.error("Signal update error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -316,7 +337,10 @@ class SignalsService {
 
       return { success: true, data };
     } catch (error) {
-      logger.error("Signal cancel error", { error });
+      logger.error("Signal cancel error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -340,7 +364,10 @@ class SignalsService {
 
       return { success: true };
     } catch (error) {
-      logger.error("Telegram signal send error", { error });
+      logger.error("Telegram signal send error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }
@@ -361,7 +388,10 @@ class SignalsService {
 
       return { success: true };
     } catch (error) {
-      logger.error("Telegram signal update error", { error });
+      logger.error("Telegram signal update error", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return { success: false, error };
     }
   }

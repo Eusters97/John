@@ -133,7 +133,18 @@ class EnhancedAuthService {
         is_verified: false,
       };
 
-      const profile = await dualDb.createUserProfile(profileData);
+      let profile = null;
+      try {
+        profile = await dualDb.createUserProfile(profileData);
+      } catch (profileError) {
+        console.error("Failed to create user profile:", {
+          message: profileError instanceof Error ? profileError.message : "Unknown error",
+          code: profileError && typeof profileError === 'object' && 'code' in profileError ? profileError.code : "NO_CODE",
+          details: profileError && typeof profileError === 'object' && 'details' in profileError ? profileError.details : "No details",
+          user_id: userId,
+        });
+        // Don't throw here - user signup should succeed even if profile creation fails
+      }
 
       if (!profile) {
         console.warn(

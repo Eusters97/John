@@ -1667,104 +1667,254 @@ export default function EnhancedUserDashboard() {
 
       case "support":
         return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Support Tickets</CardTitle>
-              <p className="text-gray-600">
-                Get help with deposits, withdrawals, or technical issues
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="ticket-subject">Subject</Label>
-                  <Input
-                    id="ticket-subject"
-                    placeholder="Brief description of your issue"
-                    value={supportTicket.subject}
-                    onChange={(e) =>
-                      setSupportTicket((prev) => ({
-                        ...prev,
-                        subject: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+          <div className="space-y-6">
+            {/* Support Tickets Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <HelpCircle className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Total Tickets</p>
+                      <p className="text-xl font-bold">{supportTickets.length}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="h-5 w-5 text-yellow-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Open Tickets</p>
+                      <p className="text-xl font-bold">
+                        {supportTickets.filter(t => t.status === 'open').length}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <div>
+                      <p className="text-sm text-gray-600">Resolved</p>
+                      <p className="text-xl font-bold">
+                        {supportTickets.filter(t => t.status === 'resolved').length}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-                <div>
-                  <Label htmlFor="ticket-category">Category</Label>
-                  <Select
-                    onValueChange={(value) =>
-                      setSupportTicket((prev) => ({ ...prev, category: value }))
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="deposit">Deposit Issues</SelectItem>
-                      <SelectItem value="withdrawal">
-                        Withdrawal Issues
-                      </SelectItem>
-                      <SelectItem value="investment">
-                        Investment Questions
-                      </SelectItem>
-                      <SelectItem value="technical">
-                        Technical Support
-                      </SelectItem>
-                      <SelectItem value="account">Account Issues</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Toggle between create ticket and view tickets */}
+            <div className="flex space-x-2">
+              <Button
+                variant={!showTicketsList ? "default" : "outline"}
+                onClick={() => setShowTicketsList(false)}
+              >
+                Create New Ticket
+              </Button>
+              <Button
+                variant={showTicketsList ? "default" : "outline"}
+                onClick={() => setShowTicketsList(true)}
+              >
+                View My Tickets ({supportTickets.length})
+              </Button>
+            </div>
 
-                <div>
-                  <Label htmlFor="ticket-description">Description</Label>
-                  <Textarea
-                    id="ticket-description"
-                    placeholder="Please provide detailed information about your issue..."
-                    rows={5}
-                    value={supportTicket.description}
-                    onChange={(e) =>
-                      setSupportTicket((prev) => ({
-                        ...prev,
-                        description: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
+            {!showTicketsList ? (
+              /* Create Ticket Form */
+              <Card>
+                <CardHeader>
+                  <CardTitle>Create Support Ticket</CardTitle>
+                  <p className="text-gray-600">
+                    Get help with deposits, withdrawals, or technical issues
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="ticket-subject">Subject</Label>
+                      <Input
+                        id="ticket-subject"
+                        placeholder="Brief description of your issue"
+                        value={supportTicket.subject}
+                        onChange={(e) =>
+                          setSupportTicket((prev) => ({
+                            ...prev,
+                            subject: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
 
-                <Button
-                  onClick={handleSupportTicket}
-                  disabled={
-                    loading || !supportTicket.subject || !supportTicket.category
-                  }
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating Ticket...
-                    </>
+                    <div>
+                      <Label htmlFor="ticket-category">Category</Label>
+                      <Select
+                        value={supportTicket.category}
+                        onValueChange={(value) =>
+                          setSupportTicket((prev) => ({ ...prev, category: value }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="deposit">Deposit Issues</SelectItem>
+                          <SelectItem value="withdrawal">
+                            Withdrawal Issues
+                          </SelectItem>
+                          <SelectItem value="investment">
+                            Investment Questions
+                          </SelectItem>
+                          <SelectItem value="technical">
+                            Technical Support
+                          </SelectItem>
+                          <SelectItem value="account">Account Issues</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="ticket-description">Description</Label>
+                      <Textarea
+                        id="ticket-description"
+                        placeholder="Please provide detailed information about your issue..."
+                        rows={5}
+                        value={supportTicket.description}
+                        onChange={(e) =>
+                          setSupportTicket((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+
+                    <Button
+                      onClick={handleSupportTicket}
+                      disabled={
+                        loading || !supportTicket.subject || !supportTicket.category
+                      }
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Creating Ticket...
+                        </>
+                      ) : (
+                        <>
+                          <Phone className="mr-2 h-4 w-4" />
+                          Create Support Ticket
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h3 className="font-semibold mb-2">Response Times</h3>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Urgent issues: 2-4 hours</li>
+                      <li>• General inquiries: 24 hours</li>
+                      <li>• Technical issues: 48 hours</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              /* Tickets List */
+              <Card>
+                <CardHeader>
+                  <CardTitle>My Support Tickets</CardTitle>
+                  <p className="text-gray-600">Track the status of your support requests</p>
+                </CardHeader>
+                <CardContent>
+                  {supportTickets.length === 0 ? (
+                    <div className="text-center py-8">
+                      <HelpCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                        No Support Tickets
+                      </h3>
+                      <p className="text-gray-500 mb-6">
+                        You haven't created any support tickets yet.
+                      </p>
+                      <Button
+                        onClick={() => setShowTicketsList(false)}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        Create First Ticket
+                      </Button>
+                    </div>
                   ) : (
-                    <>
-                      <Phone className="mr-2 h-4 w-4" />
-                      Create Support Ticket
-                    </>
-                  )}
-                </Button>
-              </div>
+                    <div className="space-y-4">
+                      {supportTickets.map((ticket) => (
+                        <div key={ticket.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <h3 className="font-semibold text-lg text-gray-900">
+                                {ticket.subject}
+                              </h3>
+                              <p className="text-sm text-gray-600 capitalize">
+                                Category: {ticket.category}
+                              </p>
+                            </div>
+                            <Badge
+                              variant={
+                                ticket.status === 'open' ? 'default' :
+                                ticket.status === 'resolved' ? 'secondary' :
+                                ticket.status === 'in_progress' ? 'destructive' : 'outline'
+                              }
+                              className={
+                                ticket.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                                ticket.status === 'resolved' ? 'bg-green-100 text-green-800' :
+                                ticket.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : ''
+                              }
+                            >
+                              {ticket.status === 'open' && '🟡 Waiting for Response'}
+                              {ticket.status === 'resolved' && '✅ Resolved'}
+                              {ticket.status === 'in_progress' && '🔄 In Progress'}
+                              {ticket.status === 'closed' && '⚫ Closed'}
+                            </Badge>
+                          </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2">Response Times</h3>
-                <ul className="space-y-1 text-sm text-gray-600">
-                  <li>• Urgent issues: 2-4 hours</li>
-                  <li>• General inquiries: 24 hours</li>
-                  <li>• Technical issues: 48 hours</li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
+                          <p className="text-gray-700 text-sm mb-3 line-clamp-2">
+                            {ticket.description}
+                          </p>
+
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span>
+                              Created: {new Date(ticket.created_at).toLocaleDateString()} at{' '}
+                              {new Date(ticket.created_at).toLocaleTimeString()}
+                            </span>
+                            <span>#{ticket.id.slice(0, 8)}</span>
+                          </div>
+
+                          {ticket.status === 'open' && (
+                            <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                              <div className="flex items-center space-x-2">
+                                <Clock className="h-4 w-4 text-blue-600" />
+                                <span className="text-sm text-blue-700 font-medium">
+                                  Waiting for support team response
+                                </span>
+                              </div>
+                              <p className="text-xs text-blue-600 mt-1">
+                                Expected response within 24 hours
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
         );
 
       case "settings":

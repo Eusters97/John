@@ -284,7 +284,7 @@ class InvestmentService {
     investment_id?: string;
   }) {
     try {
-      const { error } = await supabase.from("transactions").insert({
+      const { error } = await supabase.from("payment_transactions").insert({
         ...transactionData,
         created_at: new Date().toISOString(),
       });

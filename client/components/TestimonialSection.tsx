@@ -88,7 +88,10 @@ export default function TestimonialSection({
       if (error) throw error;
       setTestimonials(data || []);
     } catch (error) {
-      console.error('Error loading testimonials:', error);
+      console.error('Error loading testimonials:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Failed to load testimonials",

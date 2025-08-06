@@ -161,7 +161,10 @@ export default function EnhancedPaymentModal() {
         description: "Please send the exact amount to the provided address.",
       });
     } catch (error) {
-      console.error("Error creating payment:", error);
+      console.error("Error creating payment:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       setPaymentStep({
         step: "error",
         data: {

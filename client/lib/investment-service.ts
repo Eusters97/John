@@ -50,7 +50,7 @@ class InvestmentService {
       });
 
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .insert({
           user_id: investmentData.user_id,
           plan_name: investmentData.plan_name,
@@ -91,7 +91,7 @@ class InvestmentService {
       logger.info("Updating payment details", { investmentId });
 
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .update({
           payment_address: paymentDetails.crypto_address,
           payment_transaction_id: paymentDetails.transaction_id,
@@ -133,7 +133,7 @@ class InvestmentService {
       endDate.setDate(endDate.getDate() + investment.data.duration_days);
 
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .update({
           payment_status: "confirmed",
           status: "active",
@@ -175,7 +175,7 @@ class InvestmentService {
   async getInvestment(investmentId: string) {
     try {
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .select("*")
         .eq("id", investmentId)
         .single();
@@ -198,7 +198,7 @@ class InvestmentService {
   async getUserInvestments(userId: string) {
     try {
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .select("*")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
@@ -233,7 +233,7 @@ class InvestmentService {
       const finalReturn = actualReturn || investment.data.expected_return;
 
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .update({
           status: "completed",
           actual_return: finalReturn,
@@ -346,7 +346,7 @@ class InvestmentService {
   async getInvestmentStats(userId: string) {
     try {
       const { data, error } = await supabase
-        .from("investments")
+        .from("user_investments")
         .select("*")
         .eq("user_id", userId);
 

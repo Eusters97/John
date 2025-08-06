@@ -321,7 +321,10 @@ class AlphaVantageService {
         throw new Error(`Failed to update signal: ${error.message}`);
       }
     } catch (error) {
-      console.error('Error updating signal status:', error);
+      console.error('Error updating signal status:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       throw error;
     }
   }

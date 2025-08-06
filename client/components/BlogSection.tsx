@@ -311,7 +311,10 @@ export function BlogPost({ slug }: { slug: string }) {
 
       setRelatedPosts(relatedData || []);
     } catch (error) {
-      console.error('Error loading blog post:', error);
+      console.error('Error loading blog post:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast({
         title: "Error",
         description: "Blog post not found",

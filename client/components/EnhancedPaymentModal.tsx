@@ -209,7 +209,10 @@ export default function EnhancedPaymentModal() {
         });
       }
     } catch (error) {
-      console.error("Error checking payment status:", error);
+      console.error("Error checking payment status:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 

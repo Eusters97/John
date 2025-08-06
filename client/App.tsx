@@ -51,7 +51,8 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <VisitorTracker />
-            <Routes>
+            <NavigationGuard>
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
@@ -156,7 +157,8 @@ const App = () => (
               />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
-            </Routes>
+              </Routes>
+            </NavigationGuard>
           </BrowserRouter>
         </TooltipProvider>
       </InvestmentProvider>

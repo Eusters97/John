@@ -563,7 +563,8 @@ export default function EnhancedUserDashboard() {
       setSupportTickets(data || []);
     } catch (error) {
       console.error("Error loading support tickets:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
+        code: error?.code || 'NO_CODE',
         stack: error instanceof Error ? error.stack : undefined,
         user_id: user?.id
       });

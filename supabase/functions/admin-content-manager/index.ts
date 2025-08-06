@@ -89,7 +89,10 @@ serve(async (req) => {
     })
 
   } catch (error) {
-    console.error('Admin content manager error:', error)
+    console.error('Admin content manager error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,

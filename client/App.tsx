@@ -21,7 +21,7 @@ import TestDashboard from "./pages/TestDashboard";
 import Admin from "./pages/Admin";
 import SuperAdmin from "./pages/SuperAdmin";
 import AdminLogin from "./pages/AdminLogin";
-import AdminPanel from "./pages/AdminPanel";
+import AdminPanel from "./pages/AdminPanelWithSidebar";
 import ErrorMonitoring from "./pages/ErrorMonitoring";
 import Promo from "./pages/Promo";
 import Offers from "./pages/Offers";

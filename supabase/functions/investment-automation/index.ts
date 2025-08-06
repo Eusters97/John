@@ -57,7 +57,10 @@ serve(async (req) => {
         .eq("id", investment.id);
 
       if (updateError) {
-        console.error("Error updating investment:", updateError);
+        console.error("Error updating investment:", {
+          message: updateError instanceof Error ? updateError.message : 'Unknown error',
+          code: updateError && typeof updateError === 'object' && 'code' in updateError ? updateError.code : 'NO_CODE'
+        });
         continue;
       }
 
@@ -71,7 +74,10 @@ serve(async (req) => {
       );
 
       if (balanceError) {
-        console.error("Error updating balance:", balanceError);
+        console.error("Error updating balance:", {
+          message: balanceError instanceof Error ? balanceError.message : 'Unknown error',
+          code: balanceError && typeof balanceError === 'object' && 'code' in balanceError ? balanceError.code : 'NO_CODE'
+        });
         continue;
       }
 
@@ -88,7 +94,10 @@ serve(async (req) => {
         });
 
       if (transactionError) {
-        console.error("Error creating transaction:", transactionError);
+        console.error("Error creating transaction:", {
+          message: transactionError instanceof Error ? transactionError.message : 'Unknown error',
+          code: transactionError && typeof transactionError === 'object' && 'code' in transactionError ? transactionError.code : 'NO_CODE'
+        });
       }
 
       completedInvestments.push({

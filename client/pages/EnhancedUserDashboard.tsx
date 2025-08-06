@@ -570,6 +570,117 @@ export default function EnhancedUserDashboard() {
     }
   };
 
+  const loadInvestmentPlans = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("investment_plans")
+        .select("*")
+        .eq("is_active", true)
+        .order("min_amount", { ascending: true });
+
+      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+
+      // Fallback to default plans if database is not configured
+      const defaultPlans = [
+        {
+          id: "starter",
+          name: "Starter Plan",
+          min_amount: 100,
+          max_amount: 999,
+          roi_percentage: 15,
+          duration_days: 7,
+          description: "Perfect for beginners",
+          is_active: true,
+          is_featured: false
+        },
+        {
+          id: "professional",
+          name: "Professional Plan",
+          min_amount: 1000,
+          max_amount: 4999,
+          roi_percentage: 25,
+          duration_days: 14,
+          description: "For serious investors",
+          is_active: true,
+          is_featured: true
+        },
+        {
+          id: "premium",
+          name: "Premium Plan",
+          min_amount: 5000,
+          max_amount: 50000,
+          roi_percentage: 35,
+          duration_days: 30,
+          description: "Maximum returns",
+          is_active: true,
+          is_featured: false
+        }
+      ];
+
+      setInvestmentPlans(data && data.length > 0 ? data : defaultPlans);
+    } catch (error) {
+      console.error("Error loading investment plans:", {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+      // Set default plans on error
+      setInvestmentPlans([]);
+    }
+  };
+
+  const loadReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      setReviews(data || []);
+    } catch (error) {
+      console.error("Error loading reviews:", {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  };
+
+  const loadTestimonials = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("is_approved", true)
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false });
+
+      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      setTestimonials(data || []);
+    } catch (error) {
+      console.error("Error loading testimonials:", {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  };
+
+  const loadLiveSignals = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("forex_signals")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      setLiveSignals(data || []);
+    } catch (error) {
+      console.error("Error loading live signals:", {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  };
+
   const handleDeposit = async () => {
     if (!user?.id) {
       toast({

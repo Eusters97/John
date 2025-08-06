@@ -108,7 +108,10 @@ export default function BlogSection({ limit = 6, showHeader = true, featured = f
     try {
       await supabase.rpc('increment_post_views', { post_id: postId });
     } catch (error) {
-      console.error('Error incrementing view count:', error);
+      console.error('Error incrementing view count:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 

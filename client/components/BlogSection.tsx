@@ -97,7 +97,10 @@ export default function BlogSection({ limit = 6, showHeader = true, featured = f
       const uniqueCategories = [...new Set(data?.map(post => post.category).filter(Boolean))];
       setCategories(uniqueCategories);
     } catch (error) {
-      console.error('Error loading categories:', error);
+      console.error('Error loading categories:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   };
 

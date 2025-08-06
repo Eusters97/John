@@ -7,6 +7,9 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 const isPlaceholderUrl = !supabaseUrl || supabaseUrl === 'your_supabase_project_url' || supabaseUrl.includes('your_project');
 const isPlaceholderKey = !supabaseAnonKey || supabaseAnonKey === 'your_supabase_anon_key' || supabaseAnonKey.includes('your_');
 
+// Create supabase client or dummy client based on configuration
+let supabaseClient;
+
 if (isPlaceholderUrl || isPlaceholderKey) {
   console.warn('⚠️ Supabase configuration is incomplete. Using placeholder values.');
   console.group('Configuration Status:');
@@ -22,7 +25,7 @@ if (isPlaceholderUrl || isPlaceholderKey) {
   console.warn('3. Restart the development server');
 
   // Create a dummy client that will fail gracefully instead of throwing immediately
-  const dummyClient = {
+  supabaseClient = {
     auth: {
       signUp: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
       signInWithPassword: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured' } }),
@@ -38,9 +41,9 @@ if (isPlaceholderUrl || isPlaceholderKey) {
       delete: () => ({ eq: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIGURATION_ERROR' } }) })
     })
   };
-
-  // @ts-ignore - Supabase not configured, using dummy client
-  export const supabase = dummyClient;
 } else {
-  export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 }
+
+// @ts-ignore - Supabase client type compatibility
+export const supabase = supabaseClient;

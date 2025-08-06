@@ -59,6 +59,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/news" element={<News />} />
               {/* Standalone pages accessible without login */}
+              <Route path="/telegramsignals" element={<TelegramSignals />} />
               <Route path="/live-signals" element={<LiveSignalsStandalone />} />
               <Route
                 path="/testimonials"

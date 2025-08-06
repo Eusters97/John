@@ -228,7 +228,7 @@ class InvestmentService {
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined
       });
-      return { success: false, error, data: [] };
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error', data: [] };
     }
   }
 

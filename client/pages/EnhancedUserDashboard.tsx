@@ -21,6 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
 import { nowPaymentsService } from "@/lib/nowpayments";
 import { investmentService, type Investment } from "@/lib/investment-service";
+import { nowPaymentsService } from "@/lib/nowpayments";
+import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
 import {
   Wallet,
   TrendingUp,
@@ -50,6 +52,15 @@ import {
   Gift,
   Loader2,
   Star,
+  History,
+  Award,
+  Calculator,
+  Eye,
+  Play,
+  BookOpen,
+  Globe,
+  MapPin,
+  Verified,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 

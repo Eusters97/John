@@ -224,7 +224,10 @@ class NOWPaymentsService {
         .eq('payment_id_external', paymentId);
 
       if (error) {
-        console.error('Failed to update payment status in database:', error);
+        console.error('Failed to update payment status in database:', {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        });
       }
 
       // If payment is confirmed, activate the investment

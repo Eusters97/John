@@ -148,6 +148,10 @@ export default function EnhancedUserDashboard() {
         .then(() => {
           loadUserStats();
           loadSupportTickets();
+          loadInvestmentPlans();
+          loadReviews();
+          loadTestimonials();
+          loadLiveSignals();
           checkTelegramConnection();
         })
         .catch((error) => {

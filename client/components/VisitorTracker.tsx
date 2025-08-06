@@ -69,7 +69,10 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
           console.warn("Failed to track visitor:", visitorError);
         }
       } catch (error) {
-        console.warn("Visitor tracking error:", error);
+        console.warn("Visitor tracking error:", {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        });
       }
     };
 

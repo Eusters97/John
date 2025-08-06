@@ -163,7 +163,7 @@ class InvestmentPlansService {
         planData
       });
       
-      return { success: false, error };
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -194,7 +194,7 @@ class InvestmentPlansService {
         updates
       });
       
-      return { success: false, error };
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -219,7 +219,7 @@ class InvestmentPlansService {
         planId
       });
       
-      return { success: false, error };
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -253,7 +253,7 @@ class InvestmentPlansService {
         planId
       });
       
-      return { success: false, error };
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 

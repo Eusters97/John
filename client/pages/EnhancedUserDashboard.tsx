@@ -98,8 +98,8 @@ export default function EnhancedUserDashboard() {
   const [showTicketsList, setShowTicketsList] = useState(false);
 
   // Investment plans and payment states
-  const [investmentPlans, setInvestmentPlans] = useState<any[]>([]);
-  const [selectedInvestmentPlan, setSelectedInvestmentPlan] = useState<any>(null);
+  const [investmentPlans, setInvestmentPlans] = useState<InvestmentPlan[]>([]);
+  const [selectedInvestmentPlan, setSelectedInvestmentPlan] = useState<InvestmentPlan | null>(null);
   const [investmentModalOpen, setInvestmentModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'balance' | 'nowpayments'>('balance');
   const [customAmount, setCustomAmount] = useState('');

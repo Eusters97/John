@@ -663,7 +663,10 @@ export default function AdminPanel() {
         pages || generateMockPageViewData(),
       );
     } catch (error) {
-      console.warn("Analytics loading failed, using mock data:", error);
+      console.warn("Analytics loading failed, using mock data:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       const mockVisitors = generateMockVisitorData();
       const mockPages = generateMockPageViewData();
       setVisitorAnalytics(mockVisitors);

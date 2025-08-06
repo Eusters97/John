@@ -639,7 +639,9 @@ export default function EnhancedUserDashboard() {
       setLiveSignals(data || []);
     } catch (error) {
       console.error("Error loading live signals:", {
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
+        code: error?.code || 'NO_CODE',
+        stack: error instanceof Error ? error.stack : undefined
       });
     }
   };

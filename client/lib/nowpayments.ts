@@ -265,7 +265,10 @@ class NOWPaymentsService {
           .eq('id', payment.investment_id);
 
         if (error) {
-          console.error('Failed to activate investment:', error);
+          console.error('Failed to activate investment:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+          });
         }
 
         // Create notification for user

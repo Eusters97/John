@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/EnhancedAuthContext";
 import { InvestmentProvider } from "@/contexts/InvestmentContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import NavigationGuard from "@/components/NavigationGuard";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";

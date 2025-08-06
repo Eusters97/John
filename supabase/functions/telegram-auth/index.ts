@@ -199,7 +199,11 @@ serve(async (req) => {
         });
 
       if (balanceError) {
-        console.error('Error creating user balance:', balanceError);
+        console.error('Error creating user balance:', {
+          message: balanceError instanceof Error ? balanceError.message : 'Unknown error',
+          code: balanceError && typeof balanceError === 'object' && 'code' in balanceError ? balanceError.code : 'NO_CODE',
+          user_id: createdUser.id
+        });
       }
 
       return new Response(

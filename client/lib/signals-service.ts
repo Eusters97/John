@@ -113,13 +113,9 @@ class SignalsService {
    */
   async getAllSignals(page = 1, limit = 20, status?: string) {
     try {
-      let query = supabase.from("forex_signals").select(
-        `
-          *,
-          user_profiles:created_by(full_name)
-        `,
-        { count: "exact" },
-      );
+      let query = supabase
+        .from("forex_signals")
+        .select("*", { count: "exact" });
 
       if (status) {
         query = query.eq("status", status);

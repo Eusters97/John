@@ -111,7 +111,10 @@ serve(async (req) => {
       .single();
 
     if (userError && userError.code !== 'PGRST116') {
-      console.error('Error checking existing user:', userError);
+      console.error('Error checking existing user:', {
+        message: userError instanceof Error ? userError.message : 'Unknown error',
+        code: userError && typeof userError === 'object' && 'code' in userError ? userError.code : 'NO_CODE'
+      });
       return new Response(
         JSON.stringify({ error: 'Database error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -134,7 +137,10 @@ serve(async (req) => {
         .single();
 
       if (updateError) {
-        console.error('Error updating user:', updateError);
+        console.error('Error updating user:', {
+          message: updateError instanceof Error ? updateError.message : 'Unknown error',
+          code: updateError && typeof updateError === 'object' && 'code' in updateError ? updateError.code : 'NO_CODE'
+        });
         return new Response(
           JSON.stringify({ error: 'Failed to update user' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -182,7 +188,10 @@ serve(async (req) => {
         .single();
 
       if (createError) {
-        console.error('Error creating user:', createError);
+        console.error('Error creating user:', {
+          message: createError instanceof Error ? createError.message : 'Unknown error',
+          code: createError && typeof createError === 'object' && 'code' in createError ? createError.code : 'NO_CODE'
+        });
         return new Response(
           JSON.stringify({ error: 'Failed to create user account' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

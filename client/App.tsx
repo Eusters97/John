@@ -36,6 +36,7 @@ import Reviews from "./pages/Reviews";
 import DatabaseDiagnostic from "./pages/DatabaseDiagnostic";
 import NotFound from "./pages/NotFound";
 import TelegramSignals from "./pages/TelegramSignals";
+import ReviewsStandalone from "./pages/ReviewsStandalone";
 import VisitorTracker from "./components/VisitorTracker";
 
 const queryClient = new QueryClient();

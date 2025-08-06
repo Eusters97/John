@@ -82,6 +82,9 @@ export default function EnhancedUserDashboard() {
     description: "",
   });
 
+  const [supportTickets, setSupportTickets] = useState<any[]>([]);
+  const [showTicketsList, setShowTicketsList] = useState(false);
+
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("");
   const [loading, setLoading] = useState(false);

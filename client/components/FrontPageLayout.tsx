@@ -133,7 +133,7 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-white to-forex-50">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-2xl transform transition-transform lg:translate-x-0 lg:static lg:inset-0 border-r border-gray-200 flex flex-col`}>
+      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarHidden ? 'lg:-translate-x-full lg:w-0' : 'lg:translate-x-0 lg:w-64'} fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-2xl transform transition-all duration-300 lg:static lg:inset-0 border-r border-gray-200 flex flex-col`}>
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-forex-600 to-blue-600">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">

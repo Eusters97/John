@@ -2938,7 +2938,6 @@ export default function EnhancedUserDashboard() {
         {renderTabContent()}
       </div>
 
-      <EnhancedPaymentModal />
     </DashboardLayout>
   );
 }

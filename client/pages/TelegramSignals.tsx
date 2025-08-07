@@ -164,8 +164,8 @@ export default function TelegramSignals() {
     if (user) {
       setShowInvestmentModal(true);
     } else {
-      // Redirect to registration if not logged in
-      navigate("/register");
+      // Redirect to signup if not logged in
+      navigate("/signup");
     }
   };
 

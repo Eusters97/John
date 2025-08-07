@@ -23,8 +23,8 @@ class InvestmentPlansService {
       name: "Starter Plan",
       description:
         "Perfect for beginners looking to get started with forex trading",
-      min_amount: 100,
-      max_amount: 999,
+      min_amount: 200,
+      max_amount: 2000,
       roi_percentage: 1000,
       duration_days: 1,
       is_active: true,

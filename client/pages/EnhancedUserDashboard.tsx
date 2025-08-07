@@ -859,7 +859,7 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create support ticket. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to create support ticket. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -971,7 +971,7 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       toast({
         title: "Investment Error",
-        description: "Failed to process investment. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to process investment. Please try again.",
         variant: "destructive",
       });
     } finally {

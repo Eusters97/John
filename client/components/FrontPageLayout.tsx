@@ -35,6 +35,7 @@ interface FrontPageLayoutProps {
 
 export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");

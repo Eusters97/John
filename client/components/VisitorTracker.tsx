@@ -52,7 +52,11 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
           .insert(visitorData);
 
         if (pageError) {
-          console.warn("Failed to track page view:", pageError);
+          console.warn("Failed to track page view:", {
+            message: pageError?.message || 'Unknown page tracking error',
+            code: pageError?.code || 'NO_CODE',
+            details: pageError?.details || 'No details available'
+          });
         }
 
         // Track visitor analytics

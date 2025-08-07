@@ -298,14 +298,36 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
           <div className="flex items-center justify-between h-16 px-6">
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="lg:hidden"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="w-5 h-5" />
               </Button>
+
+              {!sidebarHidden && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden lg:block"
+                  onClick={() => setSidebarHidden(true)}
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              )}
+
+              {sidebarHidden && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden lg:block"
+                  onClick={() => setSidebarHidden(false)}
+                >
+                  <Menu className="w-5 h-5" />
+                </Button>
+              )}
               
               <div className="hidden md:block">
                 <Badge className="bg-gradient-to-r from-success-500 to-success-600 text-white">

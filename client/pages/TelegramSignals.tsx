@@ -244,7 +244,7 @@ export default function TelegramSignals() {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/signup")}
                 className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
               >
                 Create Account

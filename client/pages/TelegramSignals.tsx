@@ -39,7 +39,8 @@ export default function TelegramSignals() {
   const investmentOffer = {
     id: "telegram-vip",
     name: "VIP Telegram Signals Package",
-    description: "Exclusive access to our premium Telegram signals with guaranteed results",
+    description:
+      "Exclusive access to our premium Telegram signals with guaranteed results",
     min_amount: 500,
     max_amount: 50000,
     roi_percentage: 1200,
@@ -53,10 +54,10 @@ export default function TelegramSignals() {
       "24/7 Support",
       "Risk Management",
       "Live Trading Room",
-      "Exclusive Telegram Access"
+      "Exclusive Telegram Access",
     ],
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   };
 
   // Telegram signals reviews
@@ -64,21 +65,25 @@ export default function TelegramSignals() {
     {
       id: 1,
       name: "Marcus Johnson",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
       rating: 5,
-      review: "The Telegram signals are incredibly accurate! I've made over $15,000 in just 3 weeks following their trades. The analysis is spot-on and the entry/exit points are perfect.",
+      review:
+        "The Telegram signals are incredibly accurate! I've made over $15,000 in just 3 weeks following their trades. The analysis is spot-on and the entry/exit points are perfect.",
       profit: "+$15,240",
-      timeframe: "3 weeks"
+      timeframe: "3 weeks",
     },
     {
       id: 2,
       name: "Sarah Chen",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
       rating: 5,
-      review: "Best forex signals I've ever used! The Telegram channel is so well organized and the signals come with detailed analysis. My trading account has grown by 180% since joining.",
+      review:
+        "Best forex signals I've ever used! The Telegram channel is so well organized and the signals come with detailed analysis. My trading account has grown by 180% since joining.",
       profit: "+$8,750",
-      timeframe: "1 month"
-    }
+      timeframe: "1 month",
+    },
   ];
 
   // Investment testimonials
@@ -86,23 +91,27 @@ export default function TelegramSignals() {
     {
       id: 1,
       name: "David Rodriguez",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       location: "Miami, FL",
       investment: "$1,000",
       return: "$25,000",
-      story: "I started with just $1,000 and couldn't believe the results! The team delivered exactly what they promised. My investment grew to $25,000 in just 6 weeks. This is life-changing!",
-      timeframe: "6 weeks"
+      story:
+        "I started with just $1,000 and couldn't believe the results! The team delivered exactly what they promised. My investment grew to $25,000 in just 6 weeks. This is life-changing!",
+      timeframe: "6 weeks",
     },
     {
       id: 2,
       name: "Emily Watson",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
       location: "London, UK",
       investment: "$2,500",
       return: "$62,500",
-      story: "As a single mother, this investment changed everything for my family. The returns exceeded all my expectations and the support team was incredible throughout the process.",
-      timeframe: "2 months"
-    }
+      story:
+        "As a single mother, this investment changed everything for my family. The returns exceeded all my expectations and the support team was incredible throughout the process.",
+      timeframe: "2 months",
+    },
   ];
 
   const handleSignup = async () => {
@@ -130,7 +139,8 @@ export default function TelegramSignals() {
       if (result.success) {
         toast({
           title: "Success!",
-          description: "Account created successfully! Redirecting to dashboard...",
+          description:
+            "Account created successfully! Redirecting to dashboard...",
         });
 
         // Redirect to dashboard after successful signup
@@ -143,7 +153,8 @@ export default function TelegramSignals() {
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create account",
+        description:
+          error instanceof Error ? error.message : "Failed to create account",
         variant: "destructive",
       });
     }
@@ -160,13 +171,14 @@ export default function TelegramSignals() {
 
   const handleJoinTelegram = () => {
     // Open Telegram channel
-    window.open('https://t.me/forex_traders_signalss', '_blank');
+    window.open("https://t.me/forex_traders_signalss", "_blank");
 
     // If user is not logged in, encourage them to create account
     if (!user) {
       toast({
         title: "Join Our Community!",
-        description: "Create a free account to get exclusive access to our premium features",
+        description:
+          "Create a free account to get exclusive access to our premium features",
       });
     }
   };
@@ -189,10 +201,12 @@ export default function TelegramSignals() {
               <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold text-white">ForexSignals</span>
+              <span className="text-2xl font-bold text-white">
+                ForexSignals
+              </span>
             </div>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-white hover:text-gray-200 transition-colors text-sm font-medium"
             >
               ← Back to Home
@@ -207,12 +221,16 @@ export default function TelegramSignals() {
               🔥 EXCLUSIVE TELEGRAM OFFER
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Join Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">VIP</span><br />
+              Join Our{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                VIP
+              </span>
+              <br />
               Telegram Signals
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Get access to premium forex signals with 90%+ win rate directly in your Telegram. 
-              Start earning massive profits today!
+              Get access to premium forex signals with 90%+ win rate directly in
+              your Telegram. Start earning massive profits today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -240,7 +258,9 @@ export default function TelegramSignals() {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 🚀 Limited Time Investment Opportunity
               </h2>
-              <p className="text-gray-300 text-lg">Don't miss this exclusive offer available only through Telegram</p>
+              <p className="text-gray-300 text-lg">
+                Don't miss this exclusive offer available only through Telegram
+              </p>
             </div>
 
             <Card className="max-w-4xl mx-auto bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 shadow-2xl">
@@ -262,22 +282,31 @@ export default function TelegramSignals() {
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <DollarSign className="h-8 w-8 text-green-600 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">Minimum Investment</p>
-                    <p className="text-xl font-bold text-gray-900">${investmentOffer.min_amount}</p>
+                    <p className="text-xl font-bold text-gray-900">
+                      ${investmentOffer.min_amount}
+                    </p>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <Target className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">Return Multiplier</p>
-                    <p className="text-xl font-bold text-green-600">{investmentOffer.roi_percentage / 100}x</p>
+                    <p className="text-xl font-bold text-green-600">
+                      {investmentOffer.roi_percentage / 100}x
+                    </p>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <Clock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">Duration</p>
-                    <p className="text-xl font-bold text-gray-900">{investmentOffer.duration_days} day{investmentOffer.duration_days !== 1 ? 's' : ''}</p>
+                    <p className="text-xl font-bold text-gray-900">
+                      {investmentOffer.duration_days} day
+                      {investmentOffer.duration_days !== 1 ? "s" : ""}
+                    </p>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">What's Included:</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    What's Included:
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {investmentOffer.features.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-2">
@@ -306,12 +335,18 @@ export default function TelegramSignals() {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 📈 Real Results from Our Telegram Signals
               </h2>
-              <p className="text-gray-300 text-lg">See what our members are saying about our Telegram trading signals</p>
+              <p className="text-gray-300 text-lg">
+                See what our members are saying about our Telegram trading
+                signals
+              </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {signalsReviews.map((review) => (
-                <Card key={review.id} className="bg-white/10 backdrop-blur-lg border border-white/20 text-white">
+                <Card
+                  key={review.id}
+                  className="bg-white/10 backdrop-blur-lg border border-white/20 text-white"
+                >
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4 mb-4">
                       <img
@@ -321,10 +356,15 @@ export default function TelegramSignals() {
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold text-lg">{review.name}</h3>
+                          <h3 className="font-semibold text-lg">
+                            {review.name}
+                          </h3>
                           <div className="flex space-x-1">
                             {[...Array(review.rating)].map((_, i) => (
-                              <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <Star
+                                key={i}
+                                className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                              />
                             ))}
                           </div>
                         </div>
@@ -332,11 +372,15 @@ export default function TelegramSignals() {
                           <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
                             {review.profit}
                           </Badge>
-                          <span className="text-sm text-gray-300">{review.timeframe}</span>
+                          <span className="text-sm text-gray-300">
+                            {review.timeframe}
+                          </span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-gray-200 leading-relaxed">{review.review}</p>
+                    <p className="text-gray-200 leading-relaxed">
+                      {review.review}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -349,12 +393,17 @@ export default function TelegramSignals() {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 💰 Life-Changing Investment Stories
               </h2>
-              <p className="text-gray-300 text-lg">Real people, real profits, real life transformations</p>
+              <p className="text-gray-300 text-lg">
+                Real people, real profits, real life transformations
+              </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {investmentTestimonials.map((testimonial) => (
-                <Card key={testimonial.id} className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 text-white">
+                <Card
+                  key={testimonial.id}
+                  className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 text-white"
+                >
                   <CardContent className="p-8">
                     <div className="flex items-center space-x-4 mb-6">
                       <img
@@ -363,19 +412,27 @@ export default function TelegramSignals() {
                         className="w-16 h-16 rounded-full object-cover"
                       />
                       <div>
-                        <h3 className="font-bold text-xl">{testimonial.name}</h3>
+                        <h3 className="font-bold text-xl">
+                          {testimonial.name}
+                        </h3>
                         <p className="text-gray-300">{testimonial.location}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div className="bg-red-500/20 rounded-lg p-3 text-center">
-                        <p className="text-sm text-gray-300">Initial Investment</p>
-                        <p className="text-xl font-bold text-red-400">{testimonial.investment}</p>
+                        <p className="text-sm text-gray-300">
+                          Initial Investment
+                        </p>
+                        <p className="text-xl font-bold text-red-400">
+                          {testimonial.investment}
+                        </p>
                       </div>
                       <div className="bg-green-500/20 rounded-lg p-3 text-center">
                         <p className="text-sm text-gray-300">Total Return</p>
-                        <p className="text-xl font-bold text-green-400">{testimonial.return}</p>
+                        <p className="text-xl font-bold text-green-400">
+                          {testimonial.return}
+                        </p>
                       </div>
                     </div>
 
@@ -402,7 +459,8 @@ export default function TelegramSignals() {
                 Ready to Transform Your Financial Future?
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of successful traders in our exclusive Telegram channel and start your journey to financial freedom today.
+                Join thousands of successful traders in our exclusive Telegram
+                channel and start your journey to financial freedom today.
               </p>
 
               <div className="space-y-4 max-w-md mx-auto">
@@ -421,8 +479,8 @@ export default function TelegramSignals() {
                     className="bg-white/10 border-white/20 text-white placeholder-gray-400"
                   />
                 </div>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   onClick={handleSignup}
                   className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-4 text-lg"
                 >
@@ -461,7 +519,8 @@ export default function TelegramSignals() {
                   Join Our Official Telegram Channel
                 </h3>
                 <p className="text-gray-300 mb-6">
-                  Get instant access to premium forex signals, market analysis, and join our community of successful traders.
+                  Get instant access to premium forex signals, market analysis,
+                  and join our community of successful traders.
                 </p>
                 <Button
                   size="lg"

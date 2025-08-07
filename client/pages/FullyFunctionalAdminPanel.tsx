@@ -17,7 +17,9 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { signalsService, type ForexSignal } from "@/lib/signals-service";
-import investmentPlansService, { InvestmentPlan } from "@/lib/investment-plans-service";
+import investmentPlansService, {
+  InvestmentPlan,
+} from "@/lib/investment-plans-service";
 import {
   Upload,
   FileText,
@@ -194,7 +196,7 @@ interface FrontendInvestmentPlan {
   duration_days: number;
   is_active: boolean;
   is_featured: boolean;
-  plan_type: 'frontend' | 'dashboard';
+  plan_type: "frontend" | "dashboard";
   features: string[];
   created_at: string;
 }
@@ -217,8 +219,12 @@ export default function FullyFunctionalAdminPanel() {
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [siteErrors, setSiteErrors] = useState<SiteError[]>([]);
-  const [frontendPlans, setFrontendPlans] = useState<FrontendInvestmentPlan[]>([]);
-  const [dashboardPlans, setDashboardPlans] = useState<FrontendInvestmentPlan[]>([]);
+  const [frontendPlans, setFrontendPlans] = useState<FrontendInvestmentPlan[]>(
+    [],
+  );
+  const [dashboardPlans, setDashboardPlans] = useState<
+    FrontendInvestmentPlan[]
+  >([]);
 
   // Form states
   const [newsForm, setNewsForm] = useState({
@@ -258,11 +264,14 @@ export default function FullyFunctionalAdminPanel() {
   });
 
   const [ticketReply, setTicketReply] = useState("");
-  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(
+    null,
+  );
 
   const [siteSettings, setSiteSettings] = useState({
     site_name: "Forex Signals Platform",
-    site_description: "Professional forex trading signals and investment platform",
+    site_description:
+      "Professional forex trading signals and investment platform",
     contact_email: "support@forexsignals.com",
     telegram_channel: "https://t.me/forex_traders_signalss",
     maintenance_mode: false,
@@ -357,8 +366,8 @@ export default function FullyFunctionalAdminPanel() {
       setUsers(data || []);
     } catch (error) {
       console.error("Error loading users:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -370,18 +379,20 @@ export default function FullyFunctionalAdminPanel() {
       setLoading(true);
       const { data, error } = await supabase
         .from("payments")
-        .select(`
+        .select(
+          `
           *,
           user_profiles(full_name, email)
-        `)
+        `,
+        )
         .order("created_at", { ascending: false });
 
       if (error && error.code !== "42P01") throw error;
       setPayments(data || []);
     } catch (error) {
       console.error("Error loading payments:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -393,18 +404,20 @@ export default function FullyFunctionalAdminPanel() {
       setLoading(true);
       const { data, error } = await supabase
         .from("support_tickets")
-        .select(`
+        .select(
+          `
           *,
           user_profiles(full_name, email)
-        `)
+        `,
+        )
         .order("created_at", { ascending: false });
 
       if (error && error.code !== "42P01") throw error;
       setSupportTickets(data || []);
     } catch (error) {
       console.error("Error loading support tickets:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -423,8 +436,8 @@ export default function FullyFunctionalAdminPanel() {
       setNewsPosts(data || []);
     } catch (error) {
       console.error("Error loading news posts:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -443,8 +456,8 @@ export default function FullyFunctionalAdminPanel() {
       setBlogPosts(data || []);
     } catch (error) {
       console.error("Error loading blog posts:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -463,8 +476,8 @@ export default function FullyFunctionalAdminPanel() {
       setEbooks(data || []);
     } catch (error) {
       console.error("Error loading ebooks:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -483,8 +496,8 @@ export default function FullyFunctionalAdminPanel() {
       setTestimonials(data || []);
     } catch (error) {
       console.error("Error loading testimonials:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -500,8 +513,8 @@ export default function FullyFunctionalAdminPanel() {
       }
     } catch (error) {
       console.error("Error loading signals:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -521,8 +534,8 @@ export default function FullyFunctionalAdminPanel() {
       setSiteErrors(data || []);
     } catch (error) {
       console.error("Error loading site errors:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -538,14 +551,14 @@ export default function FullyFunctionalAdminPanel() {
         .order("created_at", { ascending: false });
 
       if (error && error.code !== "42P01") throw error;
-      
+
       const plans = data || [];
-      setFrontendPlans(plans.filter(p => p.plan_type === 'frontend'));
-      setDashboardPlans(plans.filter(p => p.plan_type === 'dashboard'));
+      setFrontendPlans(plans.filter((p) => p.plan_type === "frontend"));
+      setDashboardPlans(plans.filter((p) => p.plan_type === "dashboard"));
     } catch (error) {
       console.error("Error loading investment plans:", {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
       setLoading(false);
@@ -598,7 +611,8 @@ export default function FullyFunctionalAdminPanel() {
         .from("blog_posts")
         .insert({
           ...blogForm,
-          slug: blogForm.slug || blogForm.title.toLowerCase().replace(/\s+/g, '-'),
+          slug:
+            blogForm.slug || blogForm.title.toLowerCase().replace(/\s+/g, "-"),
           created_at: new Date().toISOString(),
         })
         .select()
@@ -681,7 +695,7 @@ export default function FullyFunctionalAdminPanel() {
         .update({
           admin_reply: ticketReply,
           replied_at: new Date().toISOString(),
-          status: 'replied',
+          status: "replied",
         })
         .eq("id", ticketId);
 
@@ -708,7 +722,7 @@ export default function FullyFunctionalAdminPanel() {
   const sendEmailToAllUsers = async () => {
     try {
       setLoading(true);
-      
+
       // First get all users
       const { data: users, error: usersError } = await supabase
         .from("user_profiles")
@@ -717,9 +731,9 @@ export default function FullyFunctionalAdminPanel() {
       if (usersError) throw usersError;
 
       // Create email notifications for all users
-      const notifications = users.map(user => ({
-        user_id: user.id || 'system',
-        type: 'email',
+      const notifications = users.map((user) => ({
+        user_id: user.id || "system",
+        type: "email",
         title: emailForm.subject,
         message: emailForm.message,
         created_at: new Date().toISOString(),
@@ -762,7 +776,7 @@ export default function FullyFunctionalAdminPanel() {
 
       toast({
         title: "Success",
-        description: `User ${isActive ? 'activated' : 'deactivated'} successfully`,
+        description: `User ${isActive ? "activated" : "deactivated"} successfully`,
       });
       loadUsers();
     } catch (error) {
@@ -800,7 +814,7 @@ export default function FullyFunctionalAdminPanel() {
   const updateSiteSettings = async () => {
     try {
       setLoading(true);
-      
+
       // In a real app, this would update a settings table
       // For now, we'll just show success
       toast({
@@ -827,7 +841,10 @@ export default function FullyFunctionalAdminPanel() {
               <Shield className="h-8 w-8 text-blue-600 mr-2" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-                <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                <Badge
+                  variant="secondary"
+                  className="bg-green-100 text-green-800 text-xs"
+                >
                   Administrator
                 </Badge>
               </div>
@@ -857,7 +874,9 @@ export default function FullyFunctionalAdminPanel() {
                 >
                   <Icon
                     className={`mr-3 h-5 w-5 ${
-                      activeTab === item.id ? "text-blue-600" : "text-gray-400 group-hover:text-gray-500"
+                      activeTab === item.id
+                        ? "text-blue-600"
+                        : "text-gray-400 group-hover:text-gray-500"
                     }`}
                   />
                   {item.label}
@@ -868,8 +887,8 @@ export default function FullyFunctionalAdminPanel() {
         </div>
         <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
           <div className="flex flex-col space-y-2 w-full">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
               <Globe className="h-4 w-4 mr-2" />
@@ -895,15 +914,19 @@ export default function FullyFunctionalAdminPanel() {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
-                <p className="text-gray-600">Platform performance at a glance</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Dashboard Overview
+                </h2>
+                <p className="text-gray-600">
+                  Platform performance at a glance
+                </p>
               </div>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Monitor className="h-5 w-5 text-gray-400" />
                 <span className="text-sm text-gray-500">Live Data</span>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
@@ -912,8 +935,12 @@ export default function FullyFunctionalAdminPanel() {
                       <Users className="h-8 w-8 text-blue-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Users</p>
-                      <p className="text-2xl font-bold text-gray-900">{users.length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Total Users
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {users.length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -926,8 +953,12 @@ export default function FullyFunctionalAdminPanel() {
                       <TrendingUp className="h-8 w-8 text-green-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Active Signals</p>
-                      <p className="text-2xl font-bold text-gray-900">{signals.filter(s => s.status === 'active').length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Active Signals
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {signals.filter((s) => s.status === "active").length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -940,8 +971,15 @@ export default function FullyFunctionalAdminPanel() {
                       <HelpCircle className="h-8 w-8 text-orange-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Open Tickets</p>
-                      <p className="text-2xl font-bold text-gray-900">{supportTickets.filter(t => t.status === 'open').length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Open Tickets
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {
+                          supportTickets.filter((t) => t.status === "open")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -954,8 +992,12 @@ export default function FullyFunctionalAdminPanel() {
                       <Newspaper className="h-8 w-8 text-purple-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">News Posts</p>
-                      <p className="text-2xl font-bold text-gray-900">{newsPosts.length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        News Posts
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {newsPosts.length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -968,7 +1010,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                User Management
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
@@ -1002,23 +1046,40 @@ export default function FullyFunctionalAdminPanel() {
                       </thead>
                       <tbody>
                         {users.map((user) => (
-                          <tr key={user.id} className="border-b hover:bg-gray-50">
+                          <tr
+                            key={user.id}
+                            className="border-b hover:bg-gray-50"
+                          >
                             <td className="p-3">
                               <div>
-                                <p className="font-medium">{user.full_name || 'N/A'}</p>
-                                <p className="text-gray-500 text-xs">{user.id.substring(0, 8)}...</p>
+                                <p className="font-medium">
+                                  {user.full_name || "N/A"}
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                  {user.id.substring(0, 8)}...
+                                </p>
                               </div>
                             </td>
                             <td className="p-3">{user.email}</td>
-                            <td className="p-3">{user.country || 'N/A'}</td>
+                            <td className="p-3">{user.country || "N/A"}</td>
                             <td className="p-3">
-                              <Badge variant={user.kyc_status === 'verified' ? 'default' : 'secondary'}>
-                                {user.kyc_status || 'pending'}
+                              <Badge
+                                variant={
+                                  user.kyc_status === "verified"
+                                    ? "default"
+                                    : "secondary"
+                                }
+                              >
+                                {user.kyc_status || "pending"}
                               </Badge>
                             </td>
                             <td className="p-3">
-                              <Badge variant={user.is_active ? 'default' : 'destructive'}>
-                                {user.is_active ? 'Active' : 'Inactive'}
+                              <Badge
+                                variant={
+                                  user.is_active ? "default" : "destructive"
+                                }
+                              >
+                                {user.is_active ? "Active" : "Inactive"}
                               </Badge>
                             </td>
                             <td className="p-3">
@@ -1026,12 +1087,18 @@ export default function FullyFunctionalAdminPanel() {
                             </td>
                             <td className="p-3">
                               <div className="flex items-center space-x-2">
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   size="sm"
-                                  onClick={() => updateUserStatus(user.id, !user.is_active)}
+                                  onClick={() =>
+                                    updateUserStatus(user.id, !user.is_active)
+                                  }
                                 >
-                                  {user.is_active ? <PauseCircle className="h-4 w-4" /> : <PlayCircle className="h-4 w-4" />}
+                                  {user.is_active ? (
+                                    <PauseCircle className="h-4 w-4" />
+                                  ) : (
+                                    <PlayCircle className="h-4 w-4" />
+                                  )}
                                 </Button>
                                 <Button variant="outline" size="sm">
                                   <Eye className="h-4 w-4" />
@@ -1053,7 +1120,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Payment Management</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Payment Management
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Button variant="outline" size="sm">
                   <RefreshCw className="h-4 w-4 mr-2" />
@@ -1086,41 +1155,72 @@ export default function FullyFunctionalAdminPanel() {
                       </thead>
                       <tbody>
                         {payments.map((payment) => (
-                          <tr key={payment.id} className="border-b hover:bg-gray-50">
+                          <tr
+                            key={payment.id}
+                            className="border-b hover:bg-gray-50"
+                          >
                             <td className="p-3">
                               <div>
-                                <p className="font-medium">{payment.user_profiles?.full_name || 'Unknown'}</p>
-                                <p className="text-gray-500 text-xs">{payment.user_profiles?.email}</p>
+                                <p className="font-medium">
+                                  {payment.user_profiles?.full_name ||
+                                    "Unknown"}
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                  {payment.user_profiles?.email}
+                                </p>
                               </div>
                             </td>
                             <td className="p-3">
-                              <span className="font-semibold">${payment.amount}</span>
-                              <span className="text-gray-500 ml-1">{payment.currency}</span>
+                              <span className="font-semibold">
+                                ${payment.amount}
+                              </span>
+                              <span className="text-gray-500 ml-1">
+                                {payment.currency}
+                              </span>
                             </td>
                             <td className="p-3">
-                              <Badge variant="outline">{payment.payment_method}</Badge>
+                              <Badge variant="outline">
+                                {payment.payment_method}
+                              </Badge>
                             </td>
                             <td className="p-3">
-                              <Badge variant={
-                                payment.status === 'completed' ? 'default' :
-                                payment.status === 'pending' ? 'secondary' : 'destructive'
-                              }>
+                              <Badge
+                                variant={
+                                  payment.status === "completed"
+                                    ? "default"
+                                    : payment.status === "pending"
+                                      ? "secondary"
+                                      : "destructive"
+                                }
+                              >
                                 {payment.status}
                               </Badge>
                             </td>
                             <td className="p-3">
-                              {new Date(payment.created_at).toLocaleDateString()}
+                              {new Date(
+                                payment.created_at,
+                              ).toLocaleDateString()}
                             </td>
                             <td className="p-3">
-                              <Select onValueChange={(value) => updatePaymentStatus(payment.id, value)}>
+                              <Select
+                                onValueChange={(value) =>
+                                  updatePaymentStatus(payment.id, value)
+                                }
+                              >
                                 <SelectTrigger className="w-32">
                                   <SelectValue placeholder="Update" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="pending">Pending</SelectItem>
-                                  <SelectItem value="completed">Completed</SelectItem>
+                                  <SelectItem value="pending">
+                                    Pending
+                                  </SelectItem>
+                                  <SelectItem value="completed">
+                                    Completed
+                                  </SelectItem>
                                   <SelectItem value="failed">Failed</SelectItem>
-                                  <SelectItem value="refunded">Refunded</SelectItem>
+                                  <SelectItem value="refunded">
+                                    Refunded
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </td>
@@ -1139,10 +1239,18 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Support Tickets</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Support Tickets
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                <Badge variant="outline">{supportTickets.filter(t => t.status === 'open').length} Open</Badge>
-                <Badge variant="secondary">{supportTickets.filter(t => t.status === 'resolved').length} Resolved</Badge>
+                <Badge variant="outline">
+                  {supportTickets.filter((t) => t.status === "open").length}{" "}
+                  Open
+                </Badge>
+                <Badge variant="secondary">
+                  {supportTickets.filter((t) => t.status === "resolved").length}{" "}
+                  Resolved
+                </Badge>
               </div>
             </div>
 
@@ -1158,17 +1266,30 @@ export default function FullyFunctionalAdminPanel() {
                 ) : (
                   <div className="space-y-4">
                     {supportTickets.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">No support tickets found</p>
+                      <p className="text-gray-500 text-center py-8">
+                        No support tickets found
+                      </p>
                     ) : (
                       supportTickets.map((ticket) => (
-                        <div key={ticket.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={ticket.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex flex-col lg:flex-row lg:items-start justify-between space-y-4 lg:space-y-0">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <Ticket className="h-4 w-4 text-gray-400" />
-                                <h3 className="font-semibold">{ticket.subject}</h3>
-                                <Badge 
-                                  variant={ticket.status === 'open' ? 'destructive' : ticket.status === 'resolved' ? 'default' : 'secondary'}
+                                <h3 className="font-semibold">
+                                  {ticket.subject}
+                                </h3>
+                                <Badge
+                                  variant={
+                                    ticket.status === "open"
+                                      ? "destructive"
+                                      : ticket.status === "resolved"
+                                        ? "default"
+                                        : "secondary"
+                                  }
                                   className="text-xs"
                                 >
                                   {ticket.status}
@@ -1177,26 +1298,46 @@ export default function FullyFunctionalAdminPanel() {
                                   {ticket.priority}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-gray-600 mb-2">{ticket.message}</p>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {ticket.message}
+                              </p>
                               <div className="flex items-center space-x-4 text-xs text-gray-500">
-                                <span>From: {ticket.user_profiles?.full_name || 'Unknown User'}</span>
-                                <span>Email: {ticket.user_profiles?.email || 'No email'}</span>
-                                <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+                                <span>
+                                  From:{" "}
+                                  {ticket.user_profiles?.full_name ||
+                                    "Unknown User"}
+                                </span>
+                                <span>
+                                  Email:{" "}
+                                  {ticket.user_profiles?.email || "No email"}
+                                </span>
+                                <span>
+                                  {new Date(
+                                    ticket.created_at,
+                                  ).toLocaleDateString()}
+                                </span>
                               </div>
                               {ticket.admin_reply && (
                                 <div className="mt-3 p-3 bg-blue-50 rounded border-l-4 border-blue-200">
-                                  <p className="text-sm font-medium text-blue-800">Admin Reply:</p>
-                                  <p className="text-sm text-blue-700">{ticket.admin_reply}</p>
+                                  <p className="text-sm font-medium text-blue-800">
+                                    Admin Reply:
+                                  </p>
+                                  <p className="text-sm text-blue-700">
+                                    {ticket.admin_reply}
+                                  </p>
                                   <p className="text-xs text-blue-500 mt-1">
-                                    Replied: {new Date(ticket.replied_at || '').toLocaleDateString()}
+                                    Replied:{" "}
+                                    {new Date(
+                                      ticket.replied_at || "",
+                                    ).toLocaleDateString()}
                                   </p>
                                 </div>
                               )}
                             </div>
                             <div className="flex flex-col space-y-2">
                               {!ticket.admin_reply && (
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   size="sm"
                                   onClick={() => setSelectedTicket(ticket)}
                                 >
@@ -1223,15 +1364,22 @@ export default function FullyFunctionalAdminPanel() {
                 <Card className="w-full max-w-2xl">
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle>Reply to Ticket: {selectedTicket.subject}</CardTitle>
-                      <Button variant="ghost" onClick={() => setSelectedTicket(null)}>
+                      <CardTitle>
+                        Reply to Ticket: {selectedTicket.subject}
+                      </CardTitle>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setSelectedTicket(null)}
+                      >
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-gray-50 p-3 rounded">
-                      <p className="text-sm text-gray-600 mb-1">Original message:</p>
+                      <p className="text-sm text-gray-600 mb-1">
+                        Original message:
+                      </p>
                       <p className="text-sm">{selectedTicket.message}</p>
                     </div>
                     <div>
@@ -1245,14 +1393,21 @@ export default function FullyFunctionalAdminPanel() {
                       />
                     </div>
                     <div className="flex space-x-2">
-                      <Button 
+                      <Button
                         onClick={() => replyToTicket(selectedTicket.id)}
                         disabled={!ticketReply.trim() || loading}
                       >
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+                        {loading ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        ) : (
+                          <Send className="h-4 w-4 mr-2" />
+                        )}
                         Send Reply
                       </Button>
-                      <Button variant="outline" onClick={() => setSelectedTicket(null)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setSelectedTicket(null)}
+                      >
                         Cancel
                       </Button>
                     </div>
@@ -1267,8 +1422,13 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">News Management</h2>
-              <Button onClick={() => setActiveTab("create-news")} className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                News Management
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-news")}
+                className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create News
               </Button>
@@ -1287,7 +1447,9 @@ export default function FullyFunctionalAdminPanel() {
                         id="news_title"
                         placeholder="Enter news title"
                         value={newsForm.title}
-                        onChange={(e) => setNewsForm({ ...newsForm, title: e.target.value })}
+                        onChange={(e) =>
+                          setNewsForm({ ...newsForm, title: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -1296,7 +1458,12 @@ export default function FullyFunctionalAdminPanel() {
                         id="news_image"
                         placeholder="https://example.com/image.jpg"
                         value={newsForm.featured_image_url}
-                        onChange={(e) => setNewsForm({ ...newsForm, featured_image_url: e.target.value })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            featured_image_url: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1307,7 +1474,9 @@ export default function FullyFunctionalAdminPanel() {
                       id="news_excerpt"
                       placeholder="Brief summary of the news..."
                       value={newsForm.excerpt}
-                      onChange={(e) => setNewsForm({ ...newsForm, excerpt: e.target.value })}
+                      onChange={(e) =>
+                        setNewsForm({ ...newsForm, excerpt: e.target.value })
+                      }
                     />
                   </div>
 
@@ -1318,7 +1487,9 @@ export default function FullyFunctionalAdminPanel() {
                       placeholder="Full news content..."
                       className="min-h-[200px]"
                       value={newsForm.content}
-                      onChange={(e) => setNewsForm({ ...newsForm, content: e.target.value })}
+                      onChange={(e) =>
+                        setNewsForm({ ...newsForm, content: e.target.value })
+                      }
                     />
                   </div>
 
@@ -1327,7 +1498,12 @@ export default function FullyFunctionalAdminPanel() {
                       <input
                         type="checkbox"
                         checked={newsForm.is_published}
-                        onChange={(e) => setNewsForm({ ...newsForm, is_published: e.target.checked })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            is_published: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Publish immediately
@@ -1336,7 +1512,12 @@ export default function FullyFunctionalAdminPanel() {
                       <input
                         type="checkbox"
                         checked={newsForm.is_breaking}
-                        onChange={(e) => setNewsForm({ ...newsForm, is_breaking: e.target.checked })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            is_breaking: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Breaking news
@@ -1344,11 +1525,21 @@ export default function FullyFunctionalAdminPanel() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                    <Button onClick={createNewsPost} disabled={loading || !newsForm.title || !newsForm.content}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                    <Button
+                      onClick={createNewsPost}
+                      disabled={loading || !newsForm.title || !newsForm.content}
+                    >
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create News
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("news")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("news")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -1367,29 +1558,49 @@ export default function FullyFunctionalAdminPanel() {
                   ) : (
                     <div className="space-y-4">
                       {newsPosts.length === 0 ? (
-                        <p className="text-gray-500 text-center py-8">No news posts created yet</p>
+                        <p className="text-gray-500 text-center py-8">
+                          No news posts created yet
+                        </p>
                       ) : (
                         newsPosts.slice(0, 10).map((post) => (
-                          <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div
+                            key={post.id}
+                            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                          >
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <h3 className="font-semibold">{post.title}</h3>
+                                  <h3 className="font-semibold">
+                                    {post.title}
+                                  </h3>
                                   {post.is_breaking && (
-                                    <Badge variant="destructive" className="text-xs">
+                                    <Badge
+                                      variant="destructive"
+                                      className="text-xs"
+                                    >
                                       BREAKING
                                     </Badge>
                                   )}
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {post.excerpt}
+                                </p>
                                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                                   <span>Views: {post.view_count}</span>
-                                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                                  <span>
+                                    {new Date(
+                                      post.created_at,
+                                    ).toLocaleDateString()}
+                                  </span>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                                <Badge variant={post.is_published ? 'default' : 'secondary'}>
-                                  {post.is_published ? 'Published' : 'Draft'}
+                                <Badge
+                                  variant={
+                                    post.is_published ? "default" : "secondary"
+                                  }
+                                >
+                                  {post.is_published ? "Published" : "Draft"}
                                 </Badge>
                                 <Button variant="outline" size="sm">
                                   <Edit className="h-4 w-4" />
@@ -1411,7 +1622,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Email Notifications</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Email Notifications
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Badge variant="outline">{users.length} Recipients</Badge>
               </div>
@@ -1420,7 +1633,9 @@ export default function FullyFunctionalAdminPanel() {
             <Card>
               <CardHeader>
                 <CardTitle>Send Email to All Users</CardTitle>
-                <p className="text-gray-600">Send notifications to all registered users</p>
+                <p className="text-gray-600">
+                  Send notifications to all registered users
+                </p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -1429,7 +1644,9 @@ export default function FullyFunctionalAdminPanel() {
                     id="email_subject"
                     placeholder="Email subject"
                     value={emailForm.subject}
-                    onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
+                    onChange={(e) =>
+                      setEmailForm({ ...emailForm, subject: e.target.value })
+                    }
                   />
                 </div>
 
@@ -1440,7 +1657,9 @@ export default function FullyFunctionalAdminPanel() {
                     placeholder="Email content..."
                     className="min-h-[200px]"
                     value={emailForm.message}
-                    onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
+                    onChange={(e) =>
+                      setEmailForm({ ...emailForm, message: e.target.value })
+                    }
                   />
                 </div>
 
@@ -1449,7 +1668,12 @@ export default function FullyFunctionalAdminPanel() {
                     <input
                       type="checkbox"
                       checked={emailForm.is_html}
-                      onChange={(e) => setEmailForm({ ...emailForm, is_html: e.target.checked })}
+                      onChange={(e) =>
+                        setEmailForm({
+                          ...emailForm,
+                          is_html: e.target.checked,
+                        })
+                      }
                       className="mr-2"
                     />
                     HTML Email
@@ -1457,12 +1681,18 @@ export default function FullyFunctionalAdminPanel() {
                 </div>
 
                 <div className="flex space-x-2">
-                  <Button 
-                    onClick={sendEmailToAllUsers} 
-                    disabled={loading || !emailForm.subject || !emailForm.message}
+                  <Button
+                    onClick={sendEmailToAllUsers}
+                    disabled={
+                      loading || !emailForm.subject || !emailForm.message
+                    }
                     className="bg-green-600 hover:bg-green-700"
                   >
-                    {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <MailPlus className="h-4 w-4 mr-2" />}
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    ) : (
+                      <MailPlus className="h-4 w-4 mr-2" />
+                    )}
                     Send to All Users ({users.length})
                   </Button>
                 </div>
@@ -1470,7 +1700,11 @@ export default function FullyFunctionalAdminPanel() {
                 <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                   <p className="text-yellow-800 text-sm">
                     <AlertTriangle className="h-4 w-4 inline mr-1" />
-                    This will send an email notification to all {users.length} registered users. Make sure your message is appropriate and follows email best practices.
+                    This will send an email notification to all {
+                      users.length
+                    }{" "}
+                    registered users. Make sure your message is appropriate and
+                    follows email best practices.
                   </p>
                 </div>
               </CardContent>
@@ -1482,8 +1716,13 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Blog Management</h2>
-              <Button onClick={() => setActiveTab("create-blog")} className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Blog Management
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-blog")}
+                className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Blog Post
               </Button>
@@ -1502,7 +1741,9 @@ export default function FullyFunctionalAdminPanel() {
                         id="blog_title"
                         placeholder="Enter blog title"
                         value={blogForm.title}
-                        onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
+                        onChange={(e) =>
+                          setBlogForm({ ...blogForm, title: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -1511,7 +1752,9 @@ export default function FullyFunctionalAdminPanel() {
                         id="blog_slug"
                         placeholder="blog-post-slug (auto-generated if empty)"
                         value={blogForm.slug}
-                        onChange={(e) => setBlogForm({ ...blogForm, slug: e.target.value })}
+                        onChange={(e) =>
+                          setBlogForm({ ...blogForm, slug: e.target.value })
+                        }
                       />
                     </div>
                   </div>
@@ -1519,13 +1762,20 @@ export default function FullyFunctionalAdminPanel() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="blog_category">Category</Label>
-                      <Select value={blogForm.category} onValueChange={(value) => setBlogForm({ ...blogForm, category: value })}>
+                      <Select
+                        value={blogForm.category}
+                        onValueChange={(value) =>
+                          setBlogForm({ ...blogForm, category: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="trading">Trading</SelectItem>
-                          <SelectItem value="market-analysis">Market Analysis</SelectItem>
+                          <SelectItem value="market-analysis">
+                            Market Analysis
+                          </SelectItem>
                           <SelectItem value="education">Education</SelectItem>
                           <SelectItem value="news">News</SelectItem>
                           <SelectItem value="strategy">Strategy</SelectItem>
@@ -1538,7 +1788,12 @@ export default function FullyFunctionalAdminPanel() {
                         id="blog_image"
                         placeholder="https://example.com/image.jpg"
                         value={blogForm.featured_image_url}
-                        onChange={(e) => setBlogForm({ ...blogForm, featured_image_url: e.target.value })}
+                        onChange={(e) =>
+                          setBlogForm({
+                            ...blogForm,
+                            featured_image_url: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1549,7 +1804,9 @@ export default function FullyFunctionalAdminPanel() {
                       id="blog_excerpt"
                       placeholder="Brief summary of the blog post..."
                       value={blogForm.excerpt}
-                      onChange={(e) => setBlogForm({ ...blogForm, excerpt: e.target.value })}
+                      onChange={(e) =>
+                        setBlogForm({ ...blogForm, excerpt: e.target.value })
+                      }
                     />
                   </div>
 
@@ -1560,7 +1817,9 @@ export default function FullyFunctionalAdminPanel() {
                       placeholder="Full blog content..."
                       className="min-h-[300px]"
                       value={blogForm.content}
-                      onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })}
+                      onChange={(e) =>
+                        setBlogForm({ ...blogForm, content: e.target.value })
+                      }
                     />
                   </div>
 
@@ -1569,7 +1828,12 @@ export default function FullyFunctionalAdminPanel() {
                       <input
                         type="checkbox"
                         checked={blogForm.is_published}
-                        onChange={(e) => setBlogForm({ ...blogForm, is_published: e.target.checked })}
+                        onChange={(e) =>
+                          setBlogForm({
+                            ...blogForm,
+                            is_published: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Publish immediately
@@ -1577,11 +1841,21 @@ export default function FullyFunctionalAdminPanel() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                    <Button onClick={createBlogPost} disabled={loading || !blogForm.title || !blogForm.content}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                    <Button
+                      onClick={createBlogPost}
+                      disabled={loading || !blogForm.title || !blogForm.content}
+                    >
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create Blog Post
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("blog")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("blog")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -1600,26 +1874,45 @@ export default function FullyFunctionalAdminPanel() {
                   ) : (
                     <div className="space-y-4">
                       {blogPosts.length === 0 ? (
-                        <p className="text-gray-500 text-center py-8">No blog posts created yet</p>
+                        <p className="text-gray-500 text-center py-8">
+                          No blog posts created yet
+                        </p>
                       ) : (
                         blogPosts.map((post) => (
-                          <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div
+                            key={post.id}
+                            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                          >
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <h3 className="font-semibold">{post.title}</h3>
-                                  <Badge variant="outline">{post.category}</Badge>
+                                  <h3 className="font-semibold">
+                                    {post.title}
+                                  </h3>
+                                  <Badge variant="outline">
+                                    {post.category}
+                                  </Badge>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {post.excerpt}
+                                </p>
                                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                                   <span>Views: {post.view_count}</span>
                                   <span>Slug: {post.slug}</span>
-                                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                                  <span>
+                                    {new Date(
+                                      post.created_at,
+                                    ).toLocaleDateString()}
+                                  </span>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                                <Badge variant={post.is_published ? 'default' : 'secondary'}>
-                                  {post.is_published ? 'Published' : 'Draft'}
+                                <Badge
+                                  variant={
+                                    post.is_published ? "default" : "secondary"
+                                  }
+                                >
+                                  {post.is_published ? "Published" : "Draft"}
                                 </Badge>
                                 <Button variant="outline" size="sm">
                                   <Edit className="h-4 w-4" />
@@ -1644,8 +1937,13 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Ebook Management</h2>
-              <Button onClick={() => setActiveTab("create-ebook")} className="bg-purple-600 hover:bg-purple-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Ebook Management
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-ebook")}
+                className="bg-purple-600 hover:bg-purple-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Ebook
               </Button>
@@ -1664,7 +1962,9 @@ export default function FullyFunctionalAdminPanel() {
                         id="ebook_title"
                         placeholder="Ebook title"
                         value={ebookForm.title}
-                        onChange={(e) => setEbookForm({ ...ebookForm, title: e.target.value })}
+                        onChange={(e) =>
+                          setEbookForm({ ...ebookForm, title: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -1673,7 +1973,9 @@ export default function FullyFunctionalAdminPanel() {
                         id="ebook_author"
                         placeholder="Author name"
                         value={ebookForm.author}
-                        onChange={(e) => setEbookForm({ ...ebookForm, author: e.target.value })}
+                        onChange={(e) =>
+                          setEbookForm({ ...ebookForm, author: e.target.value })
+                        }
                       />
                     </div>
                   </div>
@@ -1684,14 +1986,24 @@ export default function FullyFunctionalAdminPanel() {
                       id="ebook_description"
                       placeholder="Ebook description..."
                       value={ebookForm.description}
-                      onChange={(e) => setEbookForm({ ...ebookForm, description: e.target.value })}
+                      onChange={(e) =>
+                        setEbookForm({
+                          ...ebookForm,
+                          description: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="ebook_category">Category</Label>
-                      <Select value={ebookForm.category} onValueChange={(value) => setEbookForm({ ...ebookForm, category: value })}>
+                      <Select
+                        value={ebookForm.category}
+                        onValueChange={(value) =>
+                          setEbookForm({ ...ebookForm, category: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
@@ -1700,18 +2012,29 @@ export default function FullyFunctionalAdminPanel() {
                           <SelectItem value="forex">Forex</SelectItem>
                           <SelectItem value="strategy">Strategy</SelectItem>
                           <SelectItem value="education">Education</SelectItem>
-                          <SelectItem value="technical-analysis">Technical Analysis</SelectItem>
+                          <SelectItem value="technical-analysis">
+                            Technical Analysis
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="ebook_investment">Required Investment ($)</Label>
+                      <Label htmlFor="ebook_investment">
+                        Required Investment ($)
+                      </Label>
                       <Input
                         id="ebook_investment"
                         type="number"
                         placeholder="0 for free ebooks"
                         value={ebookForm.required_investment_amount}
-                        onChange={(e) => setEbookForm({ ...ebookForm, required_investment_amount: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEbookForm({
+                            ...ebookForm,
+                            required_investment_amount: parseInt(
+                              e.target.value,
+                            ),
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1723,7 +2046,12 @@ export default function FullyFunctionalAdminPanel() {
                         id="ebook_file"
                         placeholder="https://example.com/ebook.pdf"
                         value={ebookForm.file_url}
-                        onChange={(e) => setEbookForm({ ...ebookForm, file_url: e.target.value })}
+                        onChange={(e) =>
+                          setEbookForm({
+                            ...ebookForm,
+                            file_url: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -1732,7 +2060,12 @@ export default function FullyFunctionalAdminPanel() {
                         id="ebook_cover"
                         placeholder="https://example.com/cover.jpg"
                         value={ebookForm.cover_image_url}
-                        onChange={(e) => setEbookForm({ ...ebookForm, cover_image_url: e.target.value })}
+                        onChange={(e) =>
+                          setEbookForm({
+                            ...ebookForm,
+                            cover_image_url: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1742,7 +2075,12 @@ export default function FullyFunctionalAdminPanel() {
                       <input
                         type="checkbox"
                         checked={ebookForm.is_free}
-                        onChange={(e) => setEbookForm({ ...ebookForm, is_free: e.target.checked })}
+                        onChange={(e) =>
+                          setEbookForm({
+                            ...ebookForm,
+                            is_free: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Free ebook (overrides investment requirement)
@@ -1750,11 +2088,23 @@ export default function FullyFunctionalAdminPanel() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                    <Button onClick={createEbook} disabled={loading || !ebookForm.title || !ebookForm.file_url}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                    <Button
+                      onClick={createEbook}
+                      disabled={
+                        loading || !ebookForm.title || !ebookForm.file_url
+                      }
+                    >
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create Ebook
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("ebooks")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("ebooks")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -1773,28 +2123,59 @@ export default function FullyFunctionalAdminPanel() {
                   ) : (
                     <div className="space-y-4">
                       {ebooks.length === 0 ? (
-                        <p className="text-gray-500 text-center py-8">No ebooks created yet</p>
+                        <p className="text-gray-500 text-center py-8">
+                          No ebooks created yet
+                        </p>
                       ) : (
                         ebooks.map((ebook) => (
-                          <div key={ebook.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div
+                            key={ebook.id}
+                            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                          >
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <h3 className="font-semibold">{ebook.title}</h3>
-                                  <Badge variant="outline">{ebook.category}</Badge>
-                                  {ebook.is_free && <Badge className="bg-green-100 text-green-800">Free</Badge>}
+                                  <h3 className="font-semibold">
+                                    {ebook.title}
+                                  </h3>
+                                  <Badge variant="outline">
+                                    {ebook.category}
+                                  </Badge>
+                                  {ebook.is_free && (
+                                    <Badge className="bg-green-100 text-green-800">
+                                      Free
+                                    </Badge>
+                                  )}
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">By {ebook.author}</p>
-                                <p className="text-sm text-gray-600 mb-2">{ebook.description}</p>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  By {ebook.author}
+                                </p>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {ebook.description}
+                                </p>
                                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                                   <span>Downloads: {ebook.download_count}</span>
-                                  {!ebook.is_free && <span>Requires: ${ebook.required_investment_amount} investment</span>}
-                                  <span>{new Date(ebook.created_at).toLocaleDateString()}</span>
+                                  {!ebook.is_free && (
+                                    <span>
+                                      Requires: $
+                                      {ebook.required_investment_amount}{" "}
+                                      investment
+                                    </span>
+                                  )}
+                                  <span>
+                                    {new Date(
+                                      ebook.created_at,
+                                    ).toLocaleDateString()}
+                                  </span>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                                <Badge variant={ebook.is_published ? 'default' : 'secondary'}>
-                                  {ebook.is_published ? 'Published' : 'Draft'}
+                                <Badge
+                                  variant={
+                                    ebook.is_published ? "default" : "secondary"
+                                  }
+                                >
+                                  {ebook.is_published ? "Published" : "Draft"}
                                 </Badge>
                                 <Button variant="outline" size="sm">
                                   <Edit className="h-4 w-4" />
@@ -1819,7 +2200,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Reviews Management</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Reviews Management
+              </h2>
             </div>
 
             <Card>
@@ -1834,33 +2217,65 @@ export default function FullyFunctionalAdminPanel() {
                 ) : (
                   <div className="space-y-4">
                     {testimonials.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">No reviews found</p>
+                      <p className="text-gray-500 text-center py-8">
+                        No reviews found
+                      </p>
                     ) : (
                       testimonials.map((testimonial) => (
-                        <div key={testimonial.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={testimonial.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex flex-col sm:flex-row sm:items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
-                                <h3 className="font-semibold">{testimonial.name}</h3>
+                                <h3 className="font-semibold">
+                                  {testimonial.name}
+                                </h3>
                                 <div className="flex items-center">
-                                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                  {Array.from({
+                                    length: testimonial.rating,
+                                  }).map((_, i) => (
+                                    <Star
+                                      key={i}
+                                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                                    />
                                   ))}
                                 </div>
-                                <span className="text-sm text-gray-500">({testimonial.rating}/5)</span>
+                                <span className="text-sm text-gray-500">
+                                  ({testimonial.rating}/5)
+                                </span>
                               </div>
-                              <p className="text-sm text-gray-600 mb-2">{testimonial.content}</p>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {testimonial.content}
+                              </p>
                               <div className="flex items-center space-x-4 text-xs text-gray-500">
-                                <span>Location: {testimonial.location || 'N/A'}</span>
-                                <span>{new Date(testimonial.created_at).toLocaleDateString()}</span>
+                                <span>
+                                  Location: {testimonial.location || "N/A"}
+                                </span>
+                                <span>
+                                  {new Date(
+                                    testimonial.created_at,
+                                  ).toLocaleDateString()}
+                                </span>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                              <Badge variant={testimonial.is_approved ? 'default' : 'destructive'}>
-                                {testimonial.is_approved ? 'Approved' : 'Pending'}
+                              <Badge
+                                variant={
+                                  testimonial.is_approved
+                                    ? "default"
+                                    : "destructive"
+                                }
+                              >
+                                {testimonial.is_approved
+                                  ? "Approved"
+                                  : "Pending"}
                               </Badge>
                               {testimonial.is_featured && (
-                                <Badge className="bg-yellow-100 text-yellow-800">Featured</Badge>
+                                <Badge className="bg-yellow-100 text-yellow-800">
+                                  Featured
+                                </Badge>
                               )}
                               <Button variant="outline" size="sm">
                                 <Edit className="h-4 w-4" />
@@ -1881,7 +2296,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Analytics Dashboard
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Button variant="outline" size="sm">
                   <RefreshCw className="h-4 w-4 mr-2" />
@@ -1898,9 +2315,15 @@ export default function FullyFunctionalAdminPanel() {
                       <Users className="h-8 w-8 text-blue-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Users</p>
-                      <p className="text-2xl font-bold text-gray-900">{users.length}</p>
-                      <p className="text-xs text-green-600">+12% from last month</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Total Users
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {users.length}
+                      </p>
+                      <p className="text-xs text-green-600">
+                        +12% from last month
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -1913,9 +2336,15 @@ export default function FullyFunctionalAdminPanel() {
                       <DollarSign className="h-8 w-8 text-green-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                      <p className="text-2xl font-bold text-gray-900">$45,231</p>
-                      <p className="text-xs text-green-600">+23% from last month</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Total Revenue
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        $45,231
+                      </p>
+                      <p className="text-xs text-green-600">
+                        +23% from last month
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -1928,9 +2357,13 @@ export default function FullyFunctionalAdminPanel() {
                       <TrendingUp className="h-8 w-8 text-purple-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Active Investments</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Active Investments
+                      </p>
                       <p className="text-2xl font-bold text-gray-900">1,234</p>
-                      <p className="text-xs text-green-600">+8% from last month</p>
+                      <p className="text-xs text-green-600">
+                        +8% from last month
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -1943,9 +2376,13 @@ export default function FullyFunctionalAdminPanel() {
                       <Activity className="h-8 w-8 text-orange-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Conversion Rate
+                      </p>
                       <p className="text-2xl font-bold text-gray-900">3.2%</p>
-                      <p className="text-xs text-red-600">-0.1% from last month</p>
+                      <p className="text-xs text-red-600">
+                        -0.1% from last month
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -2021,8 +2458,12 @@ export default function FullyFunctionalAdminPanel() {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Frontend Investment Plans</h2>
-                <p className="text-gray-600">Plans shown on the main website and landing pages</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Frontend Investment Plans
+                </h2>
+                <p className="text-gray-600">
+                  Plans shown on the main website and landing pages
+                </p>
               </div>
               <Button className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0">
                 <Plus className="h-4 w-4 mr-2" />
@@ -2033,21 +2474,33 @@ export default function FullyFunctionalAdminPanel() {
             <Card>
               <CardHeader>
                 <CardTitle>Frontend Plans Management</CardTitle>
-                <p className="text-gray-600">These plans are displayed on your website homepage and marketing pages</p>
+                <p className="text-gray-600">
+                  These plans are displayed on your website homepage and
+                  marketing pages
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {[1, 2, 3].map((plan) => (
-                    <div key={plan} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div
+                      key={plan}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="font-semibold text-lg">Starter Plan</h3>
-                        <Badge variant="default" className="text-xs">Frontend</Badge>
+                        <Badge variant="default" className="text-xs">
+                          Frontend
+                        </Badge>
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">Perfect for beginners</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Perfect for beginners
+                      </p>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">ROI:</span>
-                          <span className="font-semibold text-green-600">10x (1000%)</span>
+                          <span className="font-semibold text-green-600">
+                            10x (1000%)
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Duration:</span>
@@ -2080,8 +2533,12 @@ export default function FullyFunctionalAdminPanel() {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Dashboard Investment Plans</h2>
-                <p className="text-gray-600">Plans available inside the user dashboard</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Dashboard Investment Plans
+                </h2>
+                <p className="text-gray-600">
+                  Plans available inside the user dashboard
+                </p>
               </div>
               <Button className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0">
                 <Plus className="h-4 w-4 mr-2" />
@@ -2092,21 +2549,33 @@ export default function FullyFunctionalAdminPanel() {
             <Card>
               <CardHeader>
                 <CardTitle>Dashboard Plans Management</CardTitle>
-                <p className="text-gray-600">These plans are available exclusively to logged-in users in their dashboard</p>
+                <p className="text-gray-600">
+                  These plans are available exclusively to logged-in users in
+                  their dashboard
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {[1, 2, 3].map((plan) => (
-                    <div key={plan} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div
+                      key={plan}
+                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="font-semibold text-lg">VIP Plan</h3>
-                        <Badge variant="secondary" className="text-xs">Dashboard</Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          Dashboard
+                        </Badge>
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">Exclusive dashboard offer</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Exclusive dashboard offer
+                      </p>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">ROI:</span>
-                          <span className="font-semibold text-green-600">15x (1500%)</span>
+                          <span className="font-semibold text-green-600">
+                            15x (1500%)
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Duration:</span>
@@ -2138,7 +2607,9 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Site Settings</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Site Settings
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -2152,7 +2623,12 @@ export default function FullyFunctionalAdminPanel() {
                     <Input
                       id="site_name"
                       value={siteSettings.site_name}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, site_name: e.target.value })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          site_name: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -2161,7 +2637,12 @@ export default function FullyFunctionalAdminPanel() {
                     <Textarea
                       id="site_description"
                       value={siteSettings.site_description}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, site_description: e.target.value })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          site_description: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -2171,16 +2652,28 @@ export default function FullyFunctionalAdminPanel() {
                       id="contact_email"
                       type="email"
                       value={siteSettings.contact_email}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, contact_email: e.target.value })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          contact_email: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="telegram_channel">Telegram Channel URL</Label>
+                    <Label htmlFor="telegram_channel">
+                      Telegram Channel URL
+                    </Label>
                     <Input
                       id="telegram_channel"
                       value={siteSettings.telegram_channel}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, telegram_channel: e.target.value })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          telegram_channel: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </CardContent>
@@ -2199,11 +2692,20 @@ export default function FullyFunctionalAdminPanel() {
                       </div>
                     </div>
                     <Button
-                      variant={siteSettings.maintenance_mode ? "destructive" : "outline"}
+                      variant={
+                        siteSettings.maintenance_mode
+                          ? "destructive"
+                          : "outline"
+                      }
                       size="sm"
-                      onClick={() => setSiteSettings({ ...siteSettings, maintenance_mode: !siteSettings.maintenance_mode })}
+                      onClick={() =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          maintenance_mode: !siteSettings.maintenance_mode,
+                        })
+                      }
                     >
-                      {siteSettings.maintenance_mode ? 'Disable' : 'Enable'}
+                      {siteSettings.maintenance_mode ? "Disable" : "Enable"}
                     </Button>
                   </div>
 
@@ -2215,11 +2717,23 @@ export default function FullyFunctionalAdminPanel() {
                       </div>
                     </div>
                     <Button
-                      variant={siteSettings.registration_enabled ? "default" : "outline"}
+                      variant={
+                        siteSettings.registration_enabled
+                          ? "default"
+                          : "outline"
+                      }
                       size="sm"
-                      onClick={() => setSiteSettings({ ...siteSettings, registration_enabled: !siteSettings.registration_enabled })}
+                      onClick={() =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          registration_enabled:
+                            !siteSettings.registration_enabled,
+                        })
+                      }
                     >
-                      {siteSettings.registration_enabled ? 'Enabled' : 'Disabled'}
+                      {siteSettings.registration_enabled
+                        ? "Enabled"
+                        : "Disabled"}
                     </Button>
                   </div>
 
@@ -2229,17 +2743,29 @@ export default function FullyFunctionalAdminPanel() {
                       id="min_deposit"
                       type="number"
                       value={siteSettings.min_deposit}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, min_deposit: parseInt(e.target.value) })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          min_deposit: parseInt(e.target.value),
+                        })
+                      }
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="max_withdrawal">Max Daily Withdrawal ($)</Label>
+                    <Label htmlFor="max_withdrawal">
+                      Max Daily Withdrawal ($)
+                    </Label>
                     <Input
                       id="max_withdrawal"
                       type="number"
                       value={siteSettings.max_withdrawal_per_day}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, max_withdrawal_per_day: parseInt(e.target.value) })}
+                      onChange={(e) =>
+                        setSiteSettings({
+                          ...siteSettings,
+                          max_withdrawal_per_day: parseInt(e.target.value),
+                        })
+                      }
                     />
                   </div>
                 </CardContent>
@@ -2248,7 +2774,11 @@ export default function FullyFunctionalAdminPanel() {
 
             <div className="flex justify-end">
               <Button onClick={updateSiteSettings} disabled={loading}>
-                {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
                 Save Settings
               </Button>
             </div>
@@ -2259,9 +2789,11 @@ export default function FullyFunctionalAdminPanel() {
         return (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold text-gray-900">
-              {menuItems.find(item => item.id === activeTab)?.label}
+              {menuItems.find((item) => item.id === activeTab)?.label}
             </h2>
-            <p className="text-gray-600 mt-2">This section is under development.</p>
+            <p className="text-gray-600 mt-2">
+              This section is under development.
+            </p>
           </div>
         );
     }
@@ -2275,7 +2807,10 @@ export default function FullyFunctionalAdminPanel() {
       {/* Mobile Sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 flex z-50 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
+            onClick={() => setSidebarOpen(false)}
+          />
           <Sidebar className="relative flex-1 flex flex-col max-w-xs w-full" />
         </div>
       )}
@@ -2293,10 +2828,14 @@ export default function FullyFunctionalAdminPanel() {
           <div className="flex-1 px-4 flex justify-between items-center">
             <div className="flex items-center">
               <Shield className="h-6 w-6 text-blue-600 mr-2" />
-              <h1 className="text-lg font-semibold text-gray-900">Admin Panel</h1>
+              <h1 className="text-lg font-semibold text-gray-900">
+                Admin Panel
+              </h1>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="hidden sm:block text-sm text-gray-500">{user?.email}</span>
+              <span className="hidden sm:block text-sm text-gray-500">
+                {user?.email}
+              </span>
               <Button variant="ghost" size="sm" onClick={() => signOut()}>
                 <X className="h-4 w-4" />
               </Button>

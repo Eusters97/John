@@ -17,7 +17,9 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { signalsService, type ForexSignal } from "@/lib/signals-service";
-import investmentPlansService, { InvestmentPlan } from "@/lib/investment-plans-service";
+import investmentPlansService, {
+  InvestmentPlan,
+} from "@/lib/investment-plans-service";
 import {
   Upload,
   FileText,
@@ -356,10 +358,12 @@ export default function EnhancedAdminPanel() {
       setLoading(true);
       const { data, error } = await supabase
         .from("support_tickets")
-        .select(`
+        .select(
+          `
           *,
           user_profiles(full_name, email)
-        `)
+        `,
+        )
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -455,7 +459,7 @@ export default function EnhancedAdminPanel() {
       setLoading(true);
       const result = await investmentPlansService.createPlan({
         ...investmentPlanForm,
-        features: investmentPlanForm.features.filter(f => f.trim() !== ""),
+        features: investmentPlanForm.features.filter((f) => f.trim() !== ""),
       });
 
       if (result.success) {
@@ -583,7 +587,10 @@ export default function EnhancedAdminPanel() {
               <Shield className="h-8 w-8 text-blue-600 mr-2" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-                <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                <Badge
+                  variant="secondary"
+                  className="bg-green-100 text-green-800 text-xs"
+                >
                   Administrator
                 </Badge>
               </div>
@@ -613,7 +620,9 @@ export default function EnhancedAdminPanel() {
                 >
                   <Icon
                     className={`mr-3 h-5 w-5 ${
-                      activeTab === item.id ? "text-blue-600" : "text-gray-400 group-hover:text-gray-500"
+                      activeTab === item.id
+                        ? "text-blue-600"
+                        : "text-gray-400 group-hover:text-gray-500"
                     }`}
                   />
                   {item.label}
@@ -624,8 +633,8 @@ export default function EnhancedAdminPanel() {
         </div>
         <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
           <div className="flex flex-col space-y-2 w-full">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
               <Globe className="h-4 w-4 mr-2" />
@@ -651,15 +660,19 @@ export default function EnhancedAdminPanel() {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
-                <p className="text-gray-600">Platform performance at a glance</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Dashboard Overview
+                </h2>
+                <p className="text-gray-600">
+                  Platform performance at a glance
+                </p>
               </div>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                 <Monitor className="h-5 w-5 text-gray-400" />
                 <span className="text-sm text-gray-500">Live Data</span>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
@@ -668,8 +681,12 @@ export default function EnhancedAdminPanel() {
                       <Users className="h-8 w-8 text-blue-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Users</p>
-                      <p className="text-2xl font-bold text-gray-900">{users.length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Total Users
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {users.length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -682,8 +699,12 @@ export default function EnhancedAdminPanel() {
                       <TrendingUp className="h-8 w-8 text-green-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Active Signals</p>
-                      <p className="text-2xl font-bold text-gray-900">{signals.filter(s => s.status === 'active').length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Active Signals
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {signals.filter((s) => s.status === "active").length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -696,8 +717,15 @@ export default function EnhancedAdminPanel() {
                       <HelpCircle className="h-8 w-8 text-orange-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Open Tickets</p>
-                      <p className="text-2xl font-bold text-gray-900">{supportTickets.filter(t => t.status === 'open').length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Open Tickets
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {
+                          supportTickets.filter((t) => t.status === "open")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -710,8 +738,12 @@ export default function EnhancedAdminPanel() {
                       <Bug className="h-8 w-8 text-red-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Unresolved Errors</p>
-                      <p className="text-2xl font-bold text-gray-900">{siteErrors.filter(e => !e.resolved).length}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Unresolved Errors
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {siteErrors.filter((e) => !e.resolved).length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -740,7 +772,9 @@ export default function EnhancedAdminPanel() {
                     </div>
                     <div className="flex items-center text-sm">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
-                      <span className="text-gray-600">Support ticket opened</span>
+                      <span className="text-gray-600">
+                        Support ticket opened
+                      </span>
                       <span className="ml-auto text-gray-400">12 min ago</span>
                     </div>
                   </div>
@@ -757,12 +791,19 @@ export default function EnhancedAdminPanel() {
                 <CardContent>
                   <div className="space-y-3">
                     {investmentPlans.slice(0, 3).map((plan) => (
-                      <div key={plan.id} className="flex items-center justify-between">
+                      <div
+                        key={plan.id}
+                        className="flex items-center justify-between"
+                      >
                         <div>
                           <p className="font-medium">{plan.name}</p>
-                          <p className="text-sm text-gray-600">{plan.roi_percentage / 100}x Return</p>
+                          <p className="text-sm text-gray-600">
+                            {plan.roi_percentage / 100}x Return
+                          </p>
                         </div>
-                        <Badge variant={plan.is_active ? "default" : "secondary"}>
+                        <Badge
+                          variant={plan.is_active ? "default" : "secondary"}
+                        >
                           {plan.is_active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
@@ -778,8 +819,13 @@ export default function EnhancedAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">News Management</h2>
-              <Button onClick={() => setActiveTab("create-news")} className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                News Management
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-news")}
+                className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create News
               </Button>
@@ -798,7 +844,9 @@ export default function EnhancedAdminPanel() {
                         id="news_title"
                         placeholder="Enter news title"
                         value={newsForm.title}
-                        onChange={(e) => setNewsForm({ ...newsForm, title: e.target.value })}
+                        onChange={(e) =>
+                          setNewsForm({ ...newsForm, title: e.target.value })
+                        }
                       />
                     </div>
                     <div>
@@ -807,7 +855,12 @@ export default function EnhancedAdminPanel() {
                         id="news_image"
                         placeholder="https://example.com/image.jpg"
                         value={newsForm.featured_image_url}
-                        onChange={(e) => setNewsForm({ ...newsForm, featured_image_url: e.target.value })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            featured_image_url: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -818,7 +871,9 @@ export default function EnhancedAdminPanel() {
                       id="news_excerpt"
                       placeholder="Brief summary of the news..."
                       value={newsForm.excerpt}
-                      onChange={(e) => setNewsForm({ ...newsForm, excerpt: e.target.value })}
+                      onChange={(e) =>
+                        setNewsForm({ ...newsForm, excerpt: e.target.value })
+                      }
                     />
                   </div>
 
@@ -829,7 +884,9 @@ export default function EnhancedAdminPanel() {
                       placeholder="Full news content..."
                       className="min-h-[200px]"
                       value={newsForm.content}
-                      onChange={(e) => setNewsForm({ ...newsForm, content: e.target.value })}
+                      onChange={(e) =>
+                        setNewsForm({ ...newsForm, content: e.target.value })
+                      }
                     />
                   </div>
 
@@ -838,7 +895,12 @@ export default function EnhancedAdminPanel() {
                       <input
                         type="checkbox"
                         checked={newsForm.is_published}
-                        onChange={(e) => setNewsForm({ ...newsForm, is_published: e.target.checked })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            is_published: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Publish immediately
@@ -847,7 +909,12 @@ export default function EnhancedAdminPanel() {
                       <input
                         type="checkbox"
                         checked={newsForm.is_breaking}
-                        onChange={(e) => setNewsForm({ ...newsForm, is_breaking: e.target.checked })}
+                        onChange={(e) =>
+                          setNewsForm({
+                            ...newsForm,
+                            is_breaking: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Breaking news
@@ -856,10 +923,17 @@ export default function EnhancedAdminPanel() {
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <Button onClick={createNewsPost} disabled={loading}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create News
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("news")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("news")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -878,29 +952,49 @@ export default function EnhancedAdminPanel() {
                   ) : (
                     <div className="space-y-4">
                       {newsPosts.length === 0 ? (
-                        <p className="text-gray-500 text-center py-8">No news posts created yet</p>
+                        <p className="text-gray-500 text-center py-8">
+                          No news posts created yet
+                        </p>
                       ) : (
                         newsPosts.slice(0, 10).map((post) => (
-                          <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div
+                            key={post.id}
+                            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                          >
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <h3 className="font-semibold">{post.title}</h3>
+                                  <h3 className="font-semibold">
+                                    {post.title}
+                                  </h3>
                                   {post.is_breaking && (
-                                    <Badge variant="destructive" className="text-xs">
+                                    <Badge
+                                      variant="destructive"
+                                      className="text-xs"
+                                    >
                                       BREAKING
                                     </Badge>
                                   )}
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {post.excerpt}
+                                </p>
                                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                                   <span>Views: {post.view_count}</span>
-                                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                                  <span>
+                                    {new Date(
+                                      post.created_at,
+                                    ).toLocaleDateString()}
+                                  </span>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                                <Badge variant={post.is_published ? 'default' : 'secondary'}>
-                                  {post.is_published ? 'Published' : 'Draft'}
+                                <Badge
+                                  variant={
+                                    post.is_published ? "default" : "secondary"
+                                  }
+                                >
+                                  {post.is_published ? "Published" : "Draft"}
                                 </Badge>
                                 <Button variant="outline" size="sm">
                                   <Edit className="h-4 w-4" />
@@ -922,8 +1016,13 @@ export default function EnhancedAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Investment Plans</h2>
-              <Button onClick={() => setActiveTab("create-investment")} className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Investment Plans
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-investment")}
+                className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Plan
               </Button>
@@ -942,7 +1041,12 @@ export default function EnhancedAdminPanel() {
                         id="plan_name"
                         placeholder="e.g., Premium Plan"
                         value={investmentPlanForm.name}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, name: e.target.value })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            name: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -952,7 +1056,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         placeholder="1000 = 10x return"
                         value={investmentPlanForm.roi_percentage}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, roi_percentage: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            roi_percentage: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -965,7 +1074,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         placeholder="100"
                         value={investmentPlanForm.min_amount}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, min_amount: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            min_amount: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -975,7 +1089,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         placeholder="50000"
                         value={investmentPlanForm.max_amount}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, max_amount: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            max_amount: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -985,7 +1104,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         placeholder="1"
                         value={investmentPlanForm.duration_days}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, duration_days: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            duration_days: parseInt(e.target.value),
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -996,29 +1120,48 @@ export default function EnhancedAdminPanel() {
                       id="plan_description"
                       placeholder="Plan description..."
                       value={investmentPlanForm.description}
-                      onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, description: e.target.value })}
+                      onChange={(e) =>
+                        setInvestmentPlanForm({
+                          ...investmentPlanForm,
+                          description: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
                   <div>
                     <Label>Features</Label>
                     {investmentPlanForm.features.map((feature, index) => (
-                      <div key={index} className="flex items-center space-x-2 mt-2">
+                      <div
+                        key={index}
+                        className="flex items-center space-x-2 mt-2"
+                      >
                         <Input
                           placeholder="Feature description"
                           value={feature}
                           onChange={(e) => {
-                            const newFeatures = [...investmentPlanForm.features];
+                            const newFeatures = [
+                              ...investmentPlanForm.features,
+                            ];
                             newFeatures[index] = e.target.value;
-                            setInvestmentPlanForm({ ...investmentPlanForm, features: newFeatures });
+                            setInvestmentPlanForm({
+                              ...investmentPlanForm,
+                              features: newFeatures,
+                            });
                           }}
                         />
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            const newFeatures = investmentPlanForm.features.filter((_, i) => i !== index);
-                            setInvestmentPlanForm({ ...investmentPlanForm, features: newFeatures });
+                            const newFeatures =
+                              investmentPlanForm.features.filter(
+                                (_, i) => i !== index,
+                              );
+                            setInvestmentPlanForm({
+                              ...investmentPlanForm,
+                              features: newFeatures,
+                            });
                           }}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -1029,7 +1172,12 @@ export default function EnhancedAdminPanel() {
                       variant="outline"
                       size="sm"
                       className="mt-2"
-                      onClick={() => setInvestmentPlanForm({ ...investmentPlanForm, features: [...investmentPlanForm.features, ""] })}
+                      onClick={() =>
+                        setInvestmentPlanForm({
+                          ...investmentPlanForm,
+                          features: [...investmentPlanForm.features, ""],
+                        })
+                      }
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Feature
@@ -1041,7 +1189,12 @@ export default function EnhancedAdminPanel() {
                       <input
                         type="checkbox"
                         checked={investmentPlanForm.is_active}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, is_active: e.target.checked })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            is_active: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Active
@@ -1050,7 +1203,12 @@ export default function EnhancedAdminPanel() {
                       <input
                         type="checkbox"
                         checked={investmentPlanForm.is_featured}
-                        onChange={(e) => setInvestmentPlanForm({ ...investmentPlanForm, is_featured: e.target.checked })}
+                        onChange={(e) =>
+                          setInvestmentPlanForm({
+                            ...investmentPlanForm,
+                            is_featured: e.target.checked,
+                          })
+                        }
                         className="mr-2"
                       />
                       Featured
@@ -1059,10 +1217,17 @@ export default function EnhancedAdminPanel() {
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <Button onClick={createInvestmentPlan} disabled={loading}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create Plan
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("investments")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("investments")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -1081,55 +1246,92 @@ export default function EnhancedAdminPanel() {
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {investmentPlans.map((plan) => (
-                        <div key={plan.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={plan.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex items-start justify-between mb-3">
-                            <h3 className="font-semibold text-lg">{plan.name}</h3>
+                            <h3 className="font-semibold text-lg">
+                              {plan.name}
+                            </h3>
                             <div className="flex space-x-1">
                               {plan.is_featured && (
-                                <Badge variant="default" className="text-xs bg-yellow-100 text-yellow-800">
+                                <Badge
+                                  variant="default"
+                                  className="text-xs bg-yellow-100 text-yellow-800"
+                                >
                                   Featured
                                 </Badge>
                               )}
-                              <Badge variant={plan.is_active ? 'default' : 'secondary'} className="text-xs">
-                                {plan.is_active ? 'Active' : 'Inactive'}
+                              <Badge
+                                variant={
+                                  plan.is_active ? "default" : "secondary"
+                                }
+                                className="text-xs"
+                              >
+                                {plan.is_active ? "Active" : "Inactive"}
                               </Badge>
                             </div>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">{plan.description}</p>
+                          <p className="text-sm text-gray-600 mb-3">
+                            {plan.description}
+                          </p>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                               <span className="text-gray-600">ROI:</span>
-                              <span className="font-semibold text-green-600">{plan.roi_percentage / 100}x ({plan.roi_percentage}%)</span>
+                              <span className="font-semibold text-green-600">
+                                {plan.roi_percentage / 100}x (
+                                {plan.roi_percentage}%)
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Duration:</span>
-                              <span className="font-medium">{plan.duration_days} day{plan.duration_days !== 1 ? 's' : ''}</span>
+                              <span className="font-medium">
+                                {plan.duration_days} day
+                                {plan.duration_days !== 1 ? "s" : ""}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Range:</span>
-                              <span className="font-medium">${plan.min_amount} - ${plan.max_amount}</span>
+                              <span className="font-medium">
+                                ${plan.min_amount} - ${plan.max_amount}
+                              </span>
                             </div>
                           </div>
                           <div className="mt-3 pt-3 border-t">
-                            <p className="text-xs text-gray-500 mb-2">Features:</p>
+                            <p className="text-xs text-gray-500 mb-2">
+                              Features:
+                            </p>
                             <ul className="text-xs text-gray-600 space-y-1">
-                              {plan.features.slice(0, 3).map((feature, index) => (
-                                <li key={index} className="flex items-center">
-                                  <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                                  {feature}
-                                </li>
-                              ))}
+                              {plan.features
+                                .slice(0, 3)
+                                .map((feature, index) => (
+                                  <li key={index} className="flex items-center">
+                                    <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
+                                    {feature}
+                                  </li>
+                                ))}
                               {plan.features.length > 3 && (
-                                <li className="text-gray-400">+{plan.features.length - 3} more...</li>
+                                <li className="text-gray-400">
+                                  +{plan.features.length - 3} more...
+                                </li>
                               )}
                             </ul>
                           </div>
                           <div className="flex space-x-2 mt-4">
-                            <Button variant="outline" size="sm" className="flex-1">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex-1"
+                            >
                               <Edit className="h-4 w-4 mr-1" />
                               Edit
                             </Button>
-                            <Button variant="outline" size="sm" className="text-red-600 hover:text-red-800">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 hover:text-red-800"
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
@@ -1147,10 +1349,18 @@ export default function EnhancedAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Support Tickets</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Support Tickets
+              </h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                <Badge variant="outline">{supportTickets.filter(t => t.status === 'open').length} Open</Badge>
-                <Badge variant="secondary">{supportTickets.filter(t => t.status === 'resolved').length} Resolved</Badge>
+                <Badge variant="outline">
+                  {supportTickets.filter((t) => t.status === "open").length}{" "}
+                  Open
+                </Badge>
+                <Badge variant="secondary">
+                  {supportTickets.filter((t) => t.status === "resolved").length}{" "}
+                  Resolved
+                </Badge>
               </div>
             </div>
 
@@ -1166,17 +1376,30 @@ export default function EnhancedAdminPanel() {
                 ) : (
                   <div className="space-y-4">
                     {supportTickets.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">No support tickets found</p>
+                      <p className="text-gray-500 text-center py-8">
+                        No support tickets found
+                      </p>
                     ) : (
                       supportTickets.map((ticket) => (
-                        <div key={ticket.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={ticket.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex flex-col lg:flex-row lg:items-start justify-between space-y-4 lg:space-y-0">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <Ticket className="h-4 w-4 text-gray-400" />
-                                <h3 className="font-semibold">{ticket.subject}</h3>
-                                <Badge 
-                                  variant={ticket.status === 'open' ? 'destructive' : ticket.status === 'resolved' ? 'default' : 'secondary'}
+                                <h3 className="font-semibold">
+                                  {ticket.subject}
+                                </h3>
+                                <Badge
+                                  variant={
+                                    ticket.status === "open"
+                                      ? "destructive"
+                                      : ticket.status === "resolved"
+                                        ? "default"
+                                        : "secondary"
+                                  }
                                   className="text-xs"
                                 >
                                   {ticket.status}
@@ -1185,22 +1408,44 @@ export default function EnhancedAdminPanel() {
                                   {ticket.priority}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-gray-600 mb-2">{ticket.message}</p>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {ticket.message}
+                              </p>
                               <div className="flex items-center space-x-4 text-xs text-gray-500">
-                                <span>From: {ticket.user_profiles?.full_name || 'Unknown User'}</span>
-                                <span>Email: {ticket.user_profiles?.email || 'No email'}</span>
-                                <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+                                <span>
+                                  From:{" "}
+                                  {ticket.user_profiles?.full_name ||
+                                    "Unknown User"}
+                                </span>
+                                <span>
+                                  Email:{" "}
+                                  {ticket.user_profiles?.email || "No email"}
+                                </span>
+                                <span>
+                                  {new Date(
+                                    ticket.created_at,
+                                  ).toLocaleDateString()}
+                                </span>
                               </div>
                             </div>
                             <div className="flex space-x-2">
-                              <Select value={ticket.status} onValueChange={(value) => updateTicketStatus(ticket.id, value)}>
+                              <Select
+                                value={ticket.status}
+                                onValueChange={(value) =>
+                                  updateTicketStatus(ticket.id, value)
+                                }
+                              >
                                 <SelectTrigger className="w-32">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="open">Open</SelectItem>
-                                  <SelectItem value="in_progress">In Progress</SelectItem>
-                                  <SelectItem value="resolved">Resolved</SelectItem>
+                                  <SelectItem value="in_progress">
+                                    In Progress
+                                  </SelectItem>
+                                  <SelectItem value="resolved">
+                                    Resolved
+                                  </SelectItem>
                                   <SelectItem value="closed">Closed</SelectItem>
                                 </SelectContent>
                               </Select>
@@ -1225,8 +1470,12 @@ export default function EnhancedAdminPanel() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900">Site Errors</h2>
               <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-                <Badge variant="destructive">{siteErrors.filter(e => !e.resolved).length} Unresolved</Badge>
-                <Badge variant="default">{siteErrors.filter(e => e.resolved).length} Resolved</Badge>
+                <Badge variant="destructive">
+                  {siteErrors.filter((e) => !e.resolved).length} Unresolved
+                </Badge>
+                <Badge variant="default">
+                  {siteErrors.filter((e) => e.resolved).length} Resolved
+                </Badge>
               </div>
             </div>
 
@@ -1242,17 +1491,29 @@ export default function EnhancedAdminPanel() {
                 ) : (
                   <div className="space-y-4">
                     {siteErrors.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">No errors logged</p>
+                      <p className="text-gray-500 text-center py-8">
+                        No errors logged
+                      </p>
                     ) : (
                       siteErrors.map((error) => (
-                        <div key={error.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={error.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex flex-col lg:flex-row lg:items-start justify-between space-y-4 lg:space-y-0">
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <Bug className="h-4 w-4 text-red-500" />
-                                <h3 className="font-semibold text-red-800">{error.error_code}</h3>
-                                <Badge variant={error.resolved ? 'default' : 'destructive'} className="text-xs">
-                                  {error.resolved ? 'Resolved' : 'Unresolved'}
+                                <h3 className="font-semibold text-red-800">
+                                  {error.error_code}
+                                </h3>
+                                <Badge
+                                  variant={
+                                    error.resolved ? "default" : "destructive"
+                                  }
+                                  className="text-xs"
+                                >
+                                  {error.resolved ? "Resolved" : "Unresolved"}
                                 </Badge>
                               </div>
                               <p className="text-sm text-gray-600 mb-2 font-mono bg-gray-50 p-2 rounded">
@@ -1260,15 +1521,21 @@ export default function EnhancedAdminPanel() {
                               </p>
                               <div className="flex flex-col space-y-1 text-xs text-gray-500">
                                 <span>Page: {error.page_url}</span>
-                                <span>User Agent: {error.user_agent.substring(0, 80)}...</span>
-                                <span>Time: {new Date(error.created_at).toLocaleString()}</span>
+                                <span>
+                                  User Agent:{" "}
+                                  {error.user_agent.substring(0, 80)}...
+                                </span>
+                                <span>
+                                  Time:{" "}
+                                  {new Date(error.created_at).toLocaleString()}
+                                </span>
                               </div>
                             </div>
                             <div className="flex space-x-2">
                               {!error.resolved && (
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
+                                <Button
+                                  variant="outline"
+                                  size="sm"
                                   onClick={() => markErrorResolved(error.id)}
                                   className="text-green-600 hover:text-green-800"
                                 >
@@ -1295,8 +1562,13 @@ export default function EnhancedAdminPanel() {
         return (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Forex Signals Management</h2>
-              <Button onClick={() => setActiveTab("create-signal")} className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Forex Signals Management
+              </h2>
+              <Button
+                onClick={() => setActiveTab("create-signal")}
+                className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Signal
               </Button>
@@ -1315,12 +1587,19 @@ export default function EnhancedAdminPanel() {
                         id="pair"
                         placeholder="EUR/USD"
                         value={signalForm.pair}
-                        onChange={(e) => setSignalForm({ ...signalForm, pair: e.target.value })}
+                        onChange={(e) =>
+                          setSignalForm({ ...signalForm, pair: e.target.value })
+                        }
                       />
                     </div>
                     <div>
                       <Label htmlFor="signal_type">Signal Type</Label>
-                      <Select value={signalForm.signal_type} onValueChange={(value: "buy" | "sell") => setSignalForm({ ...signalForm, signal_type: value })}>
+                      <Select
+                        value={signalForm.signal_type}
+                        onValueChange={(value: "buy" | "sell") =>
+                          setSignalForm({ ...signalForm, signal_type: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -1340,7 +1619,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         step="0.00001"
                         value={signalForm.entry_price}
-                        onChange={(e) => setSignalForm({ ...signalForm, entry_price: parseFloat(e.target.value) })}
+                        onChange={(e) =>
+                          setSignalForm({
+                            ...signalForm,
+                            entry_price: parseFloat(e.target.value),
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -1350,7 +1634,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         step="0.00001"
                         value={signalForm.stop_loss}
-                        onChange={(e) => setSignalForm({ ...signalForm, stop_loss: parseFloat(e.target.value) })}
+                        onChange={(e) =>
+                          setSignalForm({
+                            ...signalForm,
+                            stop_loss: parseFloat(e.target.value),
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -1360,7 +1649,12 @@ export default function EnhancedAdminPanel() {
                         type="number"
                         step="0.00001"
                         value={signalForm.take_profit_1}
-                        onChange={(e) => setSignalForm({ ...signalForm, take_profit_1: parseFloat(e.target.value) })}
+                        onChange={(e) =>
+                          setSignalForm({
+                            ...signalForm,
+                            take_profit_1: parseFloat(e.target.value),
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -1371,16 +1665,28 @@ export default function EnhancedAdminPanel() {
                       id="analysis"
                       placeholder="Provide detailed analysis for this signal..."
                       value={signalForm.analysis}
-                      onChange={(e) => setSignalForm({ ...signalForm, analysis: e.target.value })}
+                      onChange={(e) =>
+                        setSignalForm({
+                          ...signalForm,
+                          analysis: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <Button onClick={createSignal} disabled={loading}>
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      ) : (
+                        <Plus className="h-4 w-4 mr-2" />
+                      )}
                       Create Signal
                     </Button>
-                    <Button variant="outline" onClick={() => setActiveTab("signals")}>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("signals")}
+                    >
                       Cancel
                     </Button>
                   </div>
@@ -1399,34 +1705,56 @@ export default function EnhancedAdminPanel() {
                   ) : (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       {signals.slice(0, 10).map((signal) => (
-                        <div key={signal.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={signal.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <h3 className="font-semibold text-lg">{signal.pair}</h3>
+                              <h3 className="font-semibold text-lg">
+                                {signal.pair}
+                              </h3>
                               <p className="text-sm text-gray-600">
-                                {signal.signal_type.toUpperCase()} • Entry: {signal.entry_price}
+                                {signal.signal_type.toUpperCase()} • Entry:{" "}
+                                {signal.entry_price}
                               </p>
                             </div>
                             <div className="text-right">
-                              <Badge variant={signal.status === 'active' ? 'default' : 'secondary'}>
+                              <Badge
+                                variant={
+                                  signal.status === "active"
+                                    ? "default"
+                                    : "secondary"
+                                }
+                              >
                                 {signal.status}
                               </Badge>
-                              <p className="text-sm text-gray-600 mt-1">Confidence</p>
-                              <p className="font-semibold">{signal.confidence}%</p>
+                              <p className="text-sm text-gray-600 mt-1">
+                                Confidence
+                              </p>
+                              <p className="font-semibold">
+                                {signal.confidence}%
+                              </p>
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-2 text-sm">
                             <div>
                               <span className="text-gray-600">SL:</span>
-                              <span className="ml-1 font-medium">{signal.stop_loss}</span>
+                              <span className="ml-1 font-medium">
+                                {signal.stop_loss}
+                              </span>
                             </div>
                             <div>
                               <span className="text-gray-600">TP1:</span>
-                              <span className="ml-1 font-medium">{signal.take_profit_1}</span>
+                              <span className="ml-1 font-medium">
+                                {signal.take_profit_1}
+                              </span>
                             </div>
                           </div>
                           {signal.analysis && (
-                            <p className="text-xs text-gray-500 mt-2 line-clamp-2">{signal.analysis}</p>
+                            <p className="text-xs text-gray-500 mt-2 line-clamp-2">
+                              {signal.analysis}
+                            </p>
                           )}
                         </div>
                       ))}
@@ -1442,9 +1770,11 @@ export default function EnhancedAdminPanel() {
         return (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold text-gray-900">
-              {menuItems.find(item => item.id === activeTab)?.label}
+              {menuItems.find((item) => item.id === activeTab)?.label}
             </h2>
-            <p className="text-gray-600 mt-2">This section is under development.</p>
+            <p className="text-gray-600 mt-2">
+              This section is under development.
+            </p>
           </div>
         );
     }
@@ -1458,7 +1788,10 @@ export default function EnhancedAdminPanel() {
       {/* Mobile Sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 flex z-50 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-75"
+            onClick={() => setSidebarOpen(false)}
+          />
           <Sidebar className="relative flex-1 flex flex-col max-w-xs w-full" />
         </div>
       )}
@@ -1476,10 +1809,14 @@ export default function EnhancedAdminPanel() {
           <div className="flex-1 px-4 flex justify-between items-center">
             <div className="flex items-center">
               <Shield className="h-6 w-6 text-blue-600 mr-2" />
-              <h1 className="text-lg font-semibold text-gray-900">Admin Panel</h1>
+              <h1 className="text-lg font-semibold text-gray-900">
+                Admin Panel
+              </h1>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="hidden sm:block text-sm text-gray-500">{user?.email}</span>
+              <span className="hidden sm:block text-sm text-gray-500">
+                {user?.email}
+              </span>
               <Button variant="ghost" size="sm" onClick={() => signOut()}>
                 <X className="h-4 w-4" />
               </Button>

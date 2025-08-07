@@ -21,7 +21,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
 import { nowPaymentsService } from "@/lib/nowpayments";
 import { investmentService, type Investment } from "@/lib/investment-service";
-import { investmentPlansService, type InvestmentPlan } from "@/lib/investment-plans-service";
+import {
+  investmentPlansService,
+  type InvestmentPlan,
+} from "@/lib/investment-plans-service";
 import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
 import {
   Wallet,
@@ -99,10 +102,13 @@ export default function EnhancedUserDashboard() {
 
   // Investment plans and payment states
   const [investmentPlans, setInvestmentPlans] = useState<InvestmentPlan[]>([]);
-  const [selectedInvestmentPlan, setSelectedInvestmentPlan] = useState<InvestmentPlan | null>(null);
+  const [selectedInvestmentPlan, setSelectedInvestmentPlan] =
+    useState<InvestmentPlan | null>(null);
   const [investmentModalOpen, setInvestmentModalOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'balance' | 'nowpayments'>('balance');
-  const [customAmount, setCustomAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<"balance" | "nowpayments">(
+    "balance",
+  );
+  const [customAmount, setCustomAmount] = useState("");
   const [expectedProfit, setExpectedProfit] = useState(0);
 
   // Reviews and testimonials data
@@ -155,7 +161,7 @@ export default function EnhancedUserDashboard() {
               loadReviews(),
               loadTestimonials(),
               loadLiveSignals(),
-              checkTelegramConnection()
+              checkTelegramConnection(),
             ]);
           } catch (error) {
             console.error("Error in parallel loading:", {
@@ -243,8 +249,10 @@ export default function EnhancedUserDashboard() {
 
           if (createBalanceError) {
             // Check if this is a configuration error
-            if (createBalanceError.code === 'CONFIGURATION_ERROR') {
-              console.warn("Supabase not configured - user balance creation skipped");
+            if (createBalanceError.code === "CONFIGURATION_ERROR") {
+              console.warn(
+                "Supabase not configured - user balance creation skipped",
+              );
               console.info("Using default balance values for demo mode");
             } else {
               // Enhanced error logging with fallback for undefined properties
@@ -314,8 +322,10 @@ export default function EnhancedUserDashboard() {
         .limit(1);
 
       if (testError) {
-        if (testError.code === 'CONFIGURATION_ERROR') {
-          console.warn("Supabase is not configured - using default/demo values");
+        if (testError.code === "CONFIGURATION_ERROR") {
+          console.warn(
+            "Supabase is not configured - using default/demo values",
+          );
           // Set default stats and return early
           setUserStats({
             balance: 0.0,
@@ -413,18 +423,23 @@ export default function EnhancedUserDashboard() {
       console.log("User stats loaded successfully:", stats);
     } catch (error) {
       // Enhanced error logging for debugging
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      const isConnectionError = errorMessage.includes('Failed to fetch') || errorMessage.includes('fetch');
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      const isConnectionError =
+        errorMessage.includes("Failed to fetch") ||
+        errorMessage.includes("fetch");
 
       console.error("Error loading user statistics:", {
         message: errorMessage,
         isConnectionError,
         stack: error instanceof Error ? error.stack : undefined,
-        user_id: user?.id
+        user_id: user?.id,
       });
 
       if (isConnectionError) {
-        console.warn("Connection error detected - check Supabase configuration and network connectivity");
+        console.warn(
+          "Connection error detected - check Supabase configuration and network connectivity",
+        );
       }
 
       console.warn("Failed to load user statistics - using default values");
@@ -553,10 +568,13 @@ export default function EnhancedUserDashboard() {
       }
     } catch (error) {
       console.error("Error loading user investments:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
         stack: error instanceof Error ? error.stack : undefined,
-        user_id: user?.id
+        user_id: user?.id,
       });
     }
   };
@@ -575,10 +593,13 @@ export default function EnhancedUserDashboard() {
       setSupportTickets(data || []);
     } catch (error) {
       console.error("Error loading support tickets:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
         stack: error instanceof Error ? error.stack : undefined,
-        user_id: user?.id
+        user_id: user?.id,
       });
     }
   };
@@ -591,9 +612,12 @@ export default function EnhancedUserDashboard() {
       }
     } catch (error) {
       console.error("Error loading investment plans:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
-        stack: error instanceof Error ? error.stack : undefined
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     }
   };
@@ -607,13 +631,16 @@ export default function EnhancedUserDashboard() {
         .order("created_at", { ascending: false })
         .limit(20);
 
-      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      if (error && error.code !== "CONFIGURATION_ERROR") throw error;
       setReviews(data || []);
     } catch (error) {
       console.error("Error loading reviews:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
-        stack: error instanceof Error ? error.stack : undefined
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     }
   };
@@ -627,13 +654,16 @@ export default function EnhancedUserDashboard() {
         .eq("is_featured", true)
         .order("created_at", { ascending: false });
 
-      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      if (error && error.code !== "CONFIGURATION_ERROR") throw error;
       setTestimonials(data || []);
     } catch (error) {
       console.error("Error loading testimonials:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
-        stack: error instanceof Error ? error.stack : undefined
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     }
   };
@@ -647,13 +677,16 @@ export default function EnhancedUserDashboard() {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      if (error && error.code !== 'CONFIGURATION_ERROR') throw error;
+      if (error && error.code !== "CONFIGURATION_ERROR") throw error;
       setLiveSignals(data || []);
     } catch (error) {
       console.error("Error loading live signals:", {
-        message: error instanceof Error ? error.message : (error?.message || error?.error || 'Unknown error'),
-        code: error?.code || 'NO_CODE',
-        stack: error instanceof Error ? error.stack : undefined
+        message:
+          error instanceof Error
+            ? error.message
+            : error?.message || error?.error || "Unknown error",
+        code: error?.code || "NO_CODE",
+        stack: error instanceof Error ? error.stack : undefined,
       });
     }
   };
@@ -814,14 +847,14 @@ export default function EnhancedUserDashboard() {
       const ticketData = {
         user_id: user.id,
         user_email: user.email,
-        user_name: user.user_metadata?.full_name || user.email || 'User',
+        user_name: user.user_metadata?.full_name || user.email || "User",
         subject: supportTicket.subject,
         category: supportTicket.category,
         description: supportTicket.description,
         status: "open",
-        priority: supportTicket.category === 'technical' ? 'high' : 'medium',
+        priority: supportTicket.category === "technical" ? "high" : "medium",
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       const { data, error } = await supabase
@@ -835,17 +868,18 @@ export default function EnhancedUserDashboard() {
       // Create notification for admin (if notifications table exists)
       try {
         await supabase.from("admin_notifications").insert({
-          type: 'support_ticket',
+          type: "support_ticket",
           title: `New Support Ticket: ${supportTicket.subject}`,
           message: `${user.email} created a new ${supportTicket.category} ticket`,
           reference_id: data.id,
           is_read: false,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         });
       } catch (notifError) {
         // Notification creation is optional - don't fail the ticket creation
         console.warn("Could not create admin notification:", {
-          message: notifError instanceof Error ? notifError.message : 'Unknown error'
+          message:
+            notifError instanceof Error ? notifError.message : "Unknown error",
         });
       }
 
@@ -860,7 +894,10 @@ export default function EnhancedUserDashboard() {
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create support ticket. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to create support ticket. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -885,7 +922,10 @@ export default function EnhancedUserDashboard() {
   };
 
   const calculateExpectedProfit = (plan: InvestmentPlan, amount: number) => {
-    const calculation = investmentPlansService.calculateExpectedReturn(plan, amount);
+    const calculation = investmentPlansService.calculateExpectedReturn(
+      plan,
+      amount,
+    );
     setExpectedProfit(calculation.profit);
   };
 
@@ -894,7 +934,10 @@ export default function EnhancedUserDashboard() {
 
     const amount = parseFloat(customAmount);
 
-    if (amount < selectedInvestmentPlan.min_amount || amount > selectedInvestmentPlan.max_amount) {
+    if (
+      amount < selectedInvestmentPlan.min_amount ||
+      amount > selectedInvestmentPlan.max_amount
+    ) {
       toast({
         title: "Invalid Amount",
         description: `Amount must be between $${selectedInvestmentPlan.min_amount} and $${selectedInvestmentPlan.max_amount}`,
@@ -906,7 +949,7 @@ export default function EnhancedUserDashboard() {
     try {
       setLoading(true);
 
-      if (paymentMethod === 'balance') {
+      if (paymentMethod === "balance") {
         // Check if user has sufficient balance
         if (amount > userStats.balance) {
           toast({
@@ -925,7 +968,7 @@ export default function EnhancedUserDashboard() {
           expected_return: amount + expectedProfit,
           roi_percentage: selectedInvestmentPlan.roi_percentage,
           duration_days: selectedInvestmentPlan.duration_days,
-          payment_method: 'account_balance'
+          payment_method: "account_balance",
         });
 
         if (result.success) {
@@ -934,7 +977,7 @@ export default function EnhancedUserDashboard() {
             .from("user_balances")
             .update({
               balance: userStats.balance - amount,
-              updated_at: new Date().toISOString()
+              updated_at: new Date().toISOString(),
             })
             .eq("user_id", user.id);
 
@@ -955,24 +998,28 @@ export default function EnhancedUserDashboard() {
           "",
           amount,
           "btc", // Default crypto, user can change in checkout
-          `Investment in ${selectedInvestmentPlan.name}`
+          `Investment in ${selectedInvestmentPlan.name}`,
         );
 
         if (paymentData.payment?.payment_url) {
           // Redirect to NOWPayments checkout
-          window.open(paymentData.payment.payment_url, '_blank');
+          window.open(paymentData.payment.payment_url, "_blank");
           setInvestmentModalOpen(false);
 
           toast({
             title: "Redirecting to Payment",
-            description: "You'll be redirected to complete your payment with cryptocurrency",
+            description:
+              "You'll be redirected to complete your payment with cryptocurrency",
           });
         }
       }
     } catch (error) {
       toast({
         title: "Investment Error",
-        description: error instanceof Error ? error.message : "Failed to process investment. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to process investment. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -1023,7 +1070,6 @@ export default function EnhancedUserDashboard() {
       case "overview":
         return (
           <div className="space-y-6">
-
             {/* Stats Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               <Card>
@@ -1390,7 +1436,8 @@ export default function EnhancedUserDashboard() {
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
                   <p className="text-blue-800 text-sm">
                     <strong>Available Balance:</strong> $
-                    {userStats.balance.toFixed(2)} • Choose to pay with balance or cryptocurrency
+                    {userStats.balance.toFixed(2)} • Choose to pay with balance
+                    or cryptocurrency
                   </p>
                 </div>
               </CardContent>
@@ -1398,7 +1445,10 @@ export default function EnhancedUserDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {investmentPlans.map((plan) => (
-                <Card key={plan.id} className={`relative ${plan.is_featured ? 'ring-2 ring-blue-500' : ''}`}>
+                <Card
+                  key={plan.id}
+                  className={`relative ${plan.is_featured ? "ring-2 ring-blue-500" : ""}`}
+                >
                   {plan.is_featured && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                       <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -1417,20 +1467,29 @@ export default function EnhancedUserDashboard() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Min Amount:</span>
-                        <span className="font-semibold">${plan.min_amount}</span>
+                        <span className="font-semibold">
+                          ${plan.min_amount}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Max Amount:</span>
-                        <span className="font-semibold">${plan.max_amount}</span>
+                        <span className="font-semibold">
+                          ${plan.max_amount}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Duration:</span>
-                        <span className="font-semibold">{plan.duration_days} days</span>
+                        <span className="font-semibold">
+                          {plan.duration_days} days
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Expected Return:</span>
                         <span className="font-semibold text-green-600">
-                          ${Math.round(plan.min_amount * (1 + plan.roi_percentage / 100))}
+                          $
+                          {Math.round(
+                            plan.min_amount * (1 + plan.roi_percentage / 100),
+                          )}
                         </span>
                       </div>
                     </div>
@@ -1452,7 +1511,9 @@ export default function EnhancedUserDashboard() {
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                 <Card className="w-full max-w-md">
                   <CardHeader>
-                    <CardTitle>Invest in {selectedInvestmentPlan.name}</CardTitle>
+                    <CardTitle>
+                      Invest in {selectedInvestmentPlan.name}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
@@ -1463,22 +1524,30 @@ export default function EnhancedUserDashboard() {
                         value={customAmount}
                         onChange={(e) => {
                           setCustomAmount(e.target.value);
-                          calculateExpectedProfit(selectedInvestmentPlan, parseFloat(e.target.value) || 0);
+                          calculateExpectedProfit(
+                            selectedInvestmentPlan,
+                            parseFloat(e.target.value) || 0,
+                          );
                         }}
                         min={selectedInvestmentPlan.min_amount}
                         max={selectedInvestmentPlan.max_amount}
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Min: ${selectedInvestmentPlan.min_amount} - Max: ${selectedInvestmentPlan.max_amount}
+                        Min: ${selectedInvestmentPlan.min_amount} - Max: $
+                        {selectedInvestmentPlan.max_amount}
                       </p>
                     </div>
 
                     <div className="bg-green-50 p-3 rounded-lg">
                       <p className="text-sm text-green-700">
-                        <strong>Expected Profit:</strong> ${expectedProfit.toFixed(2)}
+                        <strong>Expected Profit:</strong> $
+                        {expectedProfit.toFixed(2)}
                       </p>
                       <p className="text-sm text-green-700">
-                        <strong>Total Return:</strong> ${(parseFloat(customAmount || '0') + expectedProfit).toFixed(2)}
+                        <strong>Total Return:</strong> $
+                        {(
+                          parseFloat(customAmount || "0") + expectedProfit
+                        ).toFixed(2)}
                       </p>
                       <p className="text-xs text-green-600 mt-1">
                         Duration: {selectedInvestmentPlan.duration_days} days
@@ -1489,30 +1558,37 @@ export default function EnhancedUserDashboard() {
                       <Label>Payment Method</Label>
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         <Button
-                          variant={paymentMethod === 'balance' ? 'default' : 'outline'}
-                          onClick={() => setPaymentMethod('balance')}
+                          variant={
+                            paymentMethod === "balance" ? "default" : "outline"
+                          }
+                          onClick={() => setPaymentMethod("balance")}
                           className="text-sm"
                         >
                           <Wallet className="mr-2 h-4 w-4" />
                           Account Balance
                         </Button>
                         <Button
-                          variant={paymentMethod === 'nowpayments' ? 'default' : 'outline'}
-                          onClick={() => setPaymentMethod('nowpayments')}
+                          variant={
+                            paymentMethod === "nowpayments"
+                              ? "default"
+                              : "outline"
+                          }
+                          onClick={() => setPaymentMethod("nowpayments")}
                           className="text-sm"
                         >
                           <CreditCard className="mr-2 h-4 w-4" />
                           Crypto Payment
                         </Button>
                       </div>
-                      {paymentMethod === 'balance' && (
+                      {paymentMethod === "balance" && (
                         <p className="text-xs text-gray-600 mt-2">
                           Available Balance: ${userStats.balance.toFixed(2)}
                         </p>
                       )}
-                      {paymentMethod === 'nowpayments' && (
+                      {paymentMethod === "nowpayments" && (
                         <p className="text-xs text-gray-600 mt-2">
-                          You'll be redirected to select your preferred cryptocurrency
+                          You'll be redirected to select your preferred
+                          cryptocurrency
                         </p>
                       )}
                     </div>
@@ -1525,12 +1601,14 @@ export default function EnhancedUserDashboard() {
                       >
                         {loading ? (
                           <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        ) : paymentMethod === 'balance' ? (
+                        ) : paymentMethod === "balance" ? (
                           <Wallet className="mr-2 h-4 w-4" />
                         ) : (
                           <CreditCard className="mr-2 h-4 w-4" />
                         )}
-                        {paymentMethod === 'balance' ? 'Invest Now' : 'Pay with Crypto'}
+                        {paymentMethod === "balance"
+                          ? "Invest Now"
+                          : "Pay with Crypto"}
                       </Button>
                       <Button
                         variant="outline"
@@ -1561,7 +1639,8 @@ export default function EnhancedUserDashboard() {
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
                   <p className="text-blue-800 text-sm">
                     <strong>Available Balance:</strong> $
-                    {userStats.balance.toFixed(2)} • Choose to pay with balance or cryptocurrency
+                    {userStats.balance.toFixed(2)} • Choose to pay with balance
+                    or cryptocurrency
                   </p>
                 </div>
               </CardContent>
@@ -1569,7 +1648,10 @@ export default function EnhancedUserDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {investmentPlans.map((plan) => (
-                <Card key={plan.id} className={`relative ${plan.is_featured ? 'ring-2 ring-blue-500' : ''}`}>
+                <Card
+                  key={plan.id}
+                  className={`relative ${plan.is_featured ? "ring-2 ring-blue-500" : ""}`}
+                >
                   {plan.is_featured && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                       <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -1588,20 +1670,29 @@ export default function EnhancedUserDashboard() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Min Amount:</span>
-                        <span className="font-semibold">${plan.min_amount}</span>
+                        <span className="font-semibold">
+                          ${plan.min_amount}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Max Amount:</span>
-                        <span className="font-semibold">${plan.max_amount}</span>
+                        <span className="font-semibold">
+                          ${plan.max_amount}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Duration:</span>
-                        <span className="font-semibold">{plan.duration_days} days</span>
+                        <span className="font-semibold">
+                          {plan.duration_days} days
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Expected Return:</span>
                         <span className="font-semibold text-green-600">
-                          ${Math.round(plan.min_amount * (1 + plan.roi_percentage / 100))}
+                          $
+                          {Math.round(
+                            plan.min_amount * (1 + plan.roi_percentage / 100),
+                          )}
                         </span>
                       </div>
                     </div>
@@ -1623,7 +1714,9 @@ export default function EnhancedUserDashboard() {
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                 <Card className="w-full max-w-md">
                   <CardHeader>
-                    <CardTitle>Invest in {selectedInvestmentPlan.name}</CardTitle>
+                    <CardTitle>
+                      Invest in {selectedInvestmentPlan.name}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
@@ -1634,22 +1727,30 @@ export default function EnhancedUserDashboard() {
                         value={customAmount}
                         onChange={(e) => {
                           setCustomAmount(e.target.value);
-                          calculateExpectedProfit(selectedInvestmentPlan, parseFloat(e.target.value) || 0);
+                          calculateExpectedProfit(
+                            selectedInvestmentPlan,
+                            parseFloat(e.target.value) || 0,
+                          );
                         }}
                         min={selectedInvestmentPlan.min_amount}
                         max={selectedInvestmentPlan.max_amount}
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Min: ${selectedInvestmentPlan.min_amount} - Max: ${selectedInvestmentPlan.max_amount}
+                        Min: ${selectedInvestmentPlan.min_amount} - Max: $
+                        {selectedInvestmentPlan.max_amount}
                       </p>
                     </div>
 
                     <div className="bg-green-50 p-3 rounded-lg">
                       <p className="text-sm text-green-700">
-                        <strong>Expected Profit:</strong> ${expectedProfit.toFixed(2)}
+                        <strong>Expected Profit:</strong> $
+                        {expectedProfit.toFixed(2)}
                       </p>
                       <p className="text-sm text-green-700">
-                        <strong>Total Return:</strong> ${(parseFloat(customAmount || '0') + expectedProfit).toFixed(2)}
+                        <strong>Total Return:</strong> $
+                        {(
+                          parseFloat(customAmount || "0") + expectedProfit
+                        ).toFixed(2)}
                       </p>
                       <p className="text-xs text-green-600 mt-1">
                         Duration: {selectedInvestmentPlan.duration_days} days
@@ -1660,30 +1761,37 @@ export default function EnhancedUserDashboard() {
                       <Label>Payment Method</Label>
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         <Button
-                          variant={paymentMethod === 'balance' ? 'default' : 'outline'}
-                          onClick={() => setPaymentMethod('balance')}
+                          variant={
+                            paymentMethod === "balance" ? "default" : "outline"
+                          }
+                          onClick={() => setPaymentMethod("balance")}
                           className="text-sm"
                         >
                           <Wallet className="mr-2 h-4 w-4" />
                           Account Balance
                         </Button>
                         <Button
-                          variant={paymentMethod === 'nowpayments' ? 'default' : 'outline'}
-                          onClick={() => setPaymentMethod('nowpayments')}
+                          variant={
+                            paymentMethod === "nowpayments"
+                              ? "default"
+                              : "outline"
+                          }
+                          onClick={() => setPaymentMethod("nowpayments")}
                           className="text-sm"
                         >
                           <CreditCard className="mr-2 h-4 w-4" />
                           Crypto Payment
                         </Button>
                       </div>
-                      {paymentMethod === 'balance' && (
+                      {paymentMethod === "balance" && (
                         <p className="text-xs text-gray-600 mt-2">
                           Available Balance: ${userStats.balance.toFixed(2)}
                         </p>
                       )}
-                      {paymentMethod === 'nowpayments' && (
+                      {paymentMethod === "nowpayments" && (
                         <p className="text-xs text-gray-600 mt-2">
-                          You'll be redirected to select your preferred cryptocurrency
+                          You'll be redirected to select your preferred
+                          cryptocurrency
                         </p>
                       )}
                     </div>
@@ -1696,12 +1804,14 @@ export default function EnhancedUserDashboard() {
                       >
                         {loading ? (
                           <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        ) : paymentMethod === 'balance' ? (
+                        ) : paymentMethod === "balance" ? (
                           <Wallet className="mr-2 h-4 w-4" />
                         ) : (
                           <CreditCard className="mr-2 h-4 w-4" />
                         )}
-                        {paymentMethod === 'balance' ? 'Invest Now' : 'Pay with Crypto'}
+                        {paymentMethod === "balance"
+                          ? "Invest Now"
+                          : "Pay with Crypto"}
                       </Button>
                       <Button
                         variant="outline"
@@ -1724,7 +1834,9 @@ export default function EnhancedUserDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Customer Reviews</CardTitle>
-                <p className="text-gray-600">See what our users are saying about our platform</p>
+                <p className="text-gray-600">
+                  See what our users are saying about our platform
+                </p>
               </CardHeader>
             </Card>
 
@@ -1732,8 +1844,12 @@ export default function EnhancedUserDashboard() {
               <Card>
                 <CardContent className="text-center py-12">
                   <Star className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No Reviews Yet</h3>
-                  <p className="text-gray-500">Be the first to leave a review!</p>
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    No Reviews Yet
+                  </h3>
+                  <p className="text-gray-500">
+                    Be the first to leave a review!
+                  </p>
                 </CardContent>
               </Card>
             ) : (
@@ -1765,7 +1881,9 @@ export default function EnhancedUserDashboard() {
                                 <Star
                                   key={i}
                                   className={`h-4 w-4 ${
-                                    i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                    i < review.rating
+                                      ? "fill-yellow-400 text-yellow-400"
+                                      : "text-gray-300"
                                   }`}
                                 />
                               ))}
@@ -1781,7 +1899,9 @@ export default function EnhancedUserDashboard() {
                       </div>
                       <p className="text-gray-700 mb-4">{review.content}</p>
                       <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{new Date(review.created_at).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </span>
                         <span className="flex items-center space-x-1">
                           <Verified className="h-3 w-3 text-blue-500" />
                           <span>Verified</span>
@@ -1801,7 +1921,9 @@ export default function EnhancedUserDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Success Stories</CardTitle>
-                <p className="text-gray-600">Featured testimonials from our most successful users</p>
+                <p className="text-gray-600">
+                  Featured testimonials from our most successful users
+                </p>
               </CardHeader>
             </Card>
 
@@ -1809,14 +1931,21 @@ export default function EnhancedUserDashboard() {
               <Card>
                 <CardContent className="text-center py-12">
                   <Award className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No Testimonials Yet</h3>
-                  <p className="text-gray-500">Success stories will appear here</p>
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    No Testimonials Yet
+                  </h3>
+                  <p className="text-gray-500">
+                    Success stories will appear here
+                  </p>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {testimonials.map((testimonial) => (
-                  <Card key={testimonial.id} className="bg-gradient-to-br from-blue-50 to-purple-50">
+                  <Card
+                    key={testimonial.id}
+                    className="bg-gradient-to-br from-blue-50 to-purple-50"
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4 mb-4">
                         <div className="flex-shrink-0">
@@ -1835,9 +1964,13 @@ export default function EnhancedUserDashboard() {
                           )}
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg">{testimonial.name}</h3>
+                          <h3 className="font-bold text-lg">
+                            {testimonial.name}
+                          </h3>
                           {testimonial.location && (
-                            <p className="text-gray-600 text-sm">{testimonial.location}</p>
+                            <p className="text-gray-600 text-sm">
+                              {testimonial.location}
+                            </p>
                           )}
                           <div className="flex space-x-1 mt-1">
                             {[...Array(5)].map((_, i) => (
@@ -1856,7 +1989,9 @@ export default function EnhancedUserDashboard() {
 
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">
-                          {new Date(testimonial.created_at).toLocaleDateString()}
+                          {new Date(
+                            testimonial.created_at,
+                          ).toLocaleDateString()}
                         </span>
                         <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                           ⭐ Featured
@@ -1876,7 +2011,9 @@ export default function EnhancedUserDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Live Forex Signals</CardTitle>
-                <p className="text-gray-600">Real-time trading signals from our expert analysts</p>
+                <p className="text-gray-600">
+                  Real-time trading signals from our expert analysts
+                </p>
               </CardHeader>
             </Card>
 
@@ -1884,9 +2021,21 @@ export default function EnhancedUserDashboard() {
               <Card>
                 <CardContent className="text-center py-12">
                   <TrendingUp className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No Active Signals</h3>
-                  <p className="text-gray-500">Live signals will appear here when available</p>
-                  <Button className="mt-4" onClick={() => window.open('https://t.me/forex_traders_signalss', '_blank')}>
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    No Active Signals
+                  </h3>
+                  <p className="text-gray-500">
+                    Live signals will appear here when available
+                  </p>
+                  <Button
+                    className="mt-4"
+                    onClick={() =>
+                      window.open(
+                        "https://t.me/forex_traders_signalss",
+                        "_blank",
+                      )
+                    }
+                  >
                     <Send className="mr-2 h-4 w-4" />
                     Join Telegram for Signals
                   </Button>
@@ -1895,16 +2044,21 @@ export default function EnhancedUserDashboard() {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {liveSignals.map((signal) => (
-                  <Card key={signal.id} className="border-l-4 border-l-green-500">
+                  <Card
+                    key={signal.id}
+                    className="border-l-4 border-l-green-500"
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="font-bold text-xl">{signal.pair}</h3>
                         <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                            signal.signal_type === 'buy'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-semibold ${
+                              signal.signal_type === "buy"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                          >
                             {signal.signal_type.toUpperCase()}
                           </span>
                           <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
@@ -1920,27 +2074,39 @@ export default function EnhancedUserDashboard() {
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Stop Loss</p>
-                          <p className="font-semibold text-red-600">{signal.stop_loss}</p>
+                          <p className="font-semibold text-red-600">
+                            {signal.stop_loss}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Take Profit 1</p>
-                          <p className="font-semibold text-green-600">{signal.take_profit_1}</p>
+                          <p className="font-semibold text-green-600">
+                            {signal.take_profit_1}
+                          </p>
                         </div>
                         {signal.take_profit_2 && (
                           <div>
-                            <p className="text-sm text-gray-600">Take Profit 2</p>
-                            <p className="font-semibold text-green-600">{signal.take_profit_2}</p>
+                            <p className="text-sm text-gray-600">
+                              Take Profit 2
+                            </p>
+                            <p className="font-semibold text-green-600">
+                              {signal.take_profit_2}
+                            </p>
                           </div>
                         )}
                       </div>
 
                       <div className="bg-gray-50 p-3 rounded-lg mb-4">
                         <h4 className="font-semibold text-sm mb-2">Analysis</h4>
-                        <p className="text-sm text-gray-700">{signal.analysis}</p>
+                        <p className="text-sm text-gray-700">
+                          {signal.analysis}
+                        </p>
                       </div>
 
                       <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{new Date(signal.created_at).toLocaleString()}</span>
+                        <span>
+                          {new Date(signal.created_at).toLocaleString()}
+                        </span>
                         <span className="flex items-center space-x-1">
                           <Eye className="h-3 w-3" />
                           <span>Live Signal</span>
@@ -2358,7 +2524,9 @@ export default function EnhancedUserDashboard() {
                     <HelpCircle className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="text-sm text-gray-600">Total Tickets</p>
-                      <p className="text-xl font-bold">{supportTickets.length}</p>
+                      <p className="text-xl font-bold">
+                        {supportTickets.length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -2370,7 +2538,10 @@ export default function EnhancedUserDashboard() {
                     <div>
                       <p className="text-sm text-gray-600">Open Tickets</p>
                       <p className="text-xl font-bold">
-                        {supportTickets.filter(t => t.status === 'open').length}
+                        {
+                          supportTickets.filter((t) => t.status === "open")
+                            .length
+                        }
                       </p>
                     </div>
                   </div>
@@ -2383,7 +2554,10 @@ export default function EnhancedUserDashboard() {
                     <div>
                       <p className="text-sm text-gray-600">Resolved</p>
                       <p className="text-xl font-bold">
-                        {supportTickets.filter(t => t.status === 'resolved').length}
+                        {
+                          supportTickets.filter((t) => t.status === "resolved")
+                            .length
+                        }
                       </p>
                     </div>
                   </div>
@@ -2438,14 +2612,19 @@ export default function EnhancedUserDashboard() {
                       <Select
                         value={supportTicket.category}
                         onValueChange={(value) =>
-                          setSupportTicket((prev) => ({ ...prev, category: value }))
+                          setSupportTicket((prev) => ({
+                            ...prev,
+                            category: value,
+                          }))
                         }
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="deposit">Deposit Issues</SelectItem>
+                          <SelectItem value="deposit">
+                            Deposit Issues
+                          </SelectItem>
                           <SelectItem value="withdrawal">
                             Withdrawal Issues
                           </SelectItem>
@@ -2455,7 +2634,9 @@ export default function EnhancedUserDashboard() {
                           <SelectItem value="technical">
                             Technical Support
                           </SelectItem>
-                          <SelectItem value="account">Account Issues</SelectItem>
+                          <SelectItem value="account">
+                            Account Issues
+                          </SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
@@ -2480,7 +2661,9 @@ export default function EnhancedUserDashboard() {
                     <Button
                       onClick={handleSupportTicket}
                       disabled={
-                        loading || !supportTicket.subject || !supportTicket.category
+                        loading ||
+                        !supportTicket.subject ||
+                        !supportTicket.category
                       }
                       className="w-full bg-blue-600 hover:bg-blue-700"
                     >
@@ -2513,7 +2696,9 @@ export default function EnhancedUserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>My Support Tickets</CardTitle>
-                  <p className="text-gray-600">Track the status of your support requests</p>
+                  <p className="text-gray-600">
+                    Track the status of your support requests
+                  </p>
                 </CardHeader>
                 <CardContent>
                   {supportTickets.length === 0 ? (
@@ -2535,7 +2720,10 @@ export default function EnhancedUserDashboard() {
                   ) : (
                     <div className="space-y-4">
                       {supportTickets.map((ticket) => (
-                        <div key={ticket.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div
+                          key={ticket.id}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
                               <h3 className="font-semibold text-lg text-gray-900">
@@ -2547,20 +2735,30 @@ export default function EnhancedUserDashboard() {
                             </div>
                             <Badge
                               variant={
-                                ticket.status === 'open' ? 'default' :
-                                ticket.status === 'resolved' ? 'secondary' :
-                                ticket.status === 'in_progress' ? 'destructive' : 'outline'
+                                ticket.status === "open"
+                                  ? "default"
+                                  : ticket.status === "resolved"
+                                    ? "secondary"
+                                    : ticket.status === "in_progress"
+                                      ? "destructive"
+                                      : "outline"
                               }
                               className={
-                                ticket.status === 'open' ? 'bg-blue-100 text-blue-800' :
-                                ticket.status === 'resolved' ? 'bg-green-100 text-green-800' :
-                                ticket.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : ''
+                                ticket.status === "open"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : ticket.status === "resolved"
+                                    ? "bg-green-100 text-green-800"
+                                    : ticket.status === "in_progress"
+                                      ? "bg-yellow-100 text-yellow-800"
+                                      : ""
                               }
                             >
-                              {ticket.status === 'open' && '🟡 Waiting for Response'}
-                              {ticket.status === 'resolved' && '✅ Resolved'}
-                              {ticket.status === 'in_progress' && '🔄 In Progress'}
-                              {ticket.status === 'closed' && '⚫ Closed'}
+                              {ticket.status === "open" &&
+                                "🟡 Waiting for Response"}
+                              {ticket.status === "resolved" && "✅ Resolved"}
+                              {ticket.status === "in_progress" &&
+                                "🔄 In Progress"}
+                              {ticket.status === "closed" && "⚫ Closed"}
                             </Badge>
                           </div>
 
@@ -2570,13 +2768,15 @@ export default function EnhancedUserDashboard() {
 
                           <div className="flex items-center justify-between text-xs text-gray-500">
                             <span>
-                              Created: {new Date(ticket.created_at).toLocaleDateString()} at{' '}
+                              Created:{" "}
+                              {new Date(ticket.created_at).toLocaleDateString()}{" "}
+                              at{" "}
                               {new Date(ticket.created_at).toLocaleTimeString()}
                             </span>
                             <span>#{ticket.id.slice(0, 8)}</span>
                           </div>
 
-                          {ticket.status === 'open' && (
+                          {ticket.status === "open" && (
                             <div className="mt-3 p-3 bg-blue-50 rounded-lg">
                               <div className="flex items-center space-x-2">
                                 <Clock className="h-4 w-4 text-blue-600" />
@@ -2855,7 +3055,6 @@ export default function EnhancedUserDashboard() {
 
         {renderTabContent()}
       </div>
-
     </DashboardLayout>
   );
 }

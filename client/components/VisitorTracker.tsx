@@ -36,8 +36,8 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
           Object.assign(visitorData, locationData);
         } catch (error) {
           console.warn("Could not get location data:", {
-            message: error instanceof Error ? error.message : 'Unknown error',
-            stack: error instanceof Error ? error.stack : undefined
+            message: error instanceof Error ? error.message : "Unknown error",
+            stack: error instanceof Error ? error.stack : undefined,
           });
           Object.assign(visitorData, {
             country: "Unknown",
@@ -53,9 +53,9 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
 
         if (pageError) {
           console.warn("Failed to track page view:", {
-            message: pageError?.message || 'Unknown page tracking error',
-            code: pageError?.code || 'NO_CODE',
-            details: pageError?.details || 'No details available'
+            message: pageError?.message || "Unknown page tracking error",
+            code: pageError?.code || "NO_CODE",
+            details: pageError?.details || "No details available",
           });
         }
 
@@ -71,15 +71,15 @@ const VisitorTracker: React.FC<VisitorTrackerProps> = ({
 
         if (visitorError) {
           console.warn("Failed to track visitor:", {
-            message: visitorError?.message || 'Unknown visitor tracking error',
-            code: visitorError?.code || 'NO_CODE',
-            details: visitorError?.details || 'No details available'
+            message: visitorError?.message || "Unknown visitor tracking error",
+            code: visitorError?.code || "NO_CODE",
+            details: visitorError?.details || "No details available",
           });
         }
       } catch (error) {
         console.warn("Visitor tracking error:", {
-          message: error instanceof Error ? error.message : 'Unknown error',
-          stack: error instanceof Error ? error.stack : undefined
+          message: error instanceof Error ? error.message : "Unknown error",
+          stack: error instanceof Error ? error.stack : undefined,
         });
       }
     };
@@ -156,8 +156,8 @@ const getLocationData = async () => {
     }
   } catch (error) {
     console.warn("Geolocation API failed:", {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
     });
   }
 

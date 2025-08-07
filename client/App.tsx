@@ -53,110 +53,113 @@ const App = () => (
             <VisitorTracker />
             <NavigationGuard>
               <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/offers" element={<Offers />} />
-              <Route path="/education" element={<Education />} />
-              <Route path="/promo" element={<Promo />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/news" element={<News />} />
-              {/* Standalone pages accessible without login */}
-              <Route path="/telegramsignals" element={<TelegramSignals />} />
-              <Route path="/reviews" element={<ReviewsStandalone />} />
-              <Route path="/live-signals" element={<LiveSignalsStandalone />} />
-              <Route
-                path="/testimonials"
-                element={<TestimonialsStandalone />}
-              />
-              <Route
-                path="/investment-plans"
-                element={<InvestmentPlansStandalone />}
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <EnhancedUserDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/test-dashboard"
-                element={
-                  <ProtectedRoute>
-                    <TestDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <Admin />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/eustersmain" element={<AdminLogin />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-              <Route
-                path="/admin-panel"
-                element={
-                  <ProtectedRoute>
-                    <AdminPanel />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/error-monitoring"
-                element={
-                  <ProtectedRoute>
-                    <ErrorMonitoring />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/investment-plans"
-                element={
-                  <ProtectedRoute>
-                    <InvestmentPlans />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/live-signals"
-                element={
-                  <ProtectedRoute>
-                    <LiveSignals />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/testimonials"
-                element={
-                  <ProtectedRoute>
-                    <Testimonials />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/reviews"
-                element={
-                  <ProtectedRoute>
-                    <Reviews />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/db-diagnostic"
-                element={
-                  <ProtectedRoute>
-                    <DatabaseDiagnostic />
-                  </ProtectedRoute>
-                }
-              />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/offers" element={<Offers />} />
+                <Route path="/education" element={<Education />} />
+                <Route path="/promo" element={<Promo />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/news" element={<News />} />
+                {/* Standalone pages accessible without login */}
+                <Route path="/telegramsignals" element={<TelegramSignals />} />
+                <Route path="/reviews" element={<ReviewsStandalone />} />
+                <Route
+                  path="/live-signals"
+                  element={<LiveSignalsStandalone />}
+                />
+                <Route
+                  path="/testimonials"
+                  element={<TestimonialsStandalone />}
+                />
+                <Route
+                  path="/investment-plans"
+                  element={<InvestmentPlansStandalone />}
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <EnhancedUserDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/test-dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <TestDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/eustersmain" element={<AdminLogin />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
+                <Route
+                  path="/admin-panel"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPanel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/error-monitoring"
+                  element={
+                    <ProtectedRoute>
+                      <ErrorMonitoring />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/investment-plans"
+                  element={
+                    <ProtectedRoute>
+                      <InvestmentPlans />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/live-signals"
+                  element={
+                    <ProtectedRoute>
+                      <LiveSignals />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/testimonials"
+                  element={
+                    <ProtectedRoute>
+                      <Testimonials />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reviews"
+                  element={
+                    <ProtectedRoute>
+                      <Reviews />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/db-diagnostic"
+                  element={
+                    <ProtectedRoute>
+                      <DatabaseDiagnostic />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </NavigationGuard>
           </BrowserRouter>

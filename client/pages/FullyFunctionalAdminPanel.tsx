@@ -1448,6 +1448,662 @@ export default function FullyFunctionalAdminPanel() {
           </div>
         );
 
+      case "blog":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Blog Management</h2>
+              <Button onClick={() => setActiveTab("create-blog")} className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Blog Post
+              </Button>
+            </div>
+
+            {activeTab === "create-blog" ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Create Blog Post</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="blog_title">Title</Label>
+                      <Input
+                        id="blog_title"
+                        placeholder="Enter blog title"
+                        value={blogForm.title}
+                        onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="blog_slug">Slug</Label>
+                      <Input
+                        id="blog_slug"
+                        placeholder="blog-post-slug (auto-generated if empty)"
+                        value={blogForm.slug}
+                        onChange={(e) => setBlogForm({ ...blogForm, slug: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="blog_category">Category</Label>
+                      <Select value={blogForm.category} onValueChange={(value) => setBlogForm({ ...blogForm, category: value })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="trading">Trading</SelectItem>
+                          <SelectItem value="market-analysis">Market Analysis</SelectItem>
+                          <SelectItem value="education">Education</SelectItem>
+                          <SelectItem value="news">News</SelectItem>
+                          <SelectItem value="strategy">Strategy</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="blog_image">Featured Image URL</Label>
+                      <Input
+                        id="blog_image"
+                        placeholder="https://example.com/image.jpg"
+                        value={blogForm.featured_image_url}
+                        onChange={(e) => setBlogForm({ ...blogForm, featured_image_url: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="blog_excerpt">Excerpt</Label>
+                    <Textarea
+                      id="blog_excerpt"
+                      placeholder="Brief summary of the blog post..."
+                      value={blogForm.excerpt}
+                      onChange={(e) => setBlogForm({ ...blogForm, excerpt: e.target.value })}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="blog_content">Content</Label>
+                    <Textarea
+                      id="blog_content"
+                      placeholder="Full blog content..."
+                      className="min-h-[300px]"
+                      value={blogForm.content}
+                      onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={blogForm.is_published}
+                        onChange={(e) => setBlogForm({ ...blogForm, is_published: e.target.checked })}
+                        className="mr-2"
+                      />
+                      Publish immediately
+                    </label>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <Button onClick={createBlogPost} disabled={loading || !blogForm.title || !blogForm.content}>
+                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                      Create Blog Post
+                    </Button>
+                    <Button variant="outline" onClick={() => setActiveTab("blog")}>
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Blog Posts</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {blogPosts.length === 0 ? (
+                        <p className="text-gray-500 text-center py-8">No blog posts created yet</p>
+                      ) : (
+                        blogPosts.map((post) => (
+                          <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <h3 className="font-semibold">{post.title}</h3>
+                                  <Badge variant="outline">{post.category}</Badge>
+                                </div>
+                                <p className="text-sm text-gray-600 mb-2">{post.excerpt}</p>
+                                <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                  <span>Views: {post.view_count}</span>
+                                  <span>Slug: {post.slug}</span>
+                                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+                                <Badge variant={post.is_published ? 'default' : 'secondary'}>
+                                  {post.is_published ? 'Published' : 'Draft'}
+                                </Badge>
+                                <Button variant="outline" size="sm">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                  <ExternalLink className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        );
+
+      case "ebooks":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Ebook Management</h2>
+              <Button onClick={() => setActiveTab("create-ebook")} className="bg-purple-600 hover:bg-purple-700 mt-4 sm:mt-0">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Ebook
+              </Button>
+            </div>
+
+            {activeTab === "create-ebook" ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Create Ebook</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="ebook_title">Title</Label>
+                      <Input
+                        id="ebook_title"
+                        placeholder="Ebook title"
+                        value={ebookForm.title}
+                        onChange={(e) => setEbookForm({ ...ebookForm, title: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="ebook_author">Author</Label>
+                      <Input
+                        id="ebook_author"
+                        placeholder="Author name"
+                        value={ebookForm.author}
+                        onChange={(e) => setEbookForm({ ...ebookForm, author: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="ebook_description">Description</Label>
+                    <Textarea
+                      id="ebook_description"
+                      placeholder="Ebook description..."
+                      value={ebookForm.description}
+                      onChange={(e) => setEbookForm({ ...ebookForm, description: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="ebook_category">Category</Label>
+                      <Select value={ebookForm.category} onValueChange={(value) => setEbookForm({ ...ebookForm, category: value })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="trading">Trading</SelectItem>
+                          <SelectItem value="forex">Forex</SelectItem>
+                          <SelectItem value="strategy">Strategy</SelectItem>
+                          <SelectItem value="education">Education</SelectItem>
+                          <SelectItem value="technical-analysis">Technical Analysis</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="ebook_investment">Required Investment ($)</Label>
+                      <Input
+                        id="ebook_investment"
+                        type="number"
+                        placeholder="0 for free ebooks"
+                        value={ebookForm.required_investment_amount}
+                        onChange={(e) => setEbookForm({ ...ebookForm, required_investment_amount: parseInt(e.target.value) })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="ebook_file">File URL</Label>
+                      <Input
+                        id="ebook_file"
+                        placeholder="https://example.com/ebook.pdf"
+                        value={ebookForm.file_url}
+                        onChange={(e) => setEbookForm({ ...ebookForm, file_url: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="ebook_cover">Cover Image URL</Label>
+                      <Input
+                        id="ebook_cover"
+                        placeholder="https://example.com/cover.jpg"
+                        value={ebookForm.cover_image_url}
+                        onChange={(e) => setEbookForm({ ...ebookForm, cover_image_url: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={ebookForm.is_free}
+                        onChange={(e) => setEbookForm({ ...ebookForm, is_free: e.target.checked })}
+                        className="mr-2"
+                      />
+                      Free ebook (overrides investment requirement)
+                    </label>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <Button onClick={createEbook} disabled={loading || !ebookForm.title || !ebookForm.file_url}>
+                      {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                      Create Ebook
+                    </Button>
+                    <Button variant="outline" onClick={() => setActiveTab("ebooks")}>
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Ebooks</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <div className="flex justify-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {ebooks.length === 0 ? (
+                        <p className="text-gray-500 text-center py-8">No ebooks created yet</p>
+                      ) : (
+                        ebooks.map((ebook) => (
+                          <div key={ebook.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <h3 className="font-semibold">{ebook.title}</h3>
+                                  <Badge variant="outline">{ebook.category}</Badge>
+                                  {ebook.is_free && <Badge className="bg-green-100 text-green-800">Free</Badge>}
+                                </div>
+                                <p className="text-sm text-gray-600 mb-2">By {ebook.author}</p>
+                                <p className="text-sm text-gray-600 mb-2">{ebook.description}</p>
+                                <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                  <span>Downloads: {ebook.download_count}</span>
+                                  {!ebook.is_free && <span>Requires: ${ebook.required_investment_amount} investment</span>}
+                                  <span>{new Date(ebook.created_at).toLocaleDateString()}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+                                <Badge variant={ebook.is_published ? 'default' : 'secondary'}>
+                                  {ebook.is_published ? 'Published' : 'Draft'}
+                                </Badge>
+                                <Button variant="outline" size="sm">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        );
+
+      case "testimonials":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Reviews Management</h2>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Customer Reviews</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {testimonials.length === 0 ? (
+                      <p className="text-gray-500 text-center py-8">No reviews found</p>
+                    ) : (
+                      testimonials.map((testimonial) => (
+                        <div key={testimonial.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <h3 className="font-semibold">{testimonial.name}</h3>
+                                <div className="flex items-center">
+                                  {Array.from({ length: testimonial.rating }).map((_, i) => (
+                                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                  ))}
+                                </div>
+                                <span className="text-sm text-gray-500">({testimonial.rating}/5)</span>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-2">{testimonial.content}</p>
+                              <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                <span>Location: {testimonial.location || 'N/A'}</span>
+                                <span>{new Date(testimonial.created_at).toLocaleDateString()}</span>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+                              <Badge variant={testimonial.is_approved ? 'default' : 'destructive'}>
+                                {testimonial.is_approved ? 'Approved' : 'Pending'}
+                              </Badge>
+                              {testimonial.is_featured && (
+                                <Badge className="bg-yellow-100 text-yellow-800">Featured</Badge>
+                              )}
+                              <Button variant="outline" size="sm">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        );
+
+      case "analytics":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+              <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+                <Button variant="outline" size="sm">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh Data
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <Users className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Total Users</p>
+                      <p className="text-2xl font-bold text-gray-900">{users.length}</p>
+                      <p className="text-xs text-green-600">+12% from last month</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <DollarSign className="h-8 w-8 text-green-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                      <p className="text-2xl font-bold text-gray-900">$45,231</p>
+                      <p className="text-xs text-green-600">+23% from last month</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <TrendingUp className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Active Investments</p>
+                      <p className="text-2xl font-bold text-gray-900">1,234</p>
+                      <p className="text-xs text-green-600">+8% from last month</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <Activity className="h-8 w-8 text-orange-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                      <p className="text-2xl font-bold text-gray-900">3.2%</p>
+                      <p className="text-xs text-red-600">-0.1% from last month</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="flex-1">
+                        <p className="text-sm">New user registration</p>
+                        <p className="text-xs text-gray-500">2 minutes ago</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <div className="flex-1">
+                        <p className="text-sm">Investment plan purchased</p>
+                        <p className="text-xs text-gray-500">5 minutes ago</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <div className="flex-1">
+                        <p className="text-sm">Support ticket created</p>
+                        <p className="text-xs text-gray-500">8 minutes ago</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <div className="flex-1">
+                        <p className="text-sm">Blog post published</p>
+                        <p className="text-xs text-gray-500">15 minutes ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Popular Investment Plans</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Premium Plan</span>
+                      <span className="text-sm font-medium">45%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Professional Plan</span>
+                      <span className="text-sm font-medium">35%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Starter Plan</span>
+                      <span className="text-sm font-medium">20%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
+
+      case "frontend-plans":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Frontend Investment Plans</h2>
+                <p className="text-gray-600">Plans shown on the main website and landing pages</p>
+              </div>
+              <Button className="bg-blue-600 hover:bg-blue-700 mt-4 sm:mt-0">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Frontend Plan
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Frontend Plans Management</CardTitle>
+                <p className="text-gray-600">These plans are displayed on your website homepage and marketing pages</p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((plan) => (
+                    <div key={plan} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-semibold text-lg">Starter Plan</h3>
+                        <Badge variant="default" className="text-xs">Frontend</Badge>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-3">Perfect for beginners</p>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">ROI:</span>
+                          <span className="font-semibold text-green-600">10x (1000%)</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Duration:</span>
+                          <span className="font-medium">24 hours</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Range:</span>
+                          <span className="font-medium">$100 - $999</span>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2 mt-4">
+                        <Button variant="outline" size="sm" className="flex-1">
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+
+      case "dashboard-plans":
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Dashboard Investment Plans</h2>
+                <p className="text-gray-600">Plans available inside the user dashboard</p>
+              </div>
+              <Button className="bg-green-600 hover:bg-green-700 mt-4 sm:mt-0">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Dashboard Plan
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Dashboard Plans Management</CardTitle>
+                <p className="text-gray-600">These plans are available exclusively to logged-in users in their dashboard</p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((plan) => (
+                    <div key={plan} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-semibold text-lg">VIP Plan</h3>
+                        <Badge variant="secondary" className="text-xs">Dashboard</Badge>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-3">Exclusive dashboard offer</p>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">ROI:</span>
+                          <span className="font-semibold text-green-600">15x (1500%)</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Duration:</span>
+                          <span className="font-medium">32 hours</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Range:</span>
+                          <span className="font-medium">$5000 - $50000</span>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2 mt-4">
+                        <Button variant="outline" size="sm" className="flex-1">
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+
       case "settings":
         return (
           <div className="space-y-6">
@@ -1512,8 +2168,8 @@ export default function FullyFunctionalAdminPanel() {
                         Put the site in maintenance mode
                       </div>
                     </div>
-                    <Button 
-                      variant={siteSettings.maintenance_mode ? "destructive" : "outline"} 
+                    <Button
+                      variant={siteSettings.maintenance_mode ? "destructive" : "outline"}
                       size="sm"
                       onClick={() => setSiteSettings({ ...siteSettings, maintenance_mode: !siteSettings.maintenance_mode })}
                     >
@@ -1528,8 +2184,8 @@ export default function FullyFunctionalAdminPanel() {
                         Allow new user registrations
                       </div>
                     </div>
-                    <Button 
-                      variant={siteSettings.registration_enabled ? "default" : "outline"} 
+                    <Button
+                      variant={siteSettings.registration_enabled ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSiteSettings({ ...siteSettings, registration_enabled: !siteSettings.registration_enabled })}
                     >

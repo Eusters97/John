@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/EnhancedAuthContext";
+import { useToast } from "@/hooks/use-toast";
+import InvestmentModal from "@/components/InvestmentModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,22 +30,33 @@ import {
 export default function TelegramSignals() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [showInvestmentModal, setShowInvestmentModal] = useState(false);
+  const navigate = useNavigate();
+  const { user, signUp } = useAuth();
+  const { toast } = useToast();
 
   // Investment offer data
   const investmentOffer = {
+    id: "telegram-vip",
     name: "VIP Telegram Signals Package",
-    amount: 500,
-    expectedReturn: 12500,
-    roi: "2,500%",
-    duration: "30 days",
     description: "Exclusive access to our premium Telegram signals with guaranteed results",
+    min_amount: 500,
+    max_amount: 50000,
+    roi_percentage: 1200,
+    duration_days: 1,
+    is_active: true,
+    is_featured: true,
     features: [
+      "12x return in 26 hours",
       "Daily Premium Signals",
       "90%+ Win Rate",
       "24/7 Support",
       "Risk Management",
-      "Live Trading Room"
-    ]
+      "Live Trading Room",
+      "Exclusive Telegram Access"
+    ],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
   };
 
   // Telegram signals reviews
@@ -91,9 +105,70 @@ export default function TelegramSignals() {
     }
   ];
 
-  const handleSignup = () => {
-    // Handle signup logic here
-    console.log("Signup with:", { name, email });
+  const handleSignup = async () => {
+    if (!name || !email) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Generate a temporary password for quick signup
+      const tempPassword = Math.random().toString(36).slice(-8) + "!A1";
+
+      const result = await signUp({
+        email,
+        password: tempPassword,
+        fullName: name,
+        country: "US", // Default country
+        phoneNumber: "", // Optional
+      });
+
+      if (result.success) {
+        toast({
+          title: "Success!",
+          description: "Account created successfully! Redirecting to dashboard...",
+        });
+
+        // Redirect to dashboard after successful signup
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        throw new Error(result.error || "Failed to create account");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to create account",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleInvestNow = () => {
+    if (user) {
+      setShowInvestmentModal(true);
+    } else {
+      // Redirect to registration if not logged in
+      navigate("/register");
+    }
+  };
+
+  const handleJoinTelegram = () => {
+    // Open Telegram channel
+    window.open('https://t.me/forex_traders_signalss', '_blank');
+
+    // If user is not logged in, encourage them to create account
+    if (!user) {
+      toast({
+        title: "Join Our Community!",
+        description: "Create a free account to get exclusive access to our premium features",
+      });
+    }
   };
 
   return (
@@ -140,11 +215,20 @@ export default function TelegramSignals() {
               Start earning massive profits today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold px-8 py-3 text-lg">
+              <Button
+                size="lg"
+                onClick={handleJoinTelegram}
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold px-8 py-3 text-lg"
+              >
                 <Send className="mr-2 h-5 w-5" />
                 Join Telegram Channel
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/register")}
+                className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
+              >
                 Create Account
               </Button>
             </div>
@@ -170,25 +254,25 @@ export default function TelegramSignals() {
                   {investmentOffer.name}
                 </CardTitle>
                 <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">
-                  {investmentOffer.roi} ROI
+                  {investmentOffer.roi_percentage / 100}x ROI
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <DollarSign className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">Investment</p>
-                    <p className="text-xl font-bold text-gray-900">${investmentOffer.amount}</p>
+                    <p className="text-sm text-gray-600">Minimum Investment</p>
+                    <p className="text-xl font-bold text-gray-900">${investmentOffer.min_amount}</p>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <Target className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">Expected Return</p>
-                    <p className="text-xl font-bold text-green-600">${investmentOffer.expectedReturn.toLocaleString()}</p>
+                    <p className="text-sm text-gray-600">Return Multiplier</p>
+                    <p className="text-xl font-bold text-green-600">{investmentOffer.roi_percentage / 100}x</p>
                   </div>
                   <div className="bg-white rounded-lg p-4 shadow-md">
                     <Clock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
                     <p className="text-sm text-gray-600">Duration</p>
-                    <p className="text-xl font-bold text-gray-900">{investmentOffer.duration}</p>
+                    <p className="text-xl font-bold text-gray-900">{investmentOffer.duration_days} day{investmentOffer.duration_days !== 1 ? 's' : ''}</p>
                   </div>
                 </div>
 
@@ -204,7 +288,11 @@ export default function TelegramSignals() {
                   </div>
                 </div>
 
-                <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 text-lg">
+                <Button
+                  size="lg"
+                  onClick={handleInvestNow}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 text-lg"
+                >
                   <Zap className="mr-2 h-5 w-5" />
                   Invest Now - Limited Spots Available
                 </Button>
@@ -375,10 +463,10 @@ export default function TelegramSignals() {
                 <p className="text-gray-300 mb-6">
                   Get instant access to premium forex signals, market analysis, and join our community of successful traders.
                 </p>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-3 text-lg"
-                  onClick={() => window.open('https://t.me/forex_traders_signalss', '_blank')}
+                  onClick={handleJoinTelegram}
                 >
                   <ExternalLink className="mr-2 h-5 w-5" />
                   Open Telegram Channel
@@ -391,6 +479,15 @@ export default function TelegramSignals() {
           </section>
         </div>
       </div>
+
+      {/* Investment Modal */}
+      {showInvestmentModal && (
+        <InvestmentModal
+          isOpen={showInvestmentModal}
+          onClose={() => setShowInvestmentModal(false)}
+          plan={investmentOffer}
+        />
+      )}
     </div>
   );
 }

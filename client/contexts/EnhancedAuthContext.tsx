@@ -437,7 +437,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         message: error instanceof Error ? error.message : 'Unknown error',
         email
       });
-      return { user: null, error: { message: error.message || 'Admin sign-in failed' } };
+      return { user: null, error: { message: error instanceof Error ? error.message : 'Admin sign-in failed' } };
     }
   }
 

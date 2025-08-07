@@ -141,14 +141,24 @@ export default function FrontPageLayout({ children }: FrontPageLayoutProps) {
             </div>
             <span className="text-white font-bold text-sm">FREE FOREX SIGNALS</span>
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="lg:hidden text-white hover:bg-white/20"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center space-x-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden lg:block text-white hover:bg-white/20"
+              onClick={() => setSidebarHidden(!sidebarHidden)}
+            >
+              <Menu className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden text-white hover:bg-white/20"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
         <div className="flex-1 flex flex-col overflow-hidden">

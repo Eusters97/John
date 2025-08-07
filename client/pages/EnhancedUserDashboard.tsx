@@ -145,14 +145,24 @@ export default function EnhancedUserDashboard() {
       console.log("User ID:", user.id);
       console.log("User email:", user.email);
       initializeUserData()
-        .then(() => {
-          loadUserStats();
-          loadSupportTickets();
-          loadInvestmentPlans();
-          loadReviews();
-          loadTestimonials();
-          loadLiveSignals();
-          checkTelegramConnection();
+        .then(async () => {
+          try {
+            await Promise.allSettled([
+              loadUserStats(),
+              loadSupportTickets(),
+              loadInvestmentPlans(),
+              loadReviews(),
+              loadTestimonials(),
+              loadLiveSignals(),
+              checkTelegramConnection()
+            ]);
+          } catch (error) {
+            console.error("Error in parallel loading:", {
+              message: error instanceof Error ? error.message : "Unknown error",
+              stack: error instanceof Error ? error.stack : undefined,
+              user_id: user?.id,
+            });
+          }
         })
         .catch((error) => {
           console.error("Error in user initialization chain:", {

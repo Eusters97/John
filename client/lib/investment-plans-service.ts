@@ -24,15 +24,16 @@ class InvestmentPlansService {
       description: "Perfect for beginners looking to get started with forex trading",
       min_amount: 100,
       max_amount: 999,
-      roi_percentage: 15,
-      duration_days: 7,
+      roi_percentage: 1000,
+      duration_days: 1,
       is_active: true,
       is_featured: false,
       features: [
+        "10x return in 24 hours",
         "Basic trading signals",
         "Email support",
-        "Weekly market analysis",
-        "Mobile app access"
+        "Mobile app access",
+        "Instant withdrawals"
       ],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -43,16 +44,17 @@ class InvestmentPlansService {
       description: "For serious investors who want higher returns",
       min_amount: 1000,
       max_amount: 4999,
-      roi_percentage: 25,
-      duration_days: 14,
+      roi_percentage: 1200,
+      duration_days: 1,
       is_active: true,
       is_featured: true,
       features: [
+        "12x return in 26 hours",
         "Premium trading signals",
         "24/7 support",
-        "Daily market analysis",
         "Personal account manager",
-        "Risk management tools"
+        "Risk management tools",
+        "Priority processing"
       ],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -63,17 +65,19 @@ class InvestmentPlansService {
       description: "Maximum returns for high-volume investors",
       min_amount: 5000,
       max_amount: 50000,
-      roi_percentage: 35,
-      duration_days: 30,
+      roi_percentage: 1500,
+      duration_days: 1,
       is_active: true,
       is_featured: false,
       features: [
+        "15x return in 32 hours",
         "VIP trading signals",
         "Priority support",
         "Real-time market alerts",
         "Dedicated analyst",
         "Advanced portfolio tools",
-        "Exclusive webinars"
+        "Exclusive webinars",
+        "VIP withdrawal service"
       ],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()

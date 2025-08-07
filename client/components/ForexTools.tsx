@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 
 export default function ForexTools() {
+  const navigate = useNavigate();
+
   // Pips Calculator State
   const [pipCalculator, setPipCalculator] = useState({
     accountCurrency: "USD",

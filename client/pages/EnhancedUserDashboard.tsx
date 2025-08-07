@@ -61,6 +61,7 @@ import {
   Globe,
   MapPin,
   Verified,
+  HelpCircle,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 

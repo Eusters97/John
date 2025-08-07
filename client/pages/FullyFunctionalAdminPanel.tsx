@@ -396,7 +396,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setSupportTickets(data || []);
     } catch (error) {
-      console.error("Error loading support tickets:", error);
+      console.error("Error loading support tickets:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -464,7 +467,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setTestimonials(data || []);
     } catch (error) {
-      console.error("Error loading testimonials:", error);
+      console.error("Error loading testimonials:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }

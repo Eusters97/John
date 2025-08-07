@@ -356,7 +356,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setUsers(data || []);
     } catch (error) {
-      console.error("Error loading users:", error);
+      console.error("Error loading users:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -376,7 +379,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setPayments(data || []);
     } catch (error) {
-      console.error("Error loading payments:", error);
+      console.error("Error loading payments:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -416,7 +422,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setNewsPosts(data || []);
     } catch (error) {
-      console.error("Error loading news posts:", error);
+      console.error("Error loading news posts:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -433,7 +442,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setBlogPosts(data || []);
     } catch (error) {
-      console.error("Error loading blog posts:", error);
+      console.error("Error loading blog posts:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -450,7 +462,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setEbooks(data || []);
     } catch (error) {
-      console.error("Error loading ebooks:", error);
+      console.error("Error loading ebooks:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -484,7 +499,10 @@ export default function FullyFunctionalAdminPanel() {
         setSignals(result.data);
       }
     } catch (error) {
-      console.error("Error loading signals:", error);
+      console.error("Error loading signals:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -502,7 +520,10 @@ export default function FullyFunctionalAdminPanel() {
       if (error && error.code !== "42P01") throw error;
       setSiteErrors(data || []);
     } catch (error) {
-      console.error("Error loading site errors:", error);
+      console.error("Error loading site errors:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }
@@ -522,7 +543,10 @@ export default function FullyFunctionalAdminPanel() {
       setFrontendPlans(plans.filter(p => p.plan_type === 'frontend'));
       setDashboardPlans(plans.filter(p => p.plan_type === 'dashboard'));
     } catch (error) {
-      console.error("Error loading investment plans:", error);
+      console.error("Error loading investment plans:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     } finally {
       setLoading(false);
     }

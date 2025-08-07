@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/EnhancedAuthContext";
 import DashboardLayout from "@/components/DashboardLayout";
 import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
-import EnhancedPaymentModal from "@/components/EnhancedPaymentModal";
+import InvestmentModal from "@/components/InvestmentModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

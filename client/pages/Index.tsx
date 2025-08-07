@@ -5,7 +5,7 @@ import CookieBanner from "@/components/CookieBanner";
 import PaymentModal from "@/components/PaymentModal";
 import WelcomePopup from "@/components/WelcomePopup";
 import EducationSection from "@/components/EducationSection";
-import SimpleInvestmentPlans from "@/components/SimpleInvestmentPlans";
+import ForexTools from "@/components/ForexTools";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

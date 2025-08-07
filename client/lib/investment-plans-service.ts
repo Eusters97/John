@@ -64,7 +64,7 @@ class InvestmentPlansService {
       id: "premium",
       name: "Premium Plan",
       description: "Maximum returns for high-volume investors",
-      min_amount: 5000,
+      min_amount: 10000,
       max_amount: 50000,
       roi_percentage: 1500,
       duration_days: 1,

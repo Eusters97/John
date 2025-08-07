@@ -303,8 +303,12 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Investment Plans Section */}
-      <SimpleInvestmentPlans allowPayments={false} redirectToLogin={true} />
+      {/* Forex Tools Section */}
+      <section className="py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <ForexTools />
+        </div>
+      </section>
 
       {/* Features Section */}
       <section className="py-20 bg-gray-50 relative overflow-hidden">

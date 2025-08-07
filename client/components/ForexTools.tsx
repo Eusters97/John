@@ -471,7 +471,10 @@ export default function ForexTools() {
                     Join thousands of successful investors who trust our proven
                     strategies.
                   </p>
-                  <Button className="bg-white text-forex-600 hover:bg-gray-100 w-full">
+                  <Button
+                    className="bg-white text-forex-600 hover:bg-gray-100 w-full"
+                    onClick={() => navigate("/investment-plans")}
+                  >
                     View All Investment Plans
                   </Button>
                 </div>

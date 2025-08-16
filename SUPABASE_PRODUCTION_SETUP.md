@@ -19,6 +19,7 @@ Your forex trading platform is now configured with your Supabase production data
 4. Click **Run** to execute the script
 
 This will:
+
 - Create all necessary tables and schemas
 - Set up Row Level Security (RLS) policies
 - Add production investment plans (no demo data)
@@ -49,6 +50,7 @@ If you plan to upload files (avatars, documents):
 ### 4. Environment Variables
 
 Your environment is already configured with:
+
 ```env
 VITE_SUPABASE_URL=https://bcstxngbmqrvuhtpzwid.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -62,9 +64,10 @@ After running the database setup:
 2. Go to Supabase **Authentication** → **Users**
 3. Find your user and note the UUID
 4. In SQL Editor, run:
+
 ```sql
-UPDATE user_profiles 
-SET is_admin = true 
+UPDATE user_profiles
+SET is_admin = true
 WHERE id = 'your-user-uuid-here';
 ```
 
@@ -73,18 +76,21 @@ WHERE id = 'your-user-uuid-here';
 Your production database includes these investment plans:
 
 ### Starter Plan
+
 - **Amount**: $200 - $2,000
 - **ROI**: 10X (1000%)
 - **Duration**: 24-32 hours
 - **Features**: Basic signals, email support, mobile access
 
 ### Professional Plan (Most Popular)
-- **Amount**: $2,000 - $10,000  
+
+- **Amount**: $2,000 - $10,000
 - **ROI**: 12X (1200%)
 - **Duration**: 24-32 hours
 - **Features**: Premium signals, 24/7 support, account manager
 
 ### Premium Plan
+
 - **Amount**: $10,000 - $50,000
 - **ROI**: 15X (1500%)
 - **Duration**: 24-32 hours
@@ -95,18 +101,21 @@ Your production database includes these investment plans:
 Your platform now includes:
 
 ### User Management
+
 - ✅ User registration/login
 - ✅ Profile management
 - ✅ KYC status tracking
 - ✅ Balance management
 
 ### Investment System
+
 - ✅ Investment plans
 - ✅ User investments tracking
 - ✅ ROI calculations
 - ✅ Payment integration ready
 
 ### Admin Panel
+
 - ✅ User management
 - ✅ Investment oversight
 - ✅ Content management (news, blogs, ebooks)
@@ -114,12 +123,14 @@ Your platform now includes:
 - ✅ Analytics and reporting
 
 ### Trading Features
+
 - ✅ Forex signals management
 - ✅ Live signals display
 - ✅ Performance tracking
 - ✅ Testimonials and reviews
 
 ### Content Management
+
 - ✅ News posts
 - ✅ Blog articles
 - ✅ Educational content (ebooks)
@@ -154,6 +165,7 @@ Your platform now includes:
 ## 🎉 You're Ready!
 
 Your forex trading platform is now:
+
 - ✅ Connected to production Supabase database
 - ✅ Configured with real investment plans
 - ✅ Free of demo/test data

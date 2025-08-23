@@ -16,7 +16,7 @@ declare global {
 const TawkTo: React.FC<TawkToProps> = ({
   propertyId = import.meta.env.VITE_TAWK_TO_PROPERTY_ID || "68a9e1946e59d01925d302a6",
   widgetId = import.meta.env.VITE_TAWK_TO_WIDGET_ID || "1j3bpibvl",
-  enabled = import.meta.env.VITE_TAWK_TO_ENABLED !== 'false'
+  enabled = true // Defaulting to true for now to ensure it loads
 }) => {
   useEffect(() => {
     console.log('TawkTo component initializing...');

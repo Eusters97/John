@@ -39,7 +39,6 @@ import NotFound from "./pages/NotFound";
 import TelegramSignals from "./pages/TelegramSignals";
 import ReviewsStandalone from "./pages/ReviewsStandalone";
 import VisitorTracker from "./components/VisitorTracker";
-import TawkTo from "./components/TawkTo";
 
 const queryClient = new QueryClient();
 

@@ -19,14 +19,28 @@ const TawkTo: React.FC<TawkToProps> = ({
   enabled = import.meta.env.VITE_TAWK_TO_ENABLED !== 'false'
 }) => {
   useEffect(() => {
-    if (!enabled) return;
+    console.log('TawkTo component initializing...');
+    console.log('Environment check:', {
+      VITE_TAWK_TO_ENABLED: import.meta.env.VITE_TAWK_TO_ENABLED,
+      VITE_TAWK_TO_PROPERTY_ID: import.meta.env.VITE_TAWK_TO_PROPERTY_ID,
+      VITE_TAWK_TO_WIDGET_ID: import.meta.env.VITE_TAWK_TO_WIDGET_ID,
+      enabled,
+      propertyId,
+      widgetId
+    });
+
+    if (!enabled) {
+      console.warn('TawkTo widget is disabled');
+      return;
+    }
 
     // Initialize Tawk_API if not already present
     if (!window.Tawk_API) {
       window.Tawk_API = {};
     }
-    
+
     window.Tawk_LoadStart = new Date();
+    console.log('TawkTo: Starting to load widget...');
 
     // Check if script is already loaded
     const existingScript = document.getElementById('tawk-to-script');

@@ -13,48 +13,56 @@
 
     <!-- Tawk.to Live Chat Widget -->
     <script type="text/javascript">
-    console.log('🔵 Starting Tawk.to initialization...');
+      console.log("🔵 Starting Tawk.to initialization...");
 
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
 
-    // Add debugging
-    console.log('🔵 Tawk_API initialized:', Tawk_API);
-    console.log('🔵 Load start time:', Tawk_LoadStart);
+      // Add debugging
+      console.log("🔵 Tawk_API initialized:", Tawk_API);
+      console.log("🔵 Load start time:", Tawk_LoadStart);
 
-    (function(){
-        console.log('🔵 Creating Tawk.to script element...');
+      (function () {
+        console.log("🔵 Creating Tawk.to script element...");
 
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/68a9e1946e59d01925d302a6/1j3bpibvl';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/68a9e1946e59d01925d302a6/1j3bpibvl";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
 
-        console.log('🔵 Script source:', s1.src);
-        console.log('🔵 Target script element:', s0);
+        console.log("🔵 Script source:", s1.src);
+        console.log("🔵 Target script element:", s0);
 
         // Add error handling
-        s1.onerror = function() {
-            console.error('❌ Failed to load Tawk.to script from:', s1.src);
+        s1.onerror = function () {
+          console.error("❌ Failed to load Tawk.to script from:", s1.src);
         };
 
-        s1.onload = function() {
-            console.log('✅ Tawk.to script loaded successfully!');
-            console.log('✅ Tawk_API after load:', window.Tawk_API);
+        s1.onload = function () {
+          console.log("✅ Tawk.to script loaded successfully!");
+          console.log("✅ Tawk_API after load:", window.Tawk_API);
         };
 
-        console.log('🔵 Inserting script into DOM...');
-        s0.parentNode.insertBefore(s1,s0);
-        console.log('🔵 Script inserted. Waiting for load...');
-    })();
+        console.log("🔵 Inserting script into DOM...");
+        s0.parentNode.insertBefore(s1, s0);
+        console.log("🔵 Script inserted. Waiting for load...");
+      })();
 
-    // Check for widget after 5 seconds
-    setTimeout(function() {
-        console.log('🔍 5-second check:');
-        console.log('   - Tawk_API exists:', typeof Tawk_API !== 'undefined');
-        console.log('   - Widget visible:', document.querySelector('#tawk-to-widget') !== null);
-        console.log('   - DOM widgets:', document.querySelectorAll('[id*="tawk"], [class*="tawk"]'));
-    }, 5000);
+      // Check for widget after 5 seconds
+      setTimeout(function () {
+        console.log("🔍 5-second check:");
+        console.log("   - Tawk_API exists:", typeof Tawk_API !== "undefined");
+        console.log(
+          "   - Widget visible:",
+          document.querySelector("#tawk-to-widget") !== null,
+        );
+        console.log(
+          "   - DOM widgets:",
+          document.querySelectorAll('[id*="tawk"], [class*="tawk"]'),
+        );
+      }, 5000);
     </script>
   </body>
 </html>

@@ -10,7 +10,7 @@ declare global {
 export class TawkToController {
   // Check if Tawk.to is loaded and ready
   static isLoaded(): boolean {
-    return typeof window !== 'undefined' && window.Tawk_API !== undefined;
+    return typeof window !== "undefined" && window.Tawk_API !== undefined;
   }
 
   // Wait for Tawk.to to load
@@ -38,9 +38,9 @@ export class TawkToController {
   static showWidget(): void {
     if (this.isLoaded() && window.Tawk_API.showWidget) {
       window.Tawk_API.showWidget();
-      console.log('Tawk.to widget shown');
+      console.log("Tawk.to widget shown");
     } else {
-      console.warn('Tawk.to not loaded or showWidget method not available');
+      console.warn("Tawk.to not loaded or showWidget method not available");
     }
   }
 
@@ -48,9 +48,9 @@ export class TawkToController {
   static hideWidget(): void {
     if (this.isLoaded() && window.Tawk_API.hideWidget) {
       window.Tawk_API.hideWidget();
-      console.log('Tawk.to widget hidden');
+      console.log("Tawk.to widget hidden");
     } else {
-      console.warn('Tawk.to not loaded or hideWidget method not available');
+      console.warn("Tawk.to not loaded or hideWidget method not available");
     }
   }
 
@@ -58,9 +58,9 @@ export class TawkToController {
   static maximize(): void {
     if (this.isLoaded() && window.Tawk_API.maximize) {
       window.Tawk_API.maximize();
-      console.log('Tawk.to widget maximized');
+      console.log("Tawk.to widget maximized");
     } else {
-      console.warn('Tawk.to not loaded or maximize method not available');
+      console.warn("Tawk.to not loaded or maximize method not available");
     }
   }
 
@@ -68,9 +68,9 @@ export class TawkToController {
   static minimize(): void {
     if (this.isLoaded() && window.Tawk_API.minimize) {
       window.Tawk_API.minimize();
-      console.log('Tawk.to widget minimized');
+      console.log("Tawk.to widget minimized");
     } else {
-      console.warn('Tawk.to not loaded or minimize method not available');
+      console.warn("Tawk.to not loaded or minimize method not available");
     }
   }
 
@@ -80,15 +80,17 @@ export class TawkToController {
       if (this.isLoaded() && window.Tawk_API.setAttributes) {
         window.Tawk_API.setAttributes(attributes, (error: any) => {
           if (error) {
-            console.error('Error setting Tawk.to attributes:', error);
+            console.error("Error setting Tawk.to attributes:", error);
             resolve(false);
           } else {
-            console.log('Tawk.to attributes set successfully:', attributes);
+            console.log("Tawk.to attributes set successfully:", attributes);
             resolve(true);
           }
         });
       } else {
-        console.warn('Tawk.to not loaded or setAttributes method not available');
+        console.warn(
+          "Tawk.to not loaded or setAttributes method not available",
+        );
         resolve(false);
       }
     });
@@ -100,7 +102,7 @@ export class TawkToController {
       window.Tawk_API.addTag(tag);
       console.log(`Tawk.to tag added: ${tag}`);
     } else {
-      console.warn('Tawk.to not loaded or addTag method not available');
+      console.warn("Tawk.to not loaded or addTag method not available");
     }
   }
 
@@ -110,13 +112,13 @@ export class TawkToController {
       window.Tawk_API.removeTag(tag);
       console.log(`Tawk.to tag removed: ${tag}`);
     } else {
-      console.warn('Tawk.to not loaded or removeTag method not available');
+      console.warn("Tawk.to not loaded or removeTag method not available");
     }
   }
 
   // Set up event listeners
   static onLoad(callback: () => void): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (this.isLoaded()) {
         window.Tawk_API.onLoad = callback;
       } else {
@@ -131,7 +133,7 @@ export class TawkToController {
   }
 
   static onStatusChange(callback: (status: string) => void): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (this.isLoaded()) {
         window.Tawk_API.onStatusChange = callback;
       } else {
@@ -145,7 +147,7 @@ export class TawkToController {
   }
 
   static onChatMaximized(callback: () => void): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (this.isLoaded()) {
         window.Tawk_API.onChatMaximized = callback;
       } else {
@@ -159,7 +161,7 @@ export class TawkToController {
   }
 
   static onChatMinimized(callback: () => void): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (this.isLoaded()) {
         window.Tawk_API.onChatMinimized = callback;
       } else {
@@ -182,23 +184,23 @@ export class TawkToController {
 
   // Test function to verify the widget is working
   static test(): void {
-    console.log('=== Tawk.to Widget Test ===');
-    console.log('Is loaded:', this.isLoaded());
-    
+    console.log("=== Tawk.to Widget Test ===");
+    console.log("Is loaded:", this.isLoaded());
+
     if (this.isLoaded()) {
-      console.log('Status:', this.getStatus());
-      console.log('Available methods:', Object.keys(window.Tawk_API || {}));
-      
+      console.log("Status:", this.getStatus());
+      console.log("Available methods:", Object.keys(window.Tawk_API || {}));
+
       // Test basic functionality
       setTimeout(() => {
-        console.log('Testing show/hide...');
+        console.log("Testing show/hide...");
         this.hideWidget();
         setTimeout(() => this.showWidget(), 2000);
       }, 1000);
     } else {
-      console.log('Waiting for Tawk.to to load...');
+      console.log("Waiting for Tawk.to to load...");
       this.waitForLoad().then((loaded) => {
-        console.log('Load result:', loaded);
+        console.log("Load result:", loaded);
         if (loaded) {
           this.test(); // Run test again
         }
@@ -226,5 +228,5 @@ export const {
   onChatMaximized,
   onChatMinimized,
   getStatus,
-  test
+  test,
 } = TawkToController;

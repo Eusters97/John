@@ -45,6 +45,7 @@ const TawkTo: React.FC<TawkToProps> = ({
     // Check if script is already loaded
     const existingScript = document.getElementById('tawk-to-script');
     if (existingScript) {
+      console.log('TawkTo: Script already exists, skipping');
       return;
     }
 
@@ -55,13 +56,17 @@ const TawkTo: React.FC<TawkToProps> = ({
     script.src = `https://embed.tawk.to/${propertyId}/${widgetId}`;
     script.charset = 'UTF-8';
     script.setAttribute('crossorigin', '*');
-    
+
+    console.log(`TawkTo: Creating script with URL: ${script.src}`);
+
     // Insert script into document head
     const firstScript = document.getElementsByTagName('script')[0];
     if (firstScript && firstScript.parentNode) {
       firstScript.parentNode.insertBefore(script, firstScript);
+      console.log('TawkTo: Script inserted before first script');
     } else {
       document.head.appendChild(script);
+      console.log('TawkTo: Script appended to head');
     }
 
     // Optional: Add error handling

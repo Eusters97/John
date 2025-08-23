@@ -51,7 +51,6 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <VisitorTracker />
-            <TawkTo />
             <NavigationGuard>
               <Routes>
                 <Route path="/" element={<Index />} />

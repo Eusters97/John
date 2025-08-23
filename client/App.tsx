@@ -38,6 +38,7 @@ import DatabaseDiagnostic from "./pages/DatabaseDiagnostic";
 import NotFound from "./pages/NotFound";
 import TelegramSignals from "./pages/TelegramSignals";
 import ReviewsStandalone from "./pages/ReviewsStandalone";
+import TawkToTest from "./pages/TawkToTest";
 import VisitorTracker from "./components/VisitorTracker";
 
 const queryClient = new QueryClient();

@@ -20,22 +20,23 @@
     "format.fix": "prettier --write .",
     "typecheck": "tsc"
   },
-"dependencies": {
-  "@neondatabase/serverless": "^1.0.1",
-  "@supabase/supabase-js": "^2.53.0",
-  "@types/bcryptjs": "^2.4.6",
-  "bcryptjs": "^3.0.2",
-  "dotenv": "^17.2.0",
-  "express": "^4.18.2",
-  "zod": "^3.23.8",
-  "@tanstack/react-query": "^5.56.2",
-  "react": "^18.3.1",
-  "react-dom": "^18.3.1",
-  "@vitejs/plugin-react-swc": "^3.5.0",
-  "vite": "^6.2.2",
-  "typescript": "^5.5.3",
-  "cors": "^2.8.5"
-}, 
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
+    "@supabase/supabase-js": "^2.53.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.0",
+    "express": "^4.18.2",
+    "zod": "^3.23.8",
+    "@tanstack/react-query": "^5.56.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "vite": "^6.2.2",
+    "typescript": "^5.5.3",
+    "cors": "^2.8.5"
+  },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
@@ -91,7 +92,6 @@
     "react-day-picker": "^8.10.1",
     "react-hook-form": "^7.53.0",
     "react-resizable-panels": "^2.1.3",
-    "react-router-dom": "^6.26.2",
     "recharts": "^2.12.7",
     "serverless-http": "^3.2.0",
     "sonner": "^1.5.0",
@@ -101,11 +101,11 @@
     "three": "^0.176.0",
     "tsx": "^4.7.0",
     "vaul": "^0.9.3",
-    "vitest": "^3.1.4"
-  }, 
-    "engines": {
+    "vitest": "^3.1.4",
+    "@types/react-router-dom": "^5.3.3"
+  },
+  "engines": {
     "node": "20.17.0",
     "npm": "10.x"
   }
-} 
-  
+}

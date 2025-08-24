@@ -45,7 +45,11 @@ import { useTawkTo } from "./hooks/useTawkTo";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Initialize Tawk.to chat widget
+  useTawkTo();
+
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <InvestmentProvider>
@@ -172,6 +176,7 @@ const App = () => (
       </InvestmentProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

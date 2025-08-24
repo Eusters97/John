@@ -41,6 +41,7 @@ import ReviewsStandalone from "./pages/ReviewsStandalone";
 import TawkToTest from "./pages/TawkToTest";
 import VisitorTracker from "./components/VisitorTracker";
 import TawkToWidget from "./components/TawkToWidget";
+import { useTawkTo } from "./hooks/useTawkTo";
 
 const queryClient = new QueryClient();
 

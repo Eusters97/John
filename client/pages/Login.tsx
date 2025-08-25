@@ -12,7 +12,6 @@ import {
   LogIn,
   Eye,
   EyeOff,
-  Mail,
   User,
   Lock,
   ArrowLeft,
@@ -27,7 +26,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { signIn, signInWithGoogle, signInWithTelegram, resetPassword, user } = useAuth();
+  const { signIn, signInWithGoogle, signInWithTelegram, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 

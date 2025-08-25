@@ -1,8 +1,8 @@
 // Environment configuration for dual database setup
 export const ENV = {
   // Supabase Configuration
-  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
+  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL,
+  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY,
   
   // Neon Configuration
   NEON_DATABASE_URL: import.meta.env.VITE_NEON_DATABASE_URL,

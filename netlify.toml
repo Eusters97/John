@@ -4,6 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Force Netlify to use environment variables from dashboard
+  VITE_SUPABASE_URL = "$VITE_SUPABASE_URL"
+  VITE_SUPABASE_ANON_KEY = "$VITE_SUPABASE_ANON_KEY"
 
 [[redirects]]
   from = "/*"

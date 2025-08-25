@@ -5,6 +5,7 @@
 You need to set these environment variables in your Netlify dashboard:
 
 ### 1. Navigate to Netlify Dashboard
+
 1. Go to your Netlify dashboard
 2. Select your deployed site
 3. Go to **Site settings** → **Environment variables**
@@ -63,6 +64,7 @@ If you still see placeholder warnings:
 ## Build Configuration
 
 The `netlify.toml` file is configured to:
+
 - Use Node.js version 20
 - Build with `npm run build:production`
 - Serve from `dist/spa` directory

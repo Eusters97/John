@@ -14,6 +14,7 @@ import NavigationGuard from "@/components/NavigationGuard";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
 import Blog from "./pages/Blog";
 import News from "./pages/News";
 import Dashboard from "./pages/Dashboard";

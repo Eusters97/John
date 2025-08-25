@@ -244,7 +244,10 @@ export default function Signup() {
     }
   }, [user, navigate]);
 
-  const updateFormData = (field: keyof SignupFormData, value: string | boolean) => {
+  const updateFormData = (
+    field: keyof SignupFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -257,7 +260,13 @@ export default function Signup() {
   };
 
   const validateForm = () => {
-    if (!formData.email || !formData.password || !formData.fullName || !formData.phoneNumber || !formData.country) {
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.fullName ||
+      !formData.phoneNumber ||
+      !formData.country
+    ) {
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
@@ -319,20 +328,25 @@ export default function Signup() {
       if (!emailAvailable) {
         toast({
           title: "Email Already Registered",
-          description: "This email is already registered. Please use a different email or sign in.",
+          description:
+            "This email is already registered. Please use a different email or sign in.",
           variant: "destructive",
         });
         return;
       }
 
       // Use enhanced authentication for registration
-      const result = await enhancedAuth.enhancedSignUp(formData.email, formData.password, {
-        fullName: formData.fullName,
-        username: formData.username,
-        phoneNumber: formData.phoneNumber,
-        country: formData.country,
-        countryCode: formData.countryCode,
-      });
+      const result = await enhancedAuth.enhancedSignUp(
+        formData.email,
+        formData.password,
+        {
+          fullName: formData.fullName,
+          username: formData.username,
+          phoneNumber: formData.phoneNumber,
+          country: formData.country,
+          countryCode: formData.countryCode,
+        },
+      );
 
       if (result.error) {
         toast({
@@ -350,12 +364,16 @@ export default function Signup() {
 
       navigate("/login");
     } catch (error) {
-      console.error('Registration error:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+      console.error("Registration error:", {
+        message: error instanceof Error ? error.message : "Unknown error",
         stack: error instanceof Error ? error.stack : undefined,
-        formData: { ...formData, password: '[REDACTED]', confirmPassword: '[REDACTED]' }
+        formData: {
+          ...formData,
+          password: "[REDACTED]",
+          confirmPassword: "[REDACTED]",
+        },
       });
-      
+
       toast({
         title: "Registration Failed",
         description:
@@ -368,8 +386,6 @@ export default function Signup() {
       setLoading(false);
     }
   };
-
-
 
   const handleTelegramSignUp = async () => {
     await signInWithTelegram();
@@ -422,7 +438,9 @@ export default function Signup() {
               <Separator className="w-full" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">Or create account with</span>
+              <span className="bg-white px-2 text-gray-500">
+                Or create account with
+              </span>
             </div>
           </div>
 
@@ -479,7 +497,10 @@ export default function Signup() {
               <Label>Country *</Label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
-                <Select onValueChange={handleCountrySelect} value={formData.country}>
+                <Select
+                  onValueChange={handleCountrySelect}
+                  value={formData.country}
+                >
                   <SelectTrigger className="pl-10">
                     <SelectValue placeholder="Select your country" />
                   </SelectTrigger>
@@ -493,16 +514,21 @@ export default function Signup() {
                       />
                     </div>
                     {countries
-                      .filter((country) =>
-                        country.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
-                        country.code.includes(countrySearch)
+                      .filter(
+                        (country) =>
+                          country.name
+                            .toLowerCase()
+                            .includes(countrySearch.toLowerCase()) ||
+                          country.code.includes(countrySearch),
                       )
                       .map((country) => (
                         <SelectItem key={country.name} value={country.name}>
                           <div className="flex items-center space-x-2">
                             <span>{country.flag}</span>
                             <span>{country.name}</span>
-                            <span className="text-gray-500">({country.code})</span>
+                            <span className="text-gray-500">
+                              ({country.code})
+                            </span>
                           </div>
                         </SelectItem>
                       ))}
@@ -529,7 +555,9 @@ export default function Signup() {
                     type="tel"
                     placeholder="Enter your phone number"
                     value={formData.phoneNumber}
-                    onChange={(e) => updateFormData("phoneNumber", e.target.value)}
+                    onChange={(e) =>
+                      updateFormData("phoneNumber", e.target.value)
+                    }
                     className="pl-10"
                     required
                   />
@@ -558,7 +586,11 @@ export default function Signup() {
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -572,7 +604,9 @@ export default function Signup() {
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
-                  onChange={(e) => updateFormData("confirmPassword", e.target.value)}
+                  onChange={(e) =>
+                    updateFormData("confirmPassword", e.target.value)
+                  }
                   className="pl-10 pr-10"
                   required
                 />
@@ -583,7 +617,11 @@ export default function Signup() {
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -593,7 +631,9 @@ export default function Signup() {
                 <Checkbox
                   id="agreeToTerms"
                   checked={formData.agreeToTerms}
-                  onCheckedChange={(checked) => updateFormData("agreeToTerms", checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    updateFormData("agreeToTerms", checked as boolean)
+                  }
                 />
                 <Label htmlFor="agreeToTerms" className="text-sm">
                   I agree to the{" "}
@@ -612,7 +652,9 @@ export default function Signup() {
                 <Checkbox
                   id="agreeToMarketing"
                   checked={formData.agreeToMarketing}
-                  onCheckedChange={(checked) => updateFormData("agreeToMarketing", checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    updateFormData("agreeToMarketing", checked as boolean)
+                  }
                 />
                 <Label htmlFor="agreeToMarketing" className="text-sm">
                   I agree to receive marketing communications and forex signals
@@ -635,9 +677,7 @@ export default function Signup() {
           </form>
 
           <div className="text-center text-sm">
-            <span className="text-gray-600">
-              Already have an account?{" "}
-            </span>
+            <span className="text-gray-600">Already have an account? </span>
             <Link
               to="/login"
               className="text-forex-600 hover:text-forex-700 font-medium"

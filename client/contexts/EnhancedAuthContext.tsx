@@ -300,8 +300,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
             data: {
-              email_confirm: false // Skip email verification
-            }
+              email_confirm: false, // Skip email verification
+            },
           },
         });
         result = { user: data.user, error };
@@ -558,10 +558,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const resetPassword = async (email: string) => {
     try {
       // Check if Supabase is properly configured
-      if (!supabase || typeof supabase.auth?.resetPasswordForEmail !== 'function') {
+      if (
+        !supabase ||
+        typeof supabase.auth?.resetPasswordForEmail !== "function"
+      ) {
         return {
           error: {
-            message: "Password reset is not available. Please contact support or check your configuration.",
+            message:
+              "Password reset is not available. Please contact support or check your configuration.",
           },
         };
       }
@@ -588,7 +592,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error("Password reset error:", error);
       return {
         error: {
-          message: "Password reset failed. Please try again or contact support.",
+          message:
+            "Password reset failed. Please try again or contact support.",
         },
       };
     }

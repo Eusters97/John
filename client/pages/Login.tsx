@@ -69,8 +69,6 @@ export default function Login() {
     }
   };
 
-
-
   const handleTelegramSignIn = async () => {
     await signInWithTelegram();
     toast({
@@ -105,107 +103,113 @@ export default function Login() {
         </CardHeader>
 
         <CardContent className="space-y-6">
-              {/* Telegram Login */}
-              <div className="space-y-3">
-                <Button
-                  onClick={handleTelegramSignIn}
-                  variant="outline"
-                  className="w-full flex items-center space-x-3 py-6 border-blue-500 text-blue-600 hover:bg-blue-50"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  <span>Continue with Telegram</span>
-                </Button>
-              </div>
+          {/* Telegram Login */}
+          <div className="space-y-3">
+            <Button
+              onClick={handleTelegramSignIn}
+              variant="outline"
+              className="w-full flex items-center space-x-3 py-6 border-blue-500 text-blue-600 hover:bg-blue-50"
+            >
+              <MessageCircle className="h-5 w-5" />
+              <span>Continue with Telegram</span>
+            </Button>
+          </div>
 
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <Separator className="w-full" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          {/* Email/Username Login */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="identifier">Email or Username</Label>
               <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <Separator className="w-full" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
-                </div>
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  id="identifier"
+                  type="text"
+                  placeholder="your@email.com or username"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 pr-10"
+                  required
+                  minLength={6}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember-me"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked as boolean)
+                  }
+                />
+                <Label htmlFor="remember-me" className="text-sm">
+                  Remember me
+                </Label>
               </div>
 
-              {/* Email/Username Login */}
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="identifier">Email or Username</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="identifier"
-                      type="text"
-                      placeholder="your@email.com or username"
-                      value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
+              <Link
+                to="/forgot-password"
+                className="text-forex-600 hover:text-forex-700 text-sm font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="pl-10 pr-10"
-                      required
-                      minLength={6}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="remember-me"
-                      checked={rememberMe}
-                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                    />
-                    <Label htmlFor="remember-me" className="text-sm">
-                      Remember me
-                    </Label>
-                  </div>
-
-                  <Link
-                    to="/forgot-password"
-                    className="text-forex-600 hover:text-forex-700 text-sm font-medium"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-forex-600 hover:bg-forex-700"
-                  disabled={loading}
-                >
-                  <div className="flex items-center space-x-2">
-                    <LogIn className="h-4 w-4" />
-                    <span>{loading ? "Signing in..." : "Sign In"}</span>
-                  </div>
-                </Button>
-              </form>
+            <Button
+              type="submit"
+              className="w-full bg-forex-600 hover:bg-forex-700"
+              disabled={loading}
+            >
+              <div className="flex items-center space-x-2">
+                <LogIn className="h-4 w-4" />
+                <span>{loading ? "Signing in..." : "Sign In"}</span>
+              </div>
+            </Button>
+          </form>
 
           <div className="text-center text-sm">
-            <span className="text-gray-600">
-              Don't have an account?{" "}
-            </span>
+            <span className="text-gray-600">Don't have an account? </span>
             <Link
               to="/signup"
               className="text-forex-600 hover:text-forex-700 font-medium"

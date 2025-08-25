@@ -29,12 +29,16 @@ export default function ForgotPassword() {
 
     try {
       const { error } = await resetPassword(email);
-      
+
       if (error) {
-        if (error.message?.includes("not available") || error.message?.includes("not configured")) {
+        if (
+          error.message?.includes("not available") ||
+          error.message?.includes("not configured")
+        ) {
           toast({
             title: "Password Reset Unavailable",
-            description: "For password reset assistance, please contact our support team at support@forexsignals.com",
+            description:
+              "For password reset assistance, please contact our support team at support@forexsignals.com",
             variant: "destructive",
           });
         } else {
@@ -96,7 +100,9 @@ export default function ForgotPassword() {
             <div className="text-center space-y-4">
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                 <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <p className="text-green-800 font-medium">Email Sent Successfully!</p>
+                <p className="text-green-800 font-medium">
+                  Email Sent Successfully!
+                </p>
                 <p className="text-green-700 text-sm mt-1">
                   We've sent password reset instructions to {email}
                 </p>
@@ -148,9 +154,9 @@ export default function ForgotPassword() {
                   </div>
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-forex-600 hover:bg-forex-700" 
+                <Button
+                  type="submit"
+                  className="w-full bg-forex-600 hover:bg-forex-700"
                   disabled={loading}
                 >
                   {loading ? "Sending..." : "Send Reset Link"}
@@ -164,9 +170,10 @@ export default function ForgotPassword() {
                   <div className="text-sm">
                     <p className="text-blue-800 font-medium mb-1">Need Help?</p>
                     <p className="text-blue-700">
-                      If you're having trouble resetting your password, contact our support team at{" "}
-                      <a 
-                        href="mailto:support@forexsignals.com" 
+                      If you're having trouble resetting your password, contact
+                      our support team at{" "}
+                      <a
+                        href="mailto:support@forexsignals.com"
                         className="underline font-medium"
                       >
                         support@forexsignals.com

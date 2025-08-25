@@ -106,8 +106,8 @@ class EnhancedAuthService {
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
             data: {
-              email_confirm: false // Skip email verification
-            }
+              email_confirm: false, // Skip email verification
+            },
           },
         });
 
@@ -141,9 +141,22 @@ class EnhancedAuthService {
         profile = await dualDb.createUserProfile(profileData);
       } catch (profileError) {
         console.error("Failed to create user profile:", {
-          message: profileError instanceof Error ? profileError.message : "Unknown error",
-          code: profileError && typeof profileError === 'object' && 'code' in profileError ? profileError.code : "NO_CODE",
-          details: profileError && typeof profileError === 'object' && 'details' in profileError ? profileError.details : "No details",
+          message:
+            profileError instanceof Error
+              ? profileError.message
+              : "Unknown error",
+          code:
+            profileError &&
+            typeof profileError === "object" &&
+            "code" in profileError
+              ? profileError.code
+              : "NO_CODE",
+          details:
+            profileError &&
+            typeof profileError === "object" &&
+            "details" in profileError
+              ? profileError.details
+              : "No details",
           user_id: userId,
         });
         // Don't throw here - user signup should succeed even if profile creation fails
@@ -164,9 +177,22 @@ class EnhancedAuthService {
         });
       } catch (balanceError) {
         console.error("Failed to create user balance:", {
-          message: balanceError instanceof Error ? balanceError.message : "Unknown error",
-          code: balanceError && typeof balanceError === 'object' && 'code' in balanceError ? balanceError.code : "NO_CODE",
-          details: balanceError && typeof balanceError === 'object' && 'details' in balanceError ? balanceError.details : "No details",
+          message:
+            balanceError instanceof Error
+              ? balanceError.message
+              : "Unknown error",
+          code:
+            balanceError &&
+            typeof balanceError === "object" &&
+            "code" in balanceError
+              ? balanceError.code
+              : "NO_CODE",
+          details:
+            balanceError &&
+            typeof balanceError === "object" &&
+            "details" in balanceError
+              ? balanceError.details
+              : "No details",
           user_id: userId,
         });
         // Don't throw here - user signup should succeed even if balance creation fails

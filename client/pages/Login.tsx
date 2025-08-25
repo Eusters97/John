@@ -26,7 +26,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [forgotMode, setForgotMode] = useState(false);
 
   const { signIn, signInWithGoogle, signInWithTelegram, resetPassword, user } = useAuth();
   const { toast } = useToast();
@@ -44,39 +43,21 @@ export default function Login() {
     setLoading(true);
 
     try {
-      if (forgotMode) {
-        const { error } = await resetPassword(identifier);
-        if (error) {
-          toast({
-            title: "Error",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          setForgotMode(false);
-          setIdentifier("");
-          toast({
-            title: "Reset email sent",
-            description: "Check your email for password reset instructions.",
-          });
-        }
-      } else {
-        // Determine if identifier is email or username
-        const isEmail = identifier.includes("@");
-        const credentials = isEmail 
-          ? { email: identifier, password }
-          : { email: identifier, password }; // For now, treat as email. We'll enhance this later.
+      // Determine if identifier is email or username
+      const isEmail = identifier.includes("@");
+      const credentials = isEmail
+        ? { email: identifier, password }
+        : { email: identifier, password }; // For now, treat as email. We'll enhance this later.
 
-        const { error } = await signIn(identifier, password, rememberMe);
-        if (error) {
-          toast({
-            title: "Sign in failed",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          navigate("/dashboard");
-        }
+      const { error } = await signIn(identifier, password, rememberMe);
+      if (error) {
+        toast({
+          title: "Sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        navigate("/dashboard");
       }
     } catch (error) {
       toast({
@@ -115,7 +96,7 @@ export default function Login() {
 
           <div>
             <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
-              {forgotMode ? "Reset Password" : "Welcome Back"}
+              Welcome Back
             </CardTitle>
             <div className="flex items-center justify-center space-x-2 text-forex-600">
               <TrendingUp className="h-4 w-4" />

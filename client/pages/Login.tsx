@@ -244,14 +244,12 @@ export default function Login() {
                     </Label>
                   </div>
 
-                  <Button
-                    type="button"
-                    variant="link"
-                    className="p-0 h-auto text-forex-600 text-sm"
-                    onClick={() => setForgotMode(true)}
+                  <Link
+                    to="/forgot-password"
+                    className="text-forex-600 hover:text-forex-700 text-sm font-medium"
                   >
                     Forgot password?
-                  </Button>
+                  </Link>
                 </div>
 
                 <Button

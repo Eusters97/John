@@ -58,7 +58,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: {
+          email_confirm: false // Skip email verification
+        }
       }
     })
     return { user: data.user, error }

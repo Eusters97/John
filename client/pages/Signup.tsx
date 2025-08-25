@@ -345,7 +345,7 @@ export default function Signup() {
 
       toast({
         title: "Registration Successful!",
-        description: `Account created successfully using ${enhancedAuth.getActiveDatabase()} database. ${enhancedAuth.getActiveDatabase() === 'Supabase' ? 'Please check your email to verify your account.' : 'You can now sign in to your account.'}`,
+        description: `Account created successfully using ${enhancedAuth.getActiveDatabase()} database. You can now sign in to your account immediately.`,
       });
 
       navigate("/login");

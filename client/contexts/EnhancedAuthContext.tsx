@@ -299,6 +299,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: {
+              email_confirm: false // Skip email verification
+            }
           },
         });
         result = { user: data.user, error };
@@ -309,8 +312,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         toast({
           title: "Account created successfully!",
           description: userData
-            ? `Registration completed using ${enhancedAuth.getActiveDatabase()} database.`
-            : "Please check your email for verification.",
+            ? `Registration completed using ${enhancedAuth.getActiveDatabase()} database. You can now sign in immediately.`
+            : "Your account is ready! You can now sign in immediately.",
         });
       }
 
@@ -554,6 +557,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const resetPassword = async (email: string) => {
     try {
+      // Check if Supabase is properly configured
+      if (!supabase || typeof supabase.auth?.resetPasswordForEmail !== 'function') {
+        return {
+          error: {
+            message: "Password reset is not available. Please contact support or check your configuration.",
+          },
+        };
+      }
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
@@ -563,11 +575,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
           title: "Password reset email sent",
           description: "Check your email for password reset instructions.",
         });
+      } else if (error.message?.includes("not configured")) {
+        return {
+          error: {
+            message: "Password reset is not available. Please contact support.",
+          },
+        };
       }
 
       return { error };
     } catch (error: any) {
-      return { error };
+      console.error("Password reset error:", error);
+      return {
+        error: {
+          message: "Password reset failed. Please try again or contact support.",
+        },
+      };
     }
   };
 

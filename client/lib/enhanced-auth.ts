@@ -87,8 +87,8 @@ class EnhancedAuthService {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const result = await sql`
-          INSERT INTO auth_users (email, encrypted_password, email_confirmed_at, confirmed_at)
-          VALUES (${email}, ${hashedPassword}, NOW(), NOW())
+          INSERT INTO auth_users (email, encrypted_password, email_confirmed_at, confirmed_at, email_confirm)
+          VALUES (${email}, ${hashedPassword}, NOW(), NOW(), false)
           RETURNING id, email
         `;
 
@@ -105,6 +105,9 @@ class EnhancedAuthService {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: {
+              email_confirm: false // Skip email verification
+            }
           },
         });
 
@@ -274,9 +277,9 @@ class EnhancedAuthService {
       if (this.useNeon) {
         // Create admin in Neon
         const authResult = await sql`
-          INSERT INTO auth_users (email, encrypted_password, email_confirmed_at, confirmed_at)
-          VALUES (${credentials.email}, ${hashedPassword}, NOW(), NOW())
-          ON CONFLICT (email) DO UPDATE SET 
+          INSERT INTO auth_users (email, encrypted_password, email_confirmed_at, confirmed_at, email_confirm)
+          VALUES (${credentials.email}, ${hashedPassword}, NOW(), NOW(), false)
+          ON CONFLICT (email) DO UPDATE SET
             encrypted_password = ${hashedPassword},
             updated_at = NOW()
           RETURNING id, email

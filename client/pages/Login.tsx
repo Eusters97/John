@@ -106,48 +106,6 @@ export default function Login() {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {forgotMode ? (
-            <div className="space-y-4">
-              <div className="text-center">
-                <Mail className="h-12 w-12 text-forex-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Forgot your password?
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Enter your email address and we'll send you a reset link.
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="reset-email">Email Address</Label>
-                  <Input
-                    id="reset-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={identifier}
-                    onChange={(e) => setIdentifier(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Sending..." : "Send Reset Link"}
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => setForgotMode(false)}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Sign In
-                </Button>
-              </form>
-            </div>
-          ) : (
-            <>
               {/* Telegram Login */}
               <div className="space-y-3">
                 <Button
@@ -244,8 +202,6 @@ export default function Login() {
                   </div>
                 </Button>
               </form>
-            </>
-          )}
 
           <div className="text-center text-sm">
             <span className="text-gray-600">

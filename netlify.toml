@@ -3,19 +3,11 @@
   publish = "dist/spa"
 
 [build.environment]
-<<<<<<< HEAD
-  NODE_VERSION = "20"
-<<<<<<< HEAD
-  # Force Netlify to use environment variables from dashboard
+  NODE_VERSION = "20.17.0"
   VITE_SUPABASE_URL = "$VITE_SUPABASE_URL"
   VITE_SUPABASE_ANON_KEY = "$VITE_SUPABASE_ANON_KEY"
-=======
-  NODE_VERSION = "20.17.0"
->>>>>>> refs/remotes/origin/main
-=======
->>>>>>> refs/remotes/origin/main
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200 
+  status = 200
